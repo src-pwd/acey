@@ -4,12 +4,15 @@
 first run:
 
 
-`cd aceyapp`
+`cd aceyapp && npm install` 
 
-`npm install && npm run dev `
+then when installed node_modules: 
 
-dev run: 
-`npm run dev`
-and watch port :4000 in browser:
+` npm run dev `
+
+and watch port :4000 in browser
 
 [localhost:4000/](localhost:4000/)
+
+
+
