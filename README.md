@@ -11,4 +11,5 @@ first run:
 dev run: 
 `npm run dev`
 and watch port :4000 in browser:
-[localhost:4000/]: localhost:4000/
+
+[localhost:4000/](localhost:4000/)
