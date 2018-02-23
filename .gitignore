@@ -1,2 +1,16 @@
+<<<<<<< HEAD
+:memory
+bin
+include
+lib
+pip-log.txt
+pip-delete-this-directory.txt
+__pycache__/
+*.py[cod]
+*.log
+*.pot
+
+=======
 node_modules
 package-lock.json
+>>>>>>> 490ad08f3814abec58faf62d1d0b7b9ac2063b2d
