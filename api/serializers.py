@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 		model = User
 		fields = ('username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login',)
 		extra_kwargs = {'password': {'write_only': True}, 'username': {'validators': []}}
-		read_only_fields = ('date_joined', 'last_login',)
+		read_only_fields = ('date_joined', 'last_login')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -48,7 +48,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 			user = instance.user
 			new_password = user_data.get('password')
 			user.password = make_password(new_password) if new_password else user.password
-
 			user.save()
 		return instance
 
@@ -89,6 +88,21 @@ class EventSerializer(serializers.ModelSerializer):
 				'total_sum',
 				)
 		read_only_fields = ('id', 'total_users', 'total_sum', 'created', 'status', )
+
+	def create(self, validated_data):
+		event = Event.objects.create(
+			creator = validated_data['creator'],
+			name = validated_data['name'],
+			type = validated_data['type'],
+			expired = validated_data['expired'],
+			description = validated_data['description'],
+			currency_pair = validated_data['currency_pair'],
+			exchange = validated_data['exchange'],
+		)
+		p = Profile.objects.get(user = validated_data['creator'])
+		p.events+=1
+		p.save()
+		return event
 
 
 class PredictionSerializer(serializers.ModelSerializer):
@@ -146,6 +160,10 @@ class BetSerializer(serializers.ModelSerializer):
 		read_only_fields = ('id',)
 
 	def create(self, validated_data):
+		p = Profile.objects.get(user = validated_data['bettor'])
+		p.bets+=1
+		p.sum-=validated_data.get('sum')
+		p.save()
 		return Bet.objects.create(option = validated_data.get('option'), bettor = validated_data.get('bettor'), sum = validated_data.get('sum'))
 
 class AccurateBetSerializer(serializers.ModelSerializer):
@@ -164,6 +182,10 @@ class AccurateBetSerializer(serializers.ModelSerializer):
 		read_only_fields = ('id',)
 
 	def create(self, validated_data):
+		p = Profile.objects.get(user = validated_data['bettor'])
+		p.bets+=1
+		p.sum-=validated_data.get('sum')
+		p.save()
 		return AccurateBet.objects.create(
 			event = validated_data.get('event'), 
 			bettor = validated_data.get('bettor'), 
@@ -180,19 +202,31 @@ class ParleySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Parley
 		fields = ('id', 'event', 'creator', 'bettor', 'created', 'koefficient', 'min_sum', 'max_sum', 'status', 'bet_sum', )
-		read_only_fields = ('id', 'created', 'status',)
+		read_only_fields = ('id', 'created', 'status', 'min_sum')
 
 	def create(self, validated_data):
+		max_sum = validated_data.get('max_sum')
+		koefficient = validated_data.get('koefficient')
+		if max_sum*koefficient > Profile.objects.get(user = validated_data['creator']).sum:
+			raise serializers.ValidationError("Creator won't be able to pay that sum. Please decrease maximum sum possible to bet.")
 		return Parley.objects.create(
 			event = validated_data.get('event'),
-			creator = validated_data.get('creator'),
-			koefficient = validated_data.get('koefficient'),
-			min_sum = validated_data.get('min_sum'),
-			max_sum = validated_data.get('max_sum'),
+			creator = validated_data['creator'],
+			koefficient = koefficient,
+			min_sum = 1,
+			max_sum = max_sum,
 			status = "Waiting",
 			)
 	
 	def update(self, instance, validated_data):
+		p = Profile.objects.get(user = validated_data['bettor'])
+		p.bets+=1
+		p.sum-=validated_data.get('bet_sum')
+		p.save()
+		p = Profile.objects.get(user = validated_data['creator'])
+		p.bets+=1
+		p.sum-=validated_data.get('bet_sum') * validated_data.get('koefficient')
+		p.save()
 		instance.bettor = validated_data.get('bettor', instance.bettor)
 		instance.bet_sum = validated_data.get('bet_sum', instance.bet_sum)
 		instance.status = "Ready"

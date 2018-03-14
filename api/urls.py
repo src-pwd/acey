@@ -8,6 +8,8 @@ urlpatterns = {
 	url(r'^users/(?P<pk>[0-9]+)/$',
 		DetailsProfileView.as_view(), name="details"),
 	url(r'^events/$', EventsView.as_view(), name="create"),
+	url(r'^events/(?P<pk>[0-9]+)/$',
+		DetailsEventView.as_view(), name="details"),
 	url(r'^predictions/$', PredictionsView.as_view(), name="create"),
 	url(r'^predictions/(?P<pk>[0-9]+)/$',
 		DetailsPredictionView.as_view(), name="details"),
