@@ -20,7 +20,7 @@ class EventsView(generics.ListCreateAPIView):
     serializer_class = EventSerializer
     # permission_classes = (IsAdminUser,)
 
-class DetailsEventView(generics.RetrieveUpdateDestroyAPIView):
+class DetailsEventView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     metadata_class = SimpleMetadata
@@ -32,15 +32,15 @@ class OptionsView(generics.ListCreateAPIView):
     # permission_classes = (IsAdminUser,)
 
 class PredictionsView(generics.ListCreateAPIView):
-    queryset = Event.objects.all()
+    queryset = Event.objects.filter(type = "Prediction")
     serializer_class = PredictionSerializer
     metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
-class DetailsPredictionView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Event.objects.all()
-    serializer_class = PredictionSerializer
-    metadata_class = SimpleMetadata
+# class DetailsPredictionView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Event.objects.all()
+#     serializer_class = PredictionSerializer
+#     metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
 class DetailsOptionView(generics.RetrieveUpdateDestroyAPIView):
@@ -69,7 +69,19 @@ class ParleysView(generics.ListCreateAPIView):
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
 
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method == 'POST':
+            setattr(serializer_class.Meta, 'read_only_fields', ('bettor', 'bet_sum', 'status', ))
+        return serializer_class
+
 class DetailsParleyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Parley.objects.all()
     serializer_class = ParleySerializer
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method in ['PUT', 'PATCH']:
+            setattr(serializer_class.Meta, 'read_only_fields', ('min_sum', 'max_sum', 'creator', 'event', 'koefficient', 'status', ))
+        return serializer_class
     # permission_classes = (IsAdminUser,)

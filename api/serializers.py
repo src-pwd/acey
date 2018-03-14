@@ -87,7 +87,7 @@ class EventSerializer(serializers.ModelSerializer):
 				'total_users', 
 				'total_sum',
 				)
-		read_only_fields = ('id', 'total_users', 'total_sum', 'created', )
+		read_only_fields = ('id', 'total_users', 'total_sum', 'created', 'status',)
 
 	def create(self, validated_data):
 		event = Event.objects.create(
@@ -216,32 +216,38 @@ class ParleySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Parley
 		fields = ('id', 'event', 'creator', 'bettor', 'created', 'koefficient', 'min_sum', 'max_sum', 'status', 'bet_sum', )
-		read_only_fields = ('id', 'created', 'status', 'min_sum')
+		read_only_fields = ('id', 'created', 'status', 'bettor',)
 
 	def create(self, validated_data):
-		if validated_data.get('max_sum') * validated_data.get('koefficient') > Profile.objects.get(user = validated_data['creator']).sum:
+		if validated_data.get('max_sum') * validated_data.get('koefficient') > Profile.objects.get(user = validated_data.get('creator')).sum:
 			raise serializers.ValidationError("Creator won't be able to pay that sum. Please decrease maximum sum possible to bet.")
+		p = Profile.objects.get(user = validated_data.get('creator'))
+		p.bets+=1
+		p.sum-=validated_data.get('bet_sum') * instance.koefficient
+		p.save()
+		e = validated_data.get('event')
+		e.total_users+=1
+		e.total_sum+=validated_data.get('bet_sum') * instance.koefficient
 		return Parley.objects.create(
-			event = validated_data.get('event'),
-			creator = validated_data['creator'],
+			event = e,
+			creator = p,
 			koefficient = validated_data.get('koefficient'),
-			min_sum = 1,
+			min_sum = validated_data.get('min_sum'),
 			max_sum = validated_data.get('max_sum'),
 			status = "Waiting",
 			)
 	
 	def update(self, instance, validated_data):
-		p = Profile.objects.get(user = validated_data['bettor'])
+		p = Profile.objects.get(user = validated_data.get('bettor'))
+		if p.sum - validated_data.get('bet_sum')>=0:
+			p.sum-=validated_data.get('bet_sum')
+		else:
+			raise serializers.ValidationError("Not enough funds on bettor wallet.")
 		p.bets+=1
-		p.sum-=validated_data.get('bet_sum')
-		p.save()
-		p = Profile.objects.get(user = validated_data['creator'])
-		p.bets+=1
-		p.sum-=validated_data.get('bet_sum') * validated_data.get('koefficient')
 		p.save()
 		e = instance.event
-		e.total_users+=2
-		e.total_sum+=validated_data.get('bet_sum') * validated_data.get('koefficient') + validated_data.get('bet_sum')
+		e.total_users+=1
+		e.total_sum+= validated_data.get('bet_sum')
 		e.save()
 		instance.bettor = validated_data.get('bettor', instance.bettor)
 		instance.bet_sum = validated_data.get('bet_sum', instance.bet_sum)

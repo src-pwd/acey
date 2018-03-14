@@ -6,13 +6,13 @@ from django.dispatch import receiver
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = "profile")
 	profile_picture = models.ImageField(null = True, blank = True)
-	rate = models.IntegerField(null = True, blank = True)
+	rate = models.IntegerField(default = 0, blank = True)
 	info = models.CharField(max_length = 500, blank = True)
 	sum = models.IntegerField(default = 0)
 	bets = models.IntegerField(default = 0)
 	events = models.IntegerField(default = 0)
-	activity_rate = models.IntegerField(null = True, blank = True)
-	win_rate = models.IntegerField(null = True, blank = True)
+	activity_rate = models.IntegerField(default = 0, null = True, blank = True)
+	win_rate = models.IntegerField(default = 0, blank = True)
 
 class Event(models.Model):
 	creator = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "creator")
