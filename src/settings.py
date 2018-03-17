@@ -15,7 +15,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:4000',
+)
 # Application definition
 
 INSTALLED_APPS = [
