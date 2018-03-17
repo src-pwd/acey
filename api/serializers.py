@@ -20,6 +20,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = ('user', 'profile_picture', 'rate', 'info', 'sum', 'bets', 'events', 'activity_rate', 'win_rate',)
+		read_only_fields = ('user', 'bets', 'events',)
 
 	def create(self, validated_data):
 		user_data = validated_data.pop('user')
@@ -35,13 +36,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 	def update(self, instance, validated_data):
 		instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
-		instance.rate = validated_data.get('rate', instance.rate)
+		# instance.rate = validated_data.get('rate', instance.rate)
 		instance.info = validated_data.get('info', instance.info)
-		instance.sum = validated_data.get('sum', instance.sum)
-		instance.bets = validated_data.get('bets', instance.bets)
-		instance.events = validated_data.get('events', instance.events)
-		instance.activity_rate = validated_data.get('activity_rate', instance.activity_rate)
-		instance.win_rate = validated_data.get('win_rate', instance.win_rate)
+		# instance.sum = validated_data.get('sum', instance.sum)
+		# instance.bets = validated_data.get('bets', instance.bets)
+		# instance.events = validated_data.get('events', instance.events)
+		# instance.activity_rate = validated_data.get('activity_rate', instance.activity_rate)
+		# instance.win_rate = validated_data.get('win_rate', instance.win_rate)
 		instance.save()
 		user_data = validated_data.get('user')
 		if user_data:
@@ -162,10 +163,13 @@ class BetSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 		sum = validated_data.get('sum')
-		p = Profile.objects.get(user = validated_data['bettor'])
-		p.bets+=1
-		p.sum-=sum
-		p.save()
+		p = Profile.objects.get(user = validated_data.get('bettor'))
+		if p.sum - sum >= 0:
+			p.bets+=1
+			p.sum-=sum
+			p.save()
+		else:
+			raise serializers.ValidationError("Not enough funds on bettor wallet.")
 		o = validated_data.get('option')
 		o.total_users+=1
 		o.total_sum+=sum
@@ -192,7 +196,16 @@ class AccurateBetSerializer(serializers.ModelSerializer):
 		read_only_fields = ('id',)
 
 	def create(self, validated_data):
-		p = Profile.objects.get(user = validated_data['bettor'])
+		sum = validated_data.get('sum')
+		if validated_data.get('stake')<=0:
+			raise serializers.ValidationError("Incorrect token price stake. Token can't cost 0 or less.")
+		p = Profile.objects.get(user = validated_data.get('bettor'))
+		if p.sum - sum >= 0:
+			p.bets+=1
+			p.sum-=sum
+			p.save()
+		else:
+			raise serializers.ValidationError("Not enough funds on bettor wallet.")
 		p.bets+=1
 		p.sum-=validated_data.get('sum')
 		p.save()

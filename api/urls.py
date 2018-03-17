@@ -1,9 +1,11 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from .views import *
 
 urlpatterns = {
-	url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')), 
+	url(r'^auth/obtain_token/', obtain_jwt_token),
+	url(r'^auth/refresh_token/', refresh_jwt_token),
 	url(r'^users/$', ProfilesView.as_view(), name="create"),
 	url(r'^users/(?P<pk>[0-9]+)/$',
 		DetailsProfileView.as_view(), name="details"),

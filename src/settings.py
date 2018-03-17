@@ -13,7 +13,7 @@ SECRET_KEY = 'ybjpfnhvm7v7s7%t9czb$k)80mjw8hfyrzd1k^c-@&^5e63#@!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -136,6 +136,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX': 'Token',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
     'JWT_ALLOW_REFRESH': True,
 }
@@ -147,3 +148,5 @@ REST_FRAMEWORK = {
 }
 
 REST_USE_JWT = True
+
+# SITE_ID = 1
