@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'QW5kcmV5RWJ1bkxlaGFSYXpyYWJvdGNoaWtCZWtlbmRh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -31,11 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'rest_auth',
+    'djoser',
+    'rest_framework_jwt',
+    # 'rest_auth',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
     'api'   
 ]
 
@@ -71,10 +70,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'src.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -142,14 +137,42 @@ REST_AUTH_SERIALIZERS = {
 }
 
 JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+    # 'JWT_ENCODE_HANDLER':
+    # 'rest_framework_jwt.utils.jwt_encode_handler',
+
+    # 'JWT_DECODE_HANDLER':
+    # 'rest_framework_jwt.utils.jwt_decode_handler',
+
+    # 'JWT_PAYLOAD_HANDLER':
+    # 'rest_framework_jwt.utils.jwt_payload_handler',
+
+    # 'JWT_PAYLOAD_GET_USER_ID_HANDLER':
+    # 'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
+
+    # 'JWT_RESPONSE_PAYLOAD_HANDLER':
+    # 'rest_framework_jwt.utils.jwt_response_payload_handler',
+
+    # 'JWT_SECRET_KEY': SECRET_KEY,
+    # 'JWT_ALGORITHM': 'HS256',
+    # 'JWT_VERIFY': True,
+    # 'JWT_VERIFY_EXPIRATION': True,
+    # 'JWT_LEEWAY': 0,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes = 15),
+    # 'JWT_AUDIENCE': None,
+    # 'JWT_ISSUER': None,
+
     'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days = 1),
+
+    # 'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
