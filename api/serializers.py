@@ -10,7 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login',)
-		extra_kwargs = {'password': {'write_only': True}, 'username': {'validators': []}}
+		extra_kwargs = {#'password': {'write_only': True}, 
+						'username': {'validators': []}}
 		read_only_fields = ('date_joined', 'last_login')
 
 
@@ -35,14 +36,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 		return my_user
 
 	def update(self, instance, validated_data):
+		if validated_data.get('rate') or validated_data.get('sum') or validated_data.get('bets') or validated_data.get('events') or validated_data.get('activity_rate') or validated_data.get('win_rate'):
+			raise serializers.ValidationError("Fields except info, picture and password can't be updated.")
 		instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
-		# instance.rate = validated_data.get('rate', instance.rate)
 		instance.info = validated_data.get('info', instance.info)
-		# instance.sum = validated_data.get('sum', instance.sum)
-		# instance.bets = validated_data.get('bets', instance.bets)
-		# instance.events = validated_data.get('events', instance.events)
-		# instance.activity_rate = validated_data.get('activity_rate', instance.activity_rate)
-		# instance.win_rate = validated_data.get('win_rate', instance.win_rate)
 		instance.save()
 		user_data = validated_data.get('user')
 		if user_data:
@@ -71,7 +68,7 @@ class OptionSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
 
-	creator = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
+	creator = serializers.SlugRelatedField(slug_field = 'username', queryset = User.objects.all())
 
 	class Meta:
 		model = Event
