@@ -1,14 +1,20 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAdminUser
+import jwt,json
+from django.http import HttpResponse
+from rest_framework import generics, views
+from django.contrib.auth.hashers import make_password, check_password
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+from rest_framework.permissions import *
 from .models import Profile
 from .serializers import *
 from rest_framework.metadata import SimpleMetadata
+from .permissions import IsOwner
 
 
 class ProfilesView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    # permission_classes = (IsAdminUser,)
+    # permission_classes = [IsAuthenticated]
 
 class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
@@ -18,13 +24,13 @@ class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
 class EventsView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    # permission_classes = (IsAdminUser,)
+    # permission_classes = (IsOwner,)
 
 class DetailsEventView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     metadata_class = SimpleMetadata
-    # permission_classes = (IsAdminUser,)
+    permission_classes = (IsOwner,)
 
 class OptionsView(generics.ListCreateAPIView):
     queryset = Option.objects.all()
@@ -37,10 +43,16 @@ class PredictionsView(generics.ListCreateAPIView):
     metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
-# class DetailsPredictionView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Event.objects.all()
-#     serializer_class = PredictionSerializer
-#     metadata_class = SimpleMetadata
+class AccuratePredictionsView(generics.ListCreateAPIView):
+    queryset = Event.objects.filter(type = "AccuratePrediction")
+    serializer_class = EventSerializer
+    # metadata_class = SimpleMetadata
+    # permission_classes = (IsAdminUser,)
+
+class ParleyEventsView(generics.ListCreateAPIView):
+    queryset = Event.objects.filter(type = "Parley")
+    serializer_class = EventSerializer
+    # metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
 class DetailsOptionView(generics.RetrieveUpdateDestroyAPIView):
