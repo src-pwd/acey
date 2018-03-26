@@ -8,7 +8,7 @@ from rest_framework.permissions import *
 from .models import Profile
 from .serializers import *
 from rest_framework.metadata import SimpleMetadata
-from .permissions import IsOwner
+# from .permissions import IsOwner
 
 
 class ProfilesView(generics.ListCreateAPIView):
@@ -21,6 +21,12 @@ class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     # permission_classes = (IsAdminUser,)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.user.delete()
+        # self.perform_destroy(instance)
+        return HttpResponse(status=200)
+
 class EventsView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -30,7 +36,7 @@ class DetailsEventView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     metadata_class = SimpleMetadata
-    permission_classes = (IsOwner,)
+    # permission_classes = (IsOwner,)
 
 class OptionsView(generics.ListCreateAPIView):
     queryset = Option.objects.all()
@@ -43,19 +49,19 @@ class PredictionsView(generics.ListCreateAPIView):
     metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
-class AccuratePredictionsView(generics.ListCreateAPIView):
+class AccuratePredictionsView(generics.ListAPIView):
     queryset = Event.objects.filter(type = "AccuratePrediction")
     serializer_class = EventSerializer
     # metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
-class ParleyEventsView(generics.ListCreateAPIView):
+class ParleyEventsView(generics.ListAPIView):
     queryset = Event.objects.filter(type = "Parley")
     serializer_class = EventSerializer
     # metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
-class DetailsOptionView(generics.RetrieveUpdateDestroyAPIView):
+class DetailsOptionView(generics.RetrieveDestroyAPIView):
     queryset = Option.objects.all()
     serializer_class = OptionSerializer
     metadata_class = SimpleMetadata

@@ -11,7 +11,7 @@ class Profile(models.Model):
 	sum = models.IntegerField(default = 0)
 	bets = models.IntegerField(default = 0)
 	events = models.IntegerField(default = 0)
-	activity_rate = models.IntegerField(default = 0, null = True, blank = True)
+	activity_rate = models.IntegerField(default = 0, blank = True)
 	win_rate = models.IntegerField(default = 0, blank = True)
 
 class Event(models.Model):
