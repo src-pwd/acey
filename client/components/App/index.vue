@@ -1,19 +1,6 @@
 <template>
 <div id="app">
-    <div class="page-layout">
-        <sidebar-component :active="sidebarOpened" />
-        <div class="page-layout-inner">
-            <header-component :openSidebar="openSidebar" :title="title" />
-            <main>
-            <div class="main-content">
-                <el-row class="container">
-                    <router-view></router-view>
-                </el-row>
-            </div>
-        </main>
-    </div>
-        <dimmer :active="obfuscatorActive" :closeSidebar="closeSidebar" />
-    </div>
+    <router-view></router-view>
 </div>
 </template>
 <script>

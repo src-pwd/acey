@@ -1,58 +1,61 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Create from 'views/Create'
-import Post from 'views/Post'
-import About from 'views/About'
-import Accuracy from 'views/Accuracy'
-import Play from 'views/Play'
-import Range from 'views/Range'
+
+import Authorization from 'Views/Authorization'
+
+import Dashboard from 'Views/Dashboard'
+
+import Create from 'Views/Create'
+import CreateRange from 'Views/Create/range.vue'
+import CreateAccuracy from 'Views/Create/accuracy.vue'
+import CreateParlay from 'Views/Create/parlay.vue'
+
+import UserDashboard from 'Views/UserDashboard'
+
 import Event from 'views/Event'
-import UserDashboard from 'views/UserDashboard'
 
 Vue.use(Router)
 
 export const routes = [
   {
     path: '/',
+    component: Authorization,
+    meta: {
+      title: 'Authorization'
+    }
+  }, {
+    path: '/dashboard',
+    component: Dashboard,
+    meta: {
+      title: 'Dashboard'
+    }
+
+  },
+  {
+    path: '/create',
     component: Create,
     meta: {
       title: 'Create'
-    }
-  }, {
-    path: '/post/:id',
-    component: Post,
-    meta: {
-      title: 'Post'
-    }
-  }, {
-    path: '/about',
-    component: About,
-    meta: {
-      title: 'About'
-    }
-  }, {
-    path: '/play',
-    component: Play,
-    meta: {
-      title: 'Play'
-    }
-  }, {
-    path: '/range',
-    component: Range,
-    meta: {
-      title: 'Range prediction'
-    }
-  }, {
-    path: '/accuracy',
-    component: Accuracy,
-    meta: {
-      title: 'Accuracy prediction'
-    }
+    },
+    children: [
+      {
+        path: 'range',
+        component: CreateRange
+      },
+      {
+        path: 'accuracy',
+        component: CreateAccuracy
+      },
+      {
+        path: 'parlay',
+        component: CreateParlay
+      }
+    ]
   }, {
     path: '/user_dashboard',
     component: UserDashboard,
     meta: {
-      title: 'User\'s dashboard'
+      title: 'User\'s dasbhboard'
     }
   }, {
     path: '/event/:id',
@@ -60,6 +63,11 @@ export const routes = [
     meta: {
       title: 'Event'
     }
+  },
+  {
+    path: '/event',
+    redirect: '/dashboard'
   }
 ]
+
 export const router = new Router({ mode: 'history', routes })

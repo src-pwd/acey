@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  import userpic from '/Users/fiji/aceyapp/static/userpic.png'
   export default {
     name: 'UserDashboard',
     components: {},
