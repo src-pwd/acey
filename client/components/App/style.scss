@@ -25,10 +25,6 @@ body {
             transition-property: transform;
             width: 100%;
             transform: translate3d(0, 0, 0)!important;
-            @include respond-to('lg') {
-                width: calc(100% - #{$sidebar-size}); //
-                transform: translate3d($sidebar-size, 0, 0)!important; //
-            }
             .main-content {
                 width: 100%;
                 margin: 0;
@@ -47,3 +43,5 @@ body {
         }
     }
 }
+
+

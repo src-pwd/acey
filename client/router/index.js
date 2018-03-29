@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Authorization from 'Views/Authorization'
+import Authorization from 'views/Authorization'
 
-import Dashboard from 'Views/Dashboard'
+import Dashboard from 'views/Dashboard'
 
-import Create from 'Views/Create'
-import CreateRange from 'Views/Create/range.vue'
-import CreateAccuracy from 'Views/Create/accuracy.vue'
-import CreateParlay from 'Views/Create/parlay.vue'
+import Create from 'views/Create'
+import CreateRange from 'views/Create/range.vue'
+import CreateAccuracy from 'views/Create/accuracy.vue'
+import CreateParlay from 'views/Create/parlay.vue'
 
-import UserDashboard from 'Views/UserDashboard'
+import UserDashboard from 'views/UserDashboard'
 
 import Event from 'views/Event'
 
