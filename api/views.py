@@ -55,7 +55,19 @@ class AccuratePredictionsView(generics.ListAPIView):
     # metadata_class = SimpleMetadata
     # permission_classes = (IsAdminUser,)
 
+class AccuratePredictionDetailsView(generics.RetrieveDestroyAPIView):
+    queryset = Event.objects.filter(type = "AccuratePrediction")
+    serializer_class = EventSerializer
+    # metadata_class = SimpleMetadata
+    # permission_classes = (IsAdminUser,)
+
 class ParleyEventsView(generics.ListAPIView):
+    queryset = Event.objects.filter(type = "Parley")
+    serializer_class = EventSerializer
+    # metadata_class = SimpleMetadata
+    # permission_classes = (IsAdminUser,)
+
+class ParleyEventDetailsView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.filter(type = "Parley")
     serializer_class = EventSerializer
     # metadata_class = SimpleMetadata
