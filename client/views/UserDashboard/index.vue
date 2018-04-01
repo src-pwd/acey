@@ -9,13 +9,12 @@
         <p>WINRATE: {{ user.winRate }}</p>
         <p>BALANCE: {{ user.balance }} ACEY</p>
       </div>
-      <img :src="userpic" alt="" class="userpic-user-dashboard">
+      <!-- <img :src="userpic" alt="" class="userpic-user-dashboard"> -->
     </div>
   </div>
 </template>
 
 <script>
-  import userpic from '/Users/fiji/aceyapp/static/userpic.png'
   export default {
     name: 'UserDashboard',
     components: {},
@@ -24,9 +23,6 @@
         console.log(this.$store.state.user)
         return this.$store.state.user
       },
-      userpic() {
-        return userpic
-      }
     }
   }
 </script>
@@ -36,8 +32,6 @@
     display: flex;
     flex-flow: row;
   }
-  
-  .userpic-user-dashboard {}
   
   .description-user-dashboard {
     width: 50%;

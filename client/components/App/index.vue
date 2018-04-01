@@ -1,27 +1,16 @@
 <template>
 <div id="app">
     <div class="page-layout">
-        <sidebar-component :active="sidebarOpened" />
-        <div class="page-layout-inner">
-            <header-component :openSidebar="openSidebar" :title="title" />
-            <main>
+            <header-c :title="title"></header-c>
             <div class="main-content">
-                <el-row class="container">
                     <router-view></router-view>
-                </el-row>
             </div>
-        </main>
-    </div>
-        <dimmer :active="obfuscatorActive" :closeSidebar="closeSidebar" />
     </div>
 </div>
 </template>
 <script>
-import Header from 'components/Header'
-import Sidebar from 'components/Sidebar'
-import Dimmer from 'components/Dimmer'
 import { mapActions, mapState } from 'vuex'
-
+import Header from 'components/Header'
 export default {
   name: 'App',
   methods: {
@@ -29,9 +18,6 @@ export default {
   },
   computed: {
     ...mapState({
-        sidebarOpened: state => {
-            return state.ui.sidebarOpened
-        },
         obfuscatorActive: state => {
             return state.ui.obfuscatorActive
         },
@@ -41,9 +27,7 @@ export default {
     })
   },
   components: {
-    'header-component': Header,
-    'sidebar-component': Sidebar,
-    Dimmer
+     'header-c' :Header
   },
   created: function () {
     window.addEventListener('resize', this.handleResize)
