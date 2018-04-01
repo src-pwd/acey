@@ -13,14 +13,13 @@ SECRET_KEY = 'QW5kcmV5RWJ1bkxlaGFSYXpyYWJvdGNoaWtCZWtlbmRh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["127.0.0.1"]
+CORS_ORIGIN_ALLOW_ALL = False
 
-# CORS_ORIGIN_WHITELIST = (
-#     '127.0.0.1:4000',
-# )
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:4000',
+)
 
-CORS_ORIGIN_ALLOW_ALL=True
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,12 +32,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework_jwt',
-    # 'rest_auth',
+    'rest_auth',
     'django.contrib.sites',
     'api'   
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -46,8 +47,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'src.urls'
@@ -176,6 +175,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-REST_USE_JWT = True
+CORS_ALLOW_CREDENTIALS = True
+
+# REST_USE_JWT = True
 
 # SITE_ID = 1

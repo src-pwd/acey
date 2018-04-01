@@ -24,7 +24,6 @@ class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.user.delete()
-        # self.perform_destroy(instance)
         return HttpResponse(status=200)
 
 class EventsView(generics.ListCreateAPIView):
