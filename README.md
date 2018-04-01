@@ -32,7 +32,9 @@ Running server:
 
 `python3 manage.py runserver`
 
+and watch port :8000 in browser
 
+[localhost:8000/](localhost:8000/)
 
 
 
