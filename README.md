@@ -1,7 +1,7 @@
 # README #
 
-### How do I get set up? ###
-first run:
+### How do I get set up front? ###
+First run:
 
 
 `cd aceyapp && npm install` 
@@ -13,6 +13,26 @@ then when installed node_modules:
 and watch port :4000 in browser
 
 [localhost:4000/](localhost:4000/)
+
+
+### How do I get set up back? ###
+First run:
+
+`mkvirtualenv acey` 
+
+Always activate virtualenv:
+
+`cd acey && source bin/activate` 
+
+Installing deps:
+
+`pip3 install -r requirements.txt` 
+
+Running server:
+
+`python3 manage.py runserver`
+
+
 
 
 
