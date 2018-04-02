@@ -2,7 +2,7 @@ import os
 import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -16,8 +16,18 @@ DEBUG = False
 ALLOWED_HOSTS = ["127.0.0.1", 'localhost']
 CORS_ORIGIN_ALLOW_ALL = False
 
+CORS_ALLOW_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken'
+)
+
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:4000',
+    'localhost:4000',
 )
 
 
@@ -125,6 +135,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/user_pictures/'
@@ -180,3 +191,6 @@ CORS_ALLOW_CREDENTIALS = True
 # REST_USE_JWT = True
 
 # SITE_ID = 1
+
+import django_heroku
+django_heroku.settings(locals())
