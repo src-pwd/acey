@@ -119,6 +119,28 @@ class ParleysView(generics.ListCreateAPIView):
             setattr(serializer_class.Meta, 'read_only_fields', ('bettor', 'bet_sum', 'status', ))
         return serializer_class
 
+class ReadyParleysView(generics.ListAPIView):
+    queryset = Parley.objects.filter(status = "Ready")
+    serializer_class = ParleySerializer
+    # permission_classes = (IsAdminUser,)
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method == 'GET':
+            setattr(serializer_class.Meta, 'read_only_fields', tuple())
+        return serializer_class
+
+class WaitingParleysView(generics.ListAPIView):
+    queryset = Parley.objects.filter(status = "Waiting")
+    serializer_class = ParleySerializer
+    # permission_classes = (IsAdminUser,)
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method == 'GET':
+            setattr(serializer_class.Meta, 'read_only_fields', tuple())
+        return serializer_class
+
 class DetailsParleyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Parley.objects.all()
     serializer_class = ParleySerializer

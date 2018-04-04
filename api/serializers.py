@@ -2,10 +2,11 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import *
-from .tokens import account_activation_token
+# from .tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.db.utils import *
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 		read_only_fields = ('date_joined', 'last_login', 'id')
 
 	def validate(self, data):
-		user_qs = User.objects.filter(email=data['email'])
+		user_qs = User.objects.filter(email=data.get('email'))
 		if user_qs.exists():
 			raise serializers.ValidationError("This email is already registered.")
 		return data
@@ -34,13 +35,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 		user_data = validated_data.pop('user')
-		user = User.objects.create(
+		user = User(
 			username=user_data['username'],
 			email=user_data.get('email', ''),
 			password=make_password(user_data['password']),
 			first_name = user_data.get('first_name', ''),
 			last_name = user_data.get('last_name', ''),
-			is_active = False,
+			# is_active = False,
+			is_active = True,
 		)
 		# subject = 'Activate Your ACEY Account'
 		# message = render_to_string('account_activation_email.html', {
@@ -50,6 +52,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 		# 		'token': account_activation_token.make_token(user),
 		# 	})
 		# user.email_user(subject, message)
+		try:
+			user.save()
+		except IntegrityError:
+			raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
 		my_user = Profile.objects.create(user=user, **validated_data)
 		return my_user
 
@@ -57,7 +63,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 		
 		if validated_data.get('rate') or validated_data.get('sum') or validated_data.get('bets') or validated_data.get('events') or validated_data.get('activity_rate') or validated_data.get('win_rate'):
 			raise serializers.ValidationError("Fields except info, picture, password, first and last name can't be updated.")
-
+		print(dict(validated_data))
 		instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
 		instance.info = validated_data.get('info', instance.info)
 		instance.save()
