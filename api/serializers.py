@@ -2,7 +2,10 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import *
-import sys
+from .tokens import account_activation_token
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 
 		model = User
-		fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login',)
+		fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_active')
 		extra_kwargs = {#'password': {'write_only': True}, 
 						'username': {'validators': []}}
 		read_only_fields = ('date_joined', 'last_login', 'id')
@@ -36,8 +39,17 @@ class ProfileSerializer(serializers.ModelSerializer):
 			email=user_data.get('email', ''),
 			password=make_password(user_data['password']),
 			first_name = user_data.get('first_name', ''),
-			last_name = user_data.get('last_name', '')
+			last_name = user_data.get('last_name', ''),
+			is_active = False,
 		)
+		# subject = 'Activate Your ACEY Account'
+		# message = render_to_string('account_activation_email.html', {
+		# 		'user': user,
+		# 		'domain': "acey.it",
+		# 		'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+		# 		'token': account_activation_token.make_token(user),
+		# 	})
+		# user.email_user(subject, message)
 		my_user = Profile.objects.create(user=user, **validated_data)
 		return my_user
 
