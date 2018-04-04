@@ -20,9 +20,15 @@ class UserSerializer(serializers.ModelSerializer):
 		read_only_fields = ('date_joined', 'last_login', 'id')
 
 	def validate(self, data):
+
 		user_qs = User.objects.filter(email=data.get('email'))
 		if user_qs.exists():
 			raise serializers.ValidationError("This email is already registered.")
+
+		user_qs = User.objects.filter(username__iexact=data.get('username'))
+		if user_qs.exists():
+			raise serializers.ValidationError("This username already exists.")
+
 		return data
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -197,12 +203,17 @@ class BetSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 
-		if Bet.objects.filter(bettor = validated_data.get('bettor'), option = validated_data.get('option')).exists():
-			raise serializers.ValidationError("This user has already made bet on this option.")	
+		option_list = Option.objects.filter(event = validated_data.get('option').event)
+
+		for i in option_list:
+			if Bet.objects.filter(bettor = validated_data.get('bettor'), option = i).exists():
+				raise serializers.ValidationError("This user has already made bet on this event.")
+
+		if validated_data.get('bettor') == validated_data.get('option').event.creator:
+			raise serializers.ValidationError("Creator of event can't bet on his event.")
 
 		sum = validated_data.get('sum')
 		_profile = Profile.objects.get(user = validated_data.get('bettor'))
-
 		if _profile.sum - sum >= 0:
 			_profile.bets+=1
 			_profile.sum-=sum
@@ -237,6 +248,9 @@ class AccurateBetSerializer(serializers.ModelSerializer):
 		read_only_fields = ('id',)
 
 	def create(self, validated_data):
+
+		if validated_data.get('bettor') == validated_data.get('event').creator:
+			raise serializers.ValidationError("Can't bet on your own event.")	
 
 		if AccurateBet.objects.filter(bettor = validated_data.get('bettor'), event = validated_data.get('event')).exists():
 			raise serializers.ValidationError("This user has already made bet on this event.")	
@@ -277,6 +291,14 @@ class ParleySerializer(serializers.ModelSerializer):
 		fields = ('id', 'event', 'creator', 'bettor', 'created', 'koefficient', 'min_sum', 'max_sum', 'status', 'bet_sum', )
 		read_only_fields = ('id', 'created', 'status', 'bettor',)
 
+	def validate(self, data):
+
+		user_qs = Parley.objects.filter(event=data.get('event'), creator = data.get('creator'))
+		if user_qs.exists():
+			raise serializers.ValidationError("Don't cheat. One event - one parley - one user.")
+
+		return data
+
 	def create(self, validated_data):
 
 		if validated_data.get('max_sum') * validated_data.get('koefficient') > Profile.objects.get(user = validated_data.get('creator')).sum:
@@ -308,18 +330,22 @@ class ParleySerializer(serializers.ModelSerializer):
 			raise serializers.ValidationError("Invalid sum to bet.")
 
 		_profile = Profile.objects.get(user = validated_data.get('bettor'))
-
 		if _profile.sum - validated_data.get('bet_sum')>=0:
 			_profile.sum-=validated_data.get('bet_sum')
 		else:
 			raise serializers.ValidationError("Not enough funds on bettor wallet.")
-
 		_profile.bets+=1
 		_profile.save()
+
+		_profile = instance.creator
+		_profile.sum += (instance.max_sum * instance.koefficient - validated_data.get('bet_sum') * instance.koefficient)
+		_profile.save()
+
 		_event = instance.event
 		_event.total_users+=1
 		_event.total_sum+= validated_data.get('bet_sum')
 		_event.save()
+
 		instance.bettor = validated_data.get('bettor', instance.bettor)
 		instance.bet_sum = validated_data.get('bet_sum', instance.bet_sum)
 		instance.status = "Ready"
