@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import ui from './ui'
 import range from './range'
+import auth from './auth'
 import accuracy from './accuracy'
 import eventsDashboard from './eventsdashboard'
 import user from './user'
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     accuracy,
     eventsDashboard,
     user,
+    auth,
     event
   },
   strict: true

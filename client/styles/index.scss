@@ -1,9 +1,13 @@
 @import './fonts.scss';
+@import './vars.scss';
 
 html, body {
     width: 100%;
     height: 100%;
+    background-color: #1a1a1a;
+    color: $font-color;
 }
+
 
 
 .container {

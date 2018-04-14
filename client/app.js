@@ -1,5 +1,7 @@
+/* eslint-disable */
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
+import jwt_decode from 'jwt-decode'
 import Element from 'element-ui'
 import App from 'components/App' // require components using webpack alias
 import { router } from './router' // Vue Router
@@ -13,6 +15,8 @@ import '../theme/index.css'
 
 sync(store, router)
 Vue.use(Element, { locale })
+
+const BASE_URL = 'http://localhost:8000'
 
 const app = new Vue({
   router,

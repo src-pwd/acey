@@ -4,7 +4,7 @@ const state = {
   winRate: 3242,
   balance: 320300,
   history: null,
-  name: 'Vasya'
+  name: 'Andrey S'
     // нужно поговорить с лехой
 }
 

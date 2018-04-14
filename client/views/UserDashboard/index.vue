@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <h1>User Dashboard </h1>
+  <div class="container">
+  <div class="user-container">
     <div class="user-dashboard">
       <div class="description-user-dashboard">
-        zdarova krasiviye
-        <p>user id: #{{ user.id }}</p>
-        <p>name: {{ user.name }}</p>
-        <p>WINRATE: {{ user.winRate }}</p>
-        <p>BALANCE: {{ user.balance }} ACEY</p>
+        <p class="description-user-name">{{ user.name }}</p>      
+        <p class="description-user-id">Your id #{{ user.id }}</p>
+        <p class="description-user-winrate">WINRATE {{ user.winRate }}</p>
+        <p class="description-user-balance">BALANCE {{ user.balance }} ACEY</p>
       </div>
-      <!-- <img :src="userpic" alt="" class="userpic-user-dashboard"> -->
+       <img src="userpic.png" alt="" class="userpic-user-dashboard">
+    </div>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   .user-dashboard {
     display: flex;
     flex-flow: row;
@@ -36,4 +36,30 @@
   .description-user-dashboard {
     width: 50%;
   }
+  .user-container {
+    width: 700px;
+    margin-top: 100px;
+    margin-left:auto;
+    margin-right: auto;
+  }
+  p.description-user-name {
+    font-size: 40px;
+    color: white;
+}
+
+.description-user-dashboard {
+  & > p {
+    font-size: 20px;
+    color: white;
+  }
+}
+
+.userpic-user-dashboard {
+  border-radius: 150px;
+  margin-left: 200px;
+}
+
+.description-user-balance {
+  color: orange !important;
+}
 </style>
