@@ -2,7 +2,7 @@ import os
 import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -16,8 +16,18 @@ DEBUG = False
 ALLOWED_HOSTS = ["127.0.0.1", 'localhost']
 CORS_ORIGIN_ALLOW_ALL = False
 
+CORS_ALLOW_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken'
+)
+
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:4000',
+    '127.0.0.1:8000',
     'localhost:4000',
 )
 
@@ -42,6 +52,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.BrokenLinkEmailsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,6 +92,16 @@ WSGI_APPLICATION = 'src.wsgi.application'
 #         'PORT': ''
 #     }
 # }
+
+DEFAULT_FROM_EMAIL = 'nananaBoston@gmail.com'
+SERVER_EMAIL = 'nananaBoston@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'PewdiepieEminem270398'
+EMAIL_HOST_USER = 'nananaBoston@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
 
 DATABASES = {
     'default': {
@@ -122,11 +143,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    BASE_DIR,
+)
+
+# STATICFILES_STORAGE = 'whitenoise.django.CompressedManifestStaticFilesStorage'
+# WHITENOISE_ROOT = os.path.join(PROJECT_DIR, 'staticfiles', 'root') 
 
 MEDIA_URL = '/user_pictures/'
 
@@ -137,42 +167,14 @@ REST_AUTH_SERIALIZERS = {
 }
 
 JWT_AUTH = {
-    # 'JWT_ENCODE_HANDLER':
-    # 'rest_framework_jwt.utils.jwt_encode_handler',
-
-    # 'JWT_DECODE_HANDLER':
-    # 'rest_framework_jwt.utils.jwt_decode_handler',
-
-    # 'JWT_PAYLOAD_HANDLER':
-    # 'rest_framework_jwt.utils.jwt_payload_handler',
-
-    # 'JWT_PAYLOAD_GET_USER_ID_HANDLER':
-    # 'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
-
-    # 'JWT_RESPONSE_PAYLOAD_HANDLER':
-    # 'rest_framework_jwt.utils.jwt_response_payload_handler',
-
-    # 'JWT_SECRET_KEY': SECRET_KEY,
-    # 'JWT_ALGORITHM': 'HS256',
-    # 'JWT_VERIFY': True,
-    # 'JWT_VERIFY_EXPIRATION': True,
-    # 'JWT_LEEWAY': 0,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes = 15),
-    # 'JWT_AUDIENCE': None,
-    # 'JWT_ISSUER': None,
-
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days = 1),
-
-    # 'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
@@ -181,3 +183,6 @@ CORS_ALLOW_CREDENTIALS = True
 # REST_USE_JWT = True
 
 # SITE_ID = 1
+
+# import django_heroku
+# django_heroku.settings(locals())
