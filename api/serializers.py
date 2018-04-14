@@ -2,11 +2,13 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import *
-# from .tokens import account_activation_token
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .tokens import account_activation_token
+from django.core.mail import send_mail
 from django.db.utils import *
+from django.conf import settings
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -47,23 +49,23 @@ class ProfileSerializer(serializers.ModelSerializer):
 			password=make_password(user_data['password']),
 			first_name = user_data.get('first_name', ''),
 			last_name = user_data.get('last_name', ''),
-			# is_active = False,
-			is_active = True,
+			is_active = False,
+			# is_active = True,
 		)
-		# subject = 'Activate Your ACEY Account'
-		# message = render_to_string('account_activation_email.html', {
-		# 		'user': user,
-		# 		'domain': "acey.it",
-		# 		'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-		# 		'token': account_activation_token.make_token(user),
-		# 	})
-		# user.email_user(subject, message)
 		try:
 			user.save()
 		except IntegrityError:
 			raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
-		my_user = Profile.objects.create(user=user, **validated_data)
-		return my_user
+		profile = Profile.objects.create(user=user, **validated_data)
+		mail_subject = 'Activate your blog account.'
+		message = render_to_string('acc_active_email.html', {
+				'user': user,
+				'domain': "acey.it",
+				'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+				'token':account_activation_token.make_token(user),
+			})
+		send_mail(mail_subject, message, settings.EMAIL_HOST_USER, [user.email])
+		return profile
 
 	def update(self, instance, validated_data):
 		
