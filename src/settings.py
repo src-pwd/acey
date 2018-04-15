@@ -167,6 +167,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 JWT_AUTH = {
+    'JWT_GET_USER_SECRET_KEY': 'api.models.jwt_get_secret_key',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes = 15),
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days = 1),
