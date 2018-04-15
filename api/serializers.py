@@ -181,7 +181,7 @@ class PredictionSerializer(serializers.ModelSerializer):
 			currency_pair = validated_data['currency_pair'],
 			exchange = validated_data['exchange'],			
 		)
-
+		
 		if options:
 			for option in options:
 				Option.objects.create(**option, event = event)

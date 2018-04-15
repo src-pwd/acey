@@ -33,7 +33,7 @@ def activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 class UserLogoutAllView(views.APIView):
-    # permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         username = request.data.get("username")
         if username:
