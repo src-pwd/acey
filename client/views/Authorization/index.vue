@@ -103,6 +103,7 @@
   .main-acey-logoform {
     padding-top: 100px;
     max-width: 1000px;
+    
     max-height: 900px;
     display: flex;
     flex-flow: row;
@@ -123,14 +124,19 @@
     }
     
     &-tab {
+      border-left: 1px solid gray;
+    border-radius: 7px;
+    border-right: 1px solid gray;
       text-align: center;
-    height: 50px;
-    padding: 50px;
+    height: 30px;
+    padding: 30px;
+    transition: 0.2s ease;
     border-bottom: 1px solid white;
 }  
   &-tab.active {
     border-top: 3px solid orange;
-    
+    height: 70px;
+    padding: 70px;
   }
 
 

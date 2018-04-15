@@ -40,9 +40,8 @@ export default {
     window.addEventListener('resize', this.handleResize)
   },
   
-  beforeCreate() {
+  beforeUpdate() {
       this.$store.dispatch('inspectToken')
-      console.log('lel')    
   }
 }
 </script>
