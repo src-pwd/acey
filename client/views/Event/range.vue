@@ -40,7 +40,20 @@
                     .then((el) => {
                         this.options = el.filter(l => l.event == this.$route.params.id)
                         console.log(this.options)
-    
+                
+                    })
+                    fetch('http://localhost:8000/api/users/', {
+                        method: "GET", // or 'PUT'
+                        headers: new Headers({
+                            "Content-Type": "application/json"
+                        })
+                    })
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then((el) => {
+                       
+                        console.log(el)
                     })
             },
             chooseOption(item) {
@@ -51,9 +64,12 @@
                 var payload = {
                     "option": this.selected.id,
                     "bettor": this.username,
-                    "sum": Math.floor(Math.random() * 100) + 1
+                    "sum": 0
                 }
-                this.$store.dispatch("predictionBet", payload)
+                this.$store.dispatch("predictionBet", payload).then(()=>{
+                        this.$router.push('/dashboard')                    
+                })
+                
             }
         },
         data() {

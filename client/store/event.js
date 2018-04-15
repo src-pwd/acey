@@ -16,7 +16,12 @@ const actions = {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(response => {
+    })
+    .then(response => {
+      if (!response.ok) {
+        response.json().then(el => window.alert(el))
+        return
+      }
       response.json().then(el => {
         console.log(el)
       })
