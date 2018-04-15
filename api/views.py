@@ -1,5 +1,6 @@
 import jwt
 import json
+from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import generics, views, status
 from django.contrib.auth.hashers import make_password, check_password
@@ -35,7 +36,15 @@ def activate(request, uidb64, token):
 class UserLogoutAllView(views.APIView):
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("username")
+        try:
+            token = request.data.get("token")
+        except Exception as e:
+            return HttpResponse("No token field in request")
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, verify = False)
+        except:
+            return HttpResponse("Can't decode token.")
+        username = payload.get("username")
         if username:
             user = User.objects.get(username = username)
             if user:
