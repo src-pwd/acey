@@ -1,15 +1,13 @@
 <template>
     <div class="dashboard">
         <div v-for="element in events">
-            <dashboard-element  :details="element"></dashboard-element>
+            <dashboard-element :details="element"></dashboard-element>
         </div>
         <router-view></router-view>
-        <p class="loading">   loading... </p>
     </div>
 </template>
 
 <script>
-    
     import element from './element.vue'
     export default {
         components: {
@@ -20,23 +18,23 @@
                 events: []
             }
         },
-        mounted() {
+        created() {
             this.fetchData()
         },
         methods: {
             fetchData() {
                 fetch('http://localhost:8000/api/events/', {
-      method: "GET", // or 'PUT'
-      headers: new Headers({
-        "Content-Type": "application/json"
-      })
-    })
-    .then(response => {
-        return  response.json()
-    })
-    .then((el)=>{
-        this.events = el
-    })
+                        method: "GET", // or 'PUT'
+                        headers: new Headers({
+                            "Content-Type": "application/json"
+                        })
+                    })
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then((el) => {
+                        this.events = el
+                    })
             }
         }
     }
@@ -51,7 +49,7 @@
         flex-flow: row;
         flex-wrap: wrap;
     }
-
+    
     .dashboard-element-block {
         width: 330px;
         height: 250px;
@@ -75,12 +73,13 @@
         transition: ease 0.3s;
         &:hover {
             transform: scale(1.03);
-            box-shadow: 0 0 150px rgba(0,0,0,0.25);
+            box-shadow: 0 0 150px rgba(0, 0, 0, 0.25);
         }
     }
+    
     .loading {
         margin-left: auto;
-    text-align: center;
-    margin-right: auto;
+        text-align: center;
+        margin-right: auto;
     }
 </style>

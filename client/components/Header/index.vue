@@ -9,7 +9,7 @@
                 <div class="app-main-nav-links">
                     <router-link tag="div" class="app-main-nav-link" to="/dashboard"><span>Dashboard</span></router-link>
                     <router-link tag="div" class="app-main-nav-link" to="/create"><span>Create</span></router-link>
-                    <router-link tag="div" class="app-main-nav-link" to="/user_dashboard"><span>User's dashboard</span></router-link>
+                    <router-link tag="div" class="app-main-nav-link" to="/profile"><span>User's dashboard</span></router-link>
                 </div>
                 
             </div>

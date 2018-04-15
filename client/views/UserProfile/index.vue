@@ -2,27 +2,33 @@
   <div class="container">
   <div class="user-container">
     <div class="user-dashboard">
-      <div class="description-user-dashboard">
-        <p class="description-user-name">{{ user.name }}</p>      
-        <p class="description-user-id">Your id #{{ user.id }}</p>
-        <p class="description-user-winrate">WINRATE {{ user.winRate }}</p>
-        <p class="description-user-balance">BALANCE {{ user.balance }} ACEY</p>
-      </div>
-       <img src="userpic.png" alt="" class="userpic-user-dashboard">
     </div>
+    <button @click="logout">Logout</button>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'UserDashboard',
+    name: 'UserProfile',
     components: {},
     computed: {
-      user() {
-        console.log(this.$store.state.user)
-        return this.$store.state.user
-      },
+       isLogged() {
+        return this.$store.state.auth.loggedIn
+      }
+      
+    },
+    watch: {
+    isLogged () {
+      if (this.isLogged == false) 
+      this.$router.push('/')
+    }
+  },
+    methods: {
+      logout() {
+        this.$store.commit("removeToken")       
+        this.$store.commit("loggingOut")    
+      }
     }
   }
 </script>

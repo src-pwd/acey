@@ -1,7 +1,6 @@
 /*eslint-disable*/
 import jwt_decode from 'jwt-decode'
 import fetch from "isomorphic-fetch";
-import router from 'vue-router'
 
 const state = {
   username: "",
@@ -20,7 +19,7 @@ const mutations = {
     localStorage.setItem("t", newToken);
     localStorage.setItem("h", state.loggedIn);
     state.jwt = newToken;
-    this.commit("loggingIn")
+    this.commit("loggingIn");
   },
   removeToken(state) {
     localStorage.removeItem("t");
@@ -46,6 +45,8 @@ const mutations = {
   },
   loggingOut() {
     state.loggedIn = false;
+    state.username = "";
+    state.password = "";
   },
   saveToken(state, value) {
     state.saveToken = value;
@@ -93,9 +94,13 @@ const actions = {
       })
     })
     .then(response => {
-      response.json().then(el => {
+      if(!response.ok) alert('something bad happend maybe try another creds')
+      else {
+         response.json().then(el => {
        this.commit("updateToken", el.token);
       })
+      }
+     
     })
       // repsonses with status < 400 get resolved. you can access response.status and response.data here
   },
@@ -114,15 +119,6 @@ const actions = {
         this.commit("updateToken", el.token);
       })
     });
-
-    // axios
-    //   .post(this.state.endpoints.refreshJWT, payload)
-    //   .then(response => {
-    //     this.commit("updateToken", response.data.token);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
   },
   inspectToken() {
     console.log('evocated')

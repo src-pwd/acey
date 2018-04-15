@@ -11,7 +11,7 @@ import CreateRange from 'views/Create/range.vue'
 import CreateAccuracy from 'views/Create/accuracy.vue'
 import CreateParlay from 'views/Create/parlay.vue'
 
-import UserDashboard from 'views/UserDashboard'
+import UserProfile from 'views/UserProfile'
 
 import Event from 'views/Event'
 
@@ -64,10 +64,10 @@ export const routes = [
     ]
   },
   {
-    path: '/user_dashboard',
-    component: UserDashboard,
+    path: '/profile',
+    component: UserProfile,
     meta: {
-      title: "User's dasbhboard",
+      title: "User's profile",
       requiresAuth: true
     }
   },
