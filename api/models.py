@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import uuid
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = "profile")
@@ -13,6 +14,10 @@ class Profile(models.Model):
 	events = models.IntegerField(default = 0)
 	activity_rate = models.IntegerField(default = 0, blank = True)
 	win_rate = models.IntegerField(default = 0, blank = True)
+	jwt_secret = models.UUIDField(default=uuid.uuid4)
+
+def jwt_get_secret_key(user_model):
+    return Profile.objects.get(user = user_model).jwt_secret
 
 class Event(models.Model):
 	creator = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "creator")

@@ -1,13 +1,13 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from rest_framework_jwt import views as jwt_views
 from djoser import views as djoser_views
 from .views import *
 
 urlpatterns = [
 	url(r'^api/login/$', jwt_views.ObtainJSONWebToken.as_view(), name='user-login'),
-	url(r'^api/login/refresh/$', jwt_views.RefreshJSONWebToken.as_view(), name='user-login-refresh'),
+	url(r'^api/login/refresh/$', RefreshJSONWebToken.as_view(), name='user-login-refresh'),
+	url(r'^api/logout/$', UserLogoutAllView.as_view(), name='user-logout'),
 	url(r'^api/users/$', ProfilesView.as_view(), name="create"),
 	url(r'^api/users/(?P<pk>[0-9]+)/$',
 		DetailsProfileView.as_view(), name="details"),

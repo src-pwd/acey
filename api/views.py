@@ -1,6 +1,7 @@
-import jwt,json
+import jwt
+import json
 from django.http import HttpResponse
-from rest_framework import generics, views
+from rest_framework import generics, views, status
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -13,7 +14,8 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-
+from rest_framework_jwt.views import JSONWebTokenAPIView
+from .customjwt.serializer import RefreshJSONWebTokenIsActiveSerializer
 # from .permissions import IsOwner
 
 def activate(request, uidb64, token):
@@ -29,6 +31,24 @@ def activate(request, uidb64, token):
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
+
+class UserLogoutAllView(views.APIView):
+    # permission_classes = [permissions.IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        if username:
+            user = User.objects.get(username = username)
+            if user:
+                profile = Profile.objects.get(user = user)
+            profile.jwt_secret = uuid.uuid4()
+            profile.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class RefreshJSONWebToken(JSONWebTokenAPIView):
+    serializer_class = RefreshJSONWebTokenIsActiveSerializer
+
 
 class ProfilesView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()

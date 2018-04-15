@@ -11,7 +11,7 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'QW5kcmV5RWJ1bkxlaGFSYXpyYWJvdGNoaWtCZWtlbmRh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", 'localhost']
 CORS_ORIGIN_ALLOW_ALL = False
@@ -167,6 +167,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 JWT_AUTH = {
+    'JWT_GET_USER_SECRET_KEY': 'api.models.jwt_get_secret_key',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes = 15),
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days = 1),
