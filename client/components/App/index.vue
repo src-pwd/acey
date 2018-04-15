@@ -42,6 +42,7 @@ export default {
   
   beforeUpdate() {
       this.$store.dispatch('inspectToken')
+      console.log(this.$store)
   }
 }
 </script>

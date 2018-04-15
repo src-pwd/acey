@@ -8,7 +8,14 @@ export default {
         return {
             
         }
+    },
+    mounted() {
+        this.fetchData() 
+    },
+    methods: {
+                
     }
+    
 }    
 </script>
 

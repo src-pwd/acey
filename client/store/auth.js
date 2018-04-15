@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode'
 import fetch from "isomorphic-fetch";
 
 const state = {
-  username: "",
+  username:localStorage.getItem("u"),
   password: "",
   email: "",
   loggedIn: localStorage.getItem("h"),
@@ -17,11 +17,13 @@ const state = {
 const mutations = {
   updateToken(state, newToken) {
     localStorage.setItem("t", newToken);
+    localStorage.setItem("u", state.username);    
     localStorage.setItem("h", state.loggedIn);
     state.jwt = newToken;
     this.commit("loggingIn");
   },
   removeToken(state) {
+    localStorage.removeItem("u");    
     localStorage.removeItem("t");
     localStorage.removeItem("h");    
     state.jwt = null;
@@ -50,8 +52,6 @@ const mutations = {
   },
   saveToken(state, value) {
     state.saveToken = value;
-    state.username = "";
-    state.password = "";
   }
 };
 
@@ -120,7 +120,7 @@ const actions = {
       })
     });
   },
-  inspectToken() {
+  inspectToken(store) {
     console.log('evocated')
     const token = state.jwt;
     if (token) {
