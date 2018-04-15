@@ -184,7 +184,7 @@ class PredictionSerializer(serializers.ModelSerializer):
 
 		if options:
 			for option in options:
-				Option.objects.create(**option, prediction = event)
+				Option.objects.create(**option, event = event)
 
 		return event
 
