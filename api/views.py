@@ -17,7 +17,7 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from rest_framework_jwt.views import JSONWebTokenAPIView
 from .customjwt.serializer import RefreshJSONWebTokenIsActiveSerializer
-# from .permissions import IsOwner
+from .permissions import BetOnEvent
 
 def activate(request, uidb64, token):
     try:
@@ -83,7 +83,7 @@ class DetailsEventView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     metadata_class = SimpleMetadata
-    # permission_classes = (IsOwner,)
+    permission_classes = (BetOnEvent,)
 
 class OptionsView(generics.ListCreateAPIView):
     queryset = Option.objects.all()
