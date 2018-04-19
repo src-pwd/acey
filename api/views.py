@@ -157,6 +157,13 @@ class ReadyParleysView(generics.ListAPIView):
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
 
+    def get_queryset(self):
+        queryset = Parley.objects.filter(status = "Ready")
+        event = self.request.query_params.get('event', None)
+        if event is not None:
+            queryset = queryset.filter(event__id=event)
+        return queryset
+
     def get_serializer_class(self):
         serializer_class = self.serializer_class
         if self.request.method == 'GET':
@@ -167,6 +174,13 @@ class WaitingParleysView(generics.ListAPIView):
     queryset = Parley.objects.filter(status = "Waiting")
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        queryset = Parley.objects.filter(status = "Waiting")
+        event = self.request.query_params.get('event', None)
+        if event is not None:
+            queryset = queryset.filter(event__id=event)
+        return queryset
 
     def get_serializer_class(self):
         serializer_class = self.serializer_class
@@ -184,3 +198,5 @@ class DetailsParleyView(generics.RetrieveUpdateDestroyAPIView):
             setattr(serializer_class.Meta, 'read_only_fields', ('min_sum', 'max_sum', 'creator', 'event', 'koefficient', 'status', ))
         return serializer_class
     # permission_classes = (IsAdminUser,)
+
+

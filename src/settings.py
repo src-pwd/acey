@@ -158,7 +158,7 @@ STATICFILES_DIRS = (
 # STATICFILES_STORAGE = 'whitenoise.django.CompressedManifestStaticFilesStorage'
 # WHITENOISE_ROOT = os.path.join(PROJECT_DIR, 'staticfiles', 'root') 
 
-MEDIA_URL = '/user_pictures/'
+MEDIA_ROOT = '/user_pictures/'
 
 REST_FRAMEWORK = {}
 
