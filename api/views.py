@@ -100,7 +100,7 @@ class AccuratePredictionsView(generics.ListAPIView):
     queryset = Event.objects.filter(type = "AccuratePrediction")
     serializer_class = EventSerializer
     # metadata_class = SimpleMetadata
-    # permission_classes = (IsAdminUser,)
+    # permission_classes = (,)
 
 class AccuratePredictionDetailsView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.filter(type = "AccuratePrediction")

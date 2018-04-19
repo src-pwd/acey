@@ -12,8 +12,19 @@ class IsBettor(BasePermission):
 
 class BetOnEvent(BasePermission):
 	def has_object_permission(self, request, view, obj):
-		option_list = Option.objects.filter(event = obj)
-		for i in option_list:
-			if Bet.objects.filter(bettor = request.user, option = i).exists():
-				raise serializers.ValidationError("This user has already made bet on this event.")
+		if obj.type == "Prediction":
+			option_list = Option.objects.filter(event = obj)
+			for i in option_list:
+				if Bet.objects.filter(bettor = request.user, option = i).exists():
+					raise serializers.ValidationError("This user has already made bet on this event.")
+		elif obj.type == "AccuratePrediction":
+			if AccurateBet.objects.filter(bettor = request.user, event = obj).exists():
+				raise serializers.ValidationError("This user has already made bet on this event.")	
+		else:
+			user_qs = Parley.objects.filter(event=obj, creator = request.user)
+			if user_qs.exists():
+				raise serializers.ValidationError("Don't cheat. One event - one parley - one user.")	
 		return True
+
+
+
