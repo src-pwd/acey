@@ -1,5 +1,5 @@
 <template>
-     <router-link tag="div" :to="'event' + '/' + details.id" :id="details.id" class="dashboard-element-block">
+     <router-link tag="div" :to="'event' + '/' + details.id + '/'" :id="details.id" class="dashboard-element-block">
           <div class="dashboard-element-text">
           <div class="dashboard-element-bg">
           <img src="dashboard_block.png">   

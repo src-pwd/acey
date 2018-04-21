@@ -6,13 +6,14 @@ import Authorization from 'views/Authorization'
 import Dashboard from 'views/Dashboard'
 
 import Create from 'views/Create'
-import CreateRange from 'views/Create/range.vue'
-import CreateAccuracy from 'views/Create/accuracy.vue'
-import CreateParlay from 'views/Create/parlay.vue'
+import CreateRange from 'views/Create/range'
+import CreateAccuracy from 'views/Create/accuracy'
+import CreateParlay from 'views/Create/parlay'
 
 import UserProfile from 'views/UserProfile'
 
 import Event from 'views/Event'
+import ChooseParlay from 'views/Event/voteparlay'
 
 Vue.use(Router)
 
@@ -58,16 +59,21 @@ export const routes = [
       title: 'User\'s dasbhboard'
     }
   }, {
-    path: '/event/:id',
+    path: '/event/:id/',
     component: Event,
     meta: {
       title: 'Event'
     }
   },
   {
+    path: '/option/:id',
+    component: ChooseParlay,
+    title: 'Parlay'
+  },
+  {
     path: '/event',
     redirect: '/dashboard'
-  }
+  } 
 ]
 
 export const router = new Router({ mode: 'history', routes })
