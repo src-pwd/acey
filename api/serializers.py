@@ -9,7 +9,12 @@ from .tokens import account_activation_token
 from django.core.mail import send_mail
 from django.db.utils import *
 from django.conf import settings
+import sys
+sys.path.append('..')
+from utils.iden import Iden
+import hashlib
 
+BACKGROUND = '#EEEEEE'
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -39,7 +44,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = ('user', 'profile_picture', 'rate', 'info', 'sum', 'bets', 'events', 'activity_rate', 'win_rate',)
-		read_only_fields = ('user', 'bets', 'events', 'rate', 'sum', 'activity_rate', 'win_rate', )
+		read_only_fields = ('user', 'bets', 'events', 'rate', 'sum', 'activity_rate', 'win_rate', 'profile_picture')
 
 	def create(self, validated_data):
 		user_data = validated_data.pop('user')
@@ -56,7 +61,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 			user.save()
 		except IntegrityError:
 			raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
-		profile = Profile.objects.create(user=user, **validated_data)
+		profile = Profile.objects.create(user=user, profile_picture = "{0}.svg".format(user.username), **validated_data )
 		mail_subject = 'Activate your blog account.'
 		message = render_to_string('acc_active_email.html', {
 				'user': user,
@@ -65,6 +70,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 				'token':account_activation_token.make_token(user),
 			})
 		send_mail(mail_subject, message, settings.EMAIL_HOST_USER, [user.email])
+		md5_hash = hashlib.md5()
+		md5_hash.update(user.username.encode('UTF-8'))
+		iden_avatar = Iden(md5_hash.hexdigest(), 'pixel')
+		iden_avatar.setBackgroundColor(BACKGROUND)
+		iden_avatar.save("user_pictures/"+user.username+'.svg')
 		return profile
 
 	def update(self, instance, validated_data):
@@ -339,7 +349,7 @@ class ParleySerializer(serializers.ModelSerializer):
 		_profile.bets+=1
 		_profile.save()
 
-		_profile = instance.creator
+		_profile = Profile.objects.get(user = instance.creator)
 		_profile.sum += (instance.max_sum * instance.koefficient - validated_data.get('bet_sum') * instance.koefficient)
 		_profile.save()
 

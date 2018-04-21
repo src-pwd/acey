@@ -6,7 +6,7 @@ import uuid
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = "profile")
-	profile_picture = models.ImageField(null = True, blank = True)
+	profile_picture = models.FileField(null = True, blank = True)
 	rate = models.IntegerField(default = 0, blank = True)
 	info = models.CharField(max_length = 500, blank = True)
 	sum = models.IntegerField(default = 0)

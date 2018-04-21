@@ -17,7 +17,7 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from rest_framework_jwt.views import JSONWebTokenAPIView
 from .customjwt.serializer import RefreshJSONWebTokenIsActiveSerializer
-# from .permissions import IsOwner
+from .permissions import BetOnEvent
 
 def activate(request, uidb64, token):
     try:
@@ -83,7 +83,7 @@ class DetailsEventView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     metadata_class = SimpleMetadata
-    # permission_classes = (IsOwner,)
+    permission_classes = (BetOnEvent,)
 
 class OptionsView(generics.ListCreateAPIView):
     queryset = Option.objects.all()
@@ -100,7 +100,7 @@ class AccuratePredictionsView(generics.ListAPIView):
     queryset = Event.objects.filter(type = "AccuratePrediction")
     serializer_class = EventSerializer
     # metadata_class = SimpleMetadata
-    # permission_classes = (IsAdminUser,)
+    # permission_classes = (,)
 
 class AccuratePredictionDetailsView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.filter(type = "AccuratePrediction")
@@ -157,6 +157,13 @@ class ReadyParleysView(generics.ListAPIView):
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
 
+    def get_queryset(self):
+        queryset = Parley.objects.filter(status = "Ready")
+        event = self.request.query_params.get('event', None)
+        if event is not None:
+            queryset = queryset.filter(event__id=event)
+        return queryset
+
     def get_serializer_class(self):
         serializer_class = self.serializer_class
         if self.request.method == 'GET':
@@ -167,6 +174,13 @@ class WaitingParleysView(generics.ListAPIView):
     queryset = Parley.objects.filter(status = "Waiting")
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        queryset = Parley.objects.filter(status = "Waiting")
+        event = self.request.query_params.get('event', None)
+        if event is not None:
+            queryset = queryset.filter(event__id=event)
+        return queryset
 
     def get_serializer_class(self):
         serializer_class = self.serializer_class
@@ -184,3 +198,5 @@ class DetailsParleyView(generics.RetrieveUpdateDestroyAPIView):
             setattr(serializer_class.Meta, 'read_only_fields', ('min_sum', 'max_sum', 'creator', 'event', 'koefficient', 'status', ))
         return serializer_class
     # permission_classes = (IsAdminUser,)
+
+
