@@ -5,7 +5,6 @@
             <div class="event-description"><span>Description</span>{{ details.description }}</div>
             <div class="event-expired"><span>Expired</span>{{ details.expired }}</div>
             <div class="event-expired"><span>Created</span>{{ details.created }}</div>
-    
         </div>
         <div v-if="details.type === 'Prediction'">
             <range />

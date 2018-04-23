@@ -1,18 +1,18 @@
 <template>
-<div>
-    <div class="range-items">
-        <div v-for="item in options" :key="item.id" class="range-board" :class="selected === item ? 'active': ''" @click="chooseOption(item)">
-            <div>Sum from:{{item.sum_from}}</div>
-            <div>Sum to:{{item.sum_to}}</div>
-            <div>Total sum:{{item.total_sum}}</div>
-            <div>Total users:{{item.total_users}}</div>
+    <div>
+        <div class="range-items">
+            <div v-for="item in options" :key="item.id" class="range-board" :class="selected === item ? 'active': ''" @click="chooseOption(item)">
+                <div>Sum from:{{item.sum_from}}</div>
+                <div>Sum to:{{item.sum_to}}</div>
+                <div>Total sum:{{item.total_sum}}</div>
+                <div>Total users:{{item.total_users}}</div>
+            </div>
+    
         </div>
-       
+        <div class="row-block-button">
+            <div><button @click="voteFor">voteeeeee</button></div>
+        </div>
     </div>
-     <div class="row-block-button">
-            <div ><button @click="voteFor">voteeeeee</button></div>
-        </div>
-        </div>
 </template>
 
 
@@ -40,9 +40,9 @@
                     .then((el) => {
                         this.options = el.filter(l => l.event == this.$route.params.id)
                         console.log(this.options)
-                
+    
                     })
-                    fetch('http://localhost:8000/api/users/', {
+                fetch('http://localhost:8000/api/users/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
@@ -52,7 +52,7 @@
                         return response.json()
                     })
                     .then((el) => {
-                       
+    
                         console.log(el)
                     })
             },
@@ -66,10 +66,10 @@
                     "bettor": this.username,
                     "sum": 0
                 }
-                this.$store.dispatch("predictionBet", payload).then(()=>{
-                        this.$router.push('/dashboard')                    
+                this.$store.dispatch("predictionBet", payload).then(() => {
+                    this.$router.push('/dashboard')
                 })
-                
+    
             }
         },
         data() {
