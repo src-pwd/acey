@@ -19,6 +19,8 @@ from rest_framework_jwt.views import JSONWebTokenAPIView
 from .customjwt.serializer import RefreshJSONWebTokenIsActiveSerializer
 from .permissions import BetOnEvent
 
+LIMIT = 20
+
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -75,9 +77,18 @@ class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
         return HttpResponse(status=200)
 
 class EventsView(generics.ListCreateAPIView):
-    queryset = Event.objects.all()
     serializer_class = EventSerializer
     # permission_classes = (IsOwner,)
+
+    def get_queryset(self):
+        limit = self.request.query_params.get('limit', LIMIT)
+        try:
+            top_limit = abs(int(limit))
+        except:
+            top_limit = LIMIT
+        bottom_limit = top_limit - LIMIT if top_limit > LIMIT else 0
+        queryset = Event.objects.all().order_by('-id')[bottom_limit:top_limit]
+        return queryset
 
 class DetailsEventView(generics.RetrieveDestroyAPIView):
     queryset = Event.objects.all()
@@ -89,6 +100,13 @@ class OptionsView(generics.ListCreateAPIView):
     queryset = Option.objects.all()
     serializer_class = OptionSerializer
     # permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        queryset = Option.objects.all()
+        event = self.request.query_params.get('event', None)
+        if event is not None:
+            queryset = queryset.filter(event__id=event)
+        return queryset
 
 class PredictionsView(generics.ListCreateAPIView):
     queryset = Event.objects.filter(type = "Prediction")
@@ -153,15 +171,20 @@ class ParleysView(generics.ListCreateAPIView):
         return serializer_class
 
 class ReadyParleysView(generics.ListAPIView):
-    queryset = Parley.objects.filter(status = "Ready")
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
+        limit = self.request.query_params.get('limit', LIMIT)
+        try:
+            top_limit = abs(int(limit))
+        except:
+            top_limit = LIMIT
+        bottom_limit = top_limit - LIMIT if top_limit > LIMIT else 0
         queryset = Parley.objects.filter(status = "Ready")
         event = self.request.query_params.get('event', None)
         if event is not None:
-            queryset = queryset.filter(event__id=event)
+            queryset = queryset.filter(event__id=event)[bottom_limit:top_limit]
         return queryset
 
     def get_serializer_class(self):
@@ -171,15 +194,20 @@ class ReadyParleysView(generics.ListAPIView):
         return serializer_class
 
 class WaitingParleysView(generics.ListAPIView):
-    queryset = Parley.objects.filter(status = "Waiting")
     serializer_class = ParleySerializer
     # permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
+        limit = self.request.query_params.get('limit', LIMIT)
+        try:
+            top_limit = abs(int(limit))
+        except:
+            top_limit = LIMIT
+        bottom_limit = top_limit - LIMIT if top_limit > LIMIT else 0
         queryset = Parley.objects.filter(status = "Waiting")
         event = self.request.query_params.get('event', None)
         if event is not None:
-            queryset = queryset.filter(event__id=event)
+            queryset = queryset.filter(event__id=event)[bottom_limit:top_limit]
         return queryset
 
     def get_serializer_class(self):
