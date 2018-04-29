@@ -1,71 +1,146 @@
 <template>
-    <div>
-        <div>Event #{{ this.$store.state.route.params.id }}</div>
-        <div class="event-info">
-            <p>Event name :{{ currentEvent.name }}</p>
-            <p>Event description: {{ currentEvent.description }}</p>
-            <p>Expired date: {{ currentEvent.ends }}</p>
+    <div class="container event-container">
+        <div class="event-desc">
+            <div class="event-name"><span>Name</span>{{ details.name }}</div>
+            <div class="event-description"><span>Description</span>{{ details.description }}</div>
+            <div class="event-expired"><span>Expired</span>{{ details.expired }}</div>
+            <div class="event-expired"><span>Created</span>{{ details.created }}</div>
         </div>
-        <div class="event-control-vote">
-            <div class="event-choose-control-range" v-if="currentEvent.type == 'range'">
-                <p>Choose range:</p>
-                <div v-for="item in options" class="range-choose">
-                    <p>{{ item.name }}</p>
-                    <p>{{ item.priceFrom }}</p>
-                    <p>{{ item.priceTo }}</p>
-                </div>
-            </div>
-            <div class="event-choose-control-accuracy" v-else>
-                <input type="number" class="event-choose-control-accuracy-input" style="width: 50%;" placeholder="Enter specific price value:">
-            </div>
+        <div v-if="details.type === 'Prediction'">
+            <range />
         </div>
-        <div>
-            <button></button>
+        <div v-if="details.type === 'AccuratePrediction'">
+            <accuracy />
         </div>
-        <router-link to="/play" tag="button">
-            PLAY DASHBOARD
-        </router-link>
+        <div v-if="details.type === 'Parley'">
+            <parlay />
+        </div>
     </div>
 </template>
 
+
 <script>
-    import {
-        mapGetters
-    } from 'vuex'
-    export default {
-        name: 'Event',
+    import accuracy from "./accuracy"
+    import range from "./range"
+    import parlay from "./parlay"
     
-        computed: {
-            ...mapGetters([
-                'currentEvent',
-            ]),
-            routerID() {
-                return this.$store.state.route.params.id
-            },
-            options() {
-                return this.$store.state.event.options ? this.$store.state.event.options : ''
+    export default {
+        components: {
+            accuracy,
+            range,
+            parlay
+        },
+        mounted() {
+            fetch('http://localhost:8000/api/events/', {
+                    method: "GET", // or 'PUT'
+                    headers: new Headers({
+                        "Content-Type": "application/json"
+                    })
+                })
+                .then(response => {
+                    return response.json()
+                })
+                .then((el) => {
+                    this.details = el.find(x => x.id == this.$route.params.id)
+                })
+             
+               
+        },
+        methods: {
+            fetchData() {
+    
+            }
+        },
+        data() {
+            return {
+                details: {},
             }
         }
+    
     }
 </script>
 
-<style>
-    .range-choose {
-        display: block;
-        flex-flow: column;
-        padding: 50px;
-        margin: 50px;
-        border: 1px solid pink;
+<style lang="scss">
+    .event-container {
+        width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
-    .event-choose-control-range {
+    .event-desc {
+        font-size: 25px;
+        color: white;
+        margin-top: 100px;
+        &>div>span {
+            color: gray;
+            padding-right: 100px;
+        }
+    }
+    
+    
+    /* .event {
+                
+                &-name {
+                    
+                }
+                &-id {
+                    
+                }
+                &-desc {
+                    
+                }
+                &-expiredv{
+                    
+                }
+            } */
+    
+    .range-bet-head {
+        margin-right: auto;
+        margin-left: 40%;
+        width: 200px;
+        padding-left: 20px;
+        font-size: 24px;
+        background-color: #1a1a1a;
+        color: white;
+        border: none;
+        &:active {
+            outline: none;
+            border-bottom: 2px solid orange;
+        }
+    }
+    
+    .prediction-options {
+        margin-top: 50px;
         display: flex;
         flex-flow: row;
+        justify-content: center;
     }
     
-    .event-choose-control-accuracy-input {
-        margin: 100px;
-        font-size: 50px;
-        text-align: center;
+    .option {
+        height: 200px;
+        width: 200px;
+        border: 1px solid orange;
+        border-radius: 7px;
+        padding: 30px;
+        margin: 30px;
+    }
+    
+    .option-text {
+        font-size: 20px;
+    }
+    
+    .save-button {
+        display: flex;
+        flex-flow: row;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px;
+        outline: 0;
+        background-color: transparent;
+        border-radius: 7px;
+        height: 30px;
+        color: orange;
+        width: 90px;
+        margin-bottom: 50px;
     }
 </style>

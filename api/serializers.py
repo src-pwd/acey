@@ -2,23 +2,40 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import *
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .tokens import account_activation_token
+from django.core.mail import send_mail
+from django.db.utils import *
+from django.conf import settings
 import sys
+sys.path.append('..')
+from utils.iden import Iden
+import hashlib
 
+BACKGROUND = '#EEEEEE'
 
 class UserSerializer(serializers.ModelSerializer):
 
 	class Meta:
 
 		model = User
-		fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login',)
+		fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_active')
 		extra_kwargs = {#'password': {'write_only': True}, 
 						'username': {'validators': []}}
 		read_only_fields = ('date_joined', 'last_login', 'id')
 
 	def validate(self, data):
-		user_qs = User.objects.filter(email=data['email'])
+
+		user_qs = User.objects.filter(email=data.get('email'))
 		if user_qs.exists():
 			raise serializers.ValidationError("This email is already registered.")
+
+		user_qs = User.objects.filter(username__iexact=data.get('username'))
+		if user_qs.exists():
+			raise serializers.ValidationError("This username already exists.")
+
 		return data
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -27,25 +44,44 @@ class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
 		fields = ('user', 'profile_picture', 'rate', 'info', 'sum', 'bets', 'events', 'activity_rate', 'win_rate',)
-		read_only_fields = ('user', 'bets', 'events', 'rate', 'sum', 'activity_rate', 'win_rate', )
+		read_only_fields = ('user', 'bets', 'events', 'rate', 'sum', 'activity_rate', 'win_rate', 'profile_picture')
 
 	def create(self, validated_data):
 		user_data = validated_data.pop('user')
-		user = User.objects.create(
+		user = User(
 			username=user_data['username'],
 			email=user_data.get('email', ''),
 			password=make_password(user_data['password']),
 			first_name = user_data.get('first_name', ''),
-			last_name = user_data.get('last_name', '')
+			last_name = user_data.get('last_name', ''),
+			is_active = False,
+			# is_active = True,
 		)
-		my_user = Profile.objects.create(user=user, **validated_data)
-		return my_user
+		try:
+			user.save()
+		except IntegrityError:
+			raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
+		profile = Profile.objects.create(user=user, profile_picture = "{0}.svg".format(user.username), **validated_data )
+		mail_subject = 'Activate your blog account.'
+		message = render_to_string('acc_active_email.html', {
+				'user': user,
+				'domain': "acey.it",
+				'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+				'token':account_activation_token.make_token(user),
+			})
+		send_mail(mail_subject, message, settings.EMAIL_HOST_USER, [user.email])
+		md5_hash = hashlib.md5()
+		md5_hash.update(user.username.encode('UTF-8'))
+		iden_avatar = Iden(md5_hash.hexdigest(), 'pixel')
+		iden_avatar.setBackgroundColor(BACKGROUND)
+		iden_avatar.save("user_pictures/"+user.username+'.svg')
+		return profile
 
 	def update(self, instance, validated_data):
 		
 		if validated_data.get('rate') or validated_data.get('sum') or validated_data.get('bets') or validated_data.get('events') or validated_data.get('activity_rate') or validated_data.get('win_rate'):
 			raise serializers.ValidationError("Fields except info, picture, password, first and last name can't be updated.")
-
+		print(dict(validated_data))
 		instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
 		instance.info = validated_data.get('info', instance.info)
 		instance.save()
@@ -155,10 +191,10 @@ class PredictionSerializer(serializers.ModelSerializer):
 			currency_pair = validated_data['currency_pair'],
 			exchange = validated_data['exchange'],			
 		)
-
+		
 		if options:
 			for option in options:
-				Option.objects.create(**option, prediction = event)
+				Option.objects.create(**option, event = event)
 
 		return event
 
@@ -179,12 +215,17 @@ class BetSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 
-		if Bet.objects.filter(bettor = validated_data.get('bettor'), option = validated_data.get('option')).exists():
-			raise serializers.ValidationError("This user has already made bet on this option.")	
+		option_list = Option.objects.filter(event = validated_data.get('option').event)
+
+		for i in option_list:
+			if Bet.objects.filter(bettor = validated_data.get('bettor'), option = i).exists():
+				raise serializers.ValidationError("This user has already made bet on this event.")
+
+		if validated_data.get('bettor') == validated_data.get('option').event.creator:
+			raise serializers.ValidationError("Creator of event can't bet on his event.")
 
 		sum = validated_data.get('sum')
 		_profile = Profile.objects.get(user = validated_data.get('bettor'))
-
 		if _profile.sum - sum >= 0:
 			_profile.bets+=1
 			_profile.sum-=sum
@@ -219,6 +260,9 @@ class AccurateBetSerializer(serializers.ModelSerializer):
 		read_only_fields = ('id',)
 
 	def create(self, validated_data):
+
+		if validated_data.get('bettor') == validated_data.get('event').creator:
+			raise serializers.ValidationError("Can't bet on your own event.")	
 
 		if AccurateBet.objects.filter(bettor = validated_data.get('bettor'), event = validated_data.get('event')).exists():
 			raise serializers.ValidationError("This user has already made bet on this event.")	
@@ -259,6 +303,14 @@ class ParleySerializer(serializers.ModelSerializer):
 		fields = ('id', 'event', 'creator', 'bettor', 'created', 'koefficient', 'min_sum', 'max_sum', 'status', 'bet_sum', )
 		read_only_fields = ('id', 'created', 'status', 'bettor',)
 
+	def validate(self, data):
+
+		user_qs = Parley.objects.filter(event=data.get('event'), creator = data.get('creator'))
+		if user_qs.exists():
+			raise serializers.ValidationError("Don't cheat. One event - one parley - one user.")
+
+		return data
+
 	def create(self, validated_data):
 
 		if validated_data.get('max_sum') * validated_data.get('koefficient') > Profile.objects.get(user = validated_data.get('creator')).sum:
@@ -290,18 +342,22 @@ class ParleySerializer(serializers.ModelSerializer):
 			raise serializers.ValidationError("Invalid sum to bet.")
 
 		_profile = Profile.objects.get(user = validated_data.get('bettor'))
-
 		if _profile.sum - validated_data.get('bet_sum')>=0:
 			_profile.sum-=validated_data.get('bet_sum')
 		else:
 			raise serializers.ValidationError("Not enough funds on bettor wallet.")
-
 		_profile.bets+=1
 		_profile.save()
+
+		_profile = Profile.objects.get(user = instance.creator)
+		_profile.sum += (instance.max_sum * instance.koefficient - validated_data.get('bet_sum') * instance.koefficient)
+		_profile.save()
+
 		_event = instance.event
 		_event.total_users+=1
 		_event.total_sum+= validated_data.get('bet_sum')
 		_event.save()
+
 		instance.bettor = validated_data.get('bettor', instance.bettor)
 		instance.bet_sum = validated_data.get('bet_sum', instance.bet_sum)
 		instance.status = "Ready"
