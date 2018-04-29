@@ -18,6 +18,7 @@ from django.core.mail import EmailMessage
 from rest_framework_jwt.views import JSONWebTokenAPIView
 from .customjwt.serializer import RefreshJSONWebTokenIsActiveSerializer
 from .permissions import BetOnEvent
+from rest_framework.decorators import list_route
 
 LIMIT = 20
 
@@ -75,6 +76,9 @@ class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         instance.user.delete()
         return HttpResponse(status=200)
+
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
 
 class EventsView(generics.ListCreateAPIView):
     serializer_class = EventSerializer
@@ -149,6 +153,17 @@ class BetsView(generics.ListCreateAPIView):
     serializer_class = BetSerializer
     # permission_classes = (IsAdminUser,)
 
+    def get_queryset(self):
+        queryset = Bet.objects.all()
+        event = self.request.query_params.get('event', None)
+        if event:
+            queryset = queryset.filter(option__event__id=event)   
+        else:
+            option = self.request.query_params.get('option', None)
+            if option:
+                queryset = queryset.filter(option__id=option)
+        return queryset
+
 class DetailsBetView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bet.objects.all()
     serializer_class = BetSerializer
@@ -158,6 +173,13 @@ class AccurateBetsView(generics.ListCreateAPIView):
     queryset = AccurateBet.objects.all()
     serializer_class = AccurateBetSerializer
     # permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        queryset = AccurateBet.objects.all()
+        event = self.request.query_params.get('event', None)
+        if event:
+            queryset = queryset.filter(event__id=event)
+        return queryset
 
 class ParleysView(generics.ListCreateAPIView):
     queryset = Parley.objects.all()
