@@ -38,7 +38,7 @@ module.exports = {
       theme: path.join(__dirname, '../theme'), // get Element-UI icons
       scss_vars: path.resolve(__dirname, '../client/styles/vars.scss'), //  get scss vars
       styles: path.join(__dirname, '../client/styles'), // get scss files
-      static: path.join(__dirname, 'static')
+      static: path.join(__dirname, '../client/static')
     },
     modules: [
       // places where to search for required modules
@@ -92,6 +92,11 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: _.cwd('./static'),
+        // to the root of dist path
+        to: './'
+      },
+      {
+        from: _.cwd('./user_pictures'),
         // to the root of dist path
         to: './'
       }

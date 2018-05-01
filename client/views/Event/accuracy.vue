@@ -9,6 +9,9 @@
     <datalist id="ticks">
         <option v-for="item in 1000" :value="item">{{item}}</option>
       </datalist>
+      <div>
+      <input class="betting-sum" v-model="sum"/><br />
+    </div>
     <div class="row-block-button">
       <div><button @click="voteFor">voteeeeee</button></div>
     </div>
@@ -30,7 +33,7 @@
         var payload = {
           "event":  this.eventId,
           "bettor": this.username,
-          "sum":    0,
+          "sum":    this.sum,
           "stake":  this.currentValue
         }
         this.$store.dispatch("accurateBet", payload).then(() => {
@@ -40,7 +43,8 @@
     },
     data() {
       return {
-        currentValue: 500
+        currentValue: 500,
+        sum:0
       }
     }
   }

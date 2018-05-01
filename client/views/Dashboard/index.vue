@@ -19,7 +19,16 @@
             }
         },
         created() {
+            
             this.fetchData()
+        },
+        mounted() {
+            console.log(this.getToken)
+        },
+        computed: {
+            getToken() {
+                return this.$store.state.auth.jwt
+            }
         },
         methods: {
             fetchData() {

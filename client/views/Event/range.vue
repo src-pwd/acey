@@ -9,6 +9,9 @@
             </div>
     
         </div>
+        <div>
+      <input class="" v-model="sum"/><br />
+    </div>
         <div class="row-block-button">
             <div><button @click="voteFor">voteeeeee</button></div>
         </div>
@@ -64,7 +67,7 @@
                 var payload = {
                     "option": this.selected.id,
                     "bettor": this.username,
-                    "sum": 0
+                    "sum": this.sum
                 }
                 this.$store.dispatch("predictionBet", payload).then(() => {
                     this.$router.push('/dashboard')
@@ -75,7 +78,8 @@
         data() {
             return {
                 options: [],
-                selected: null
+                selected: null,
+                sum: 0
             }
         }
     }

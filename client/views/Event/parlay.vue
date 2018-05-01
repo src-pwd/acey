@@ -25,7 +25,8 @@
     export default {
         data() {
             return {
-                details: {}
+                details: {},
+                sum: 0
             }
         },
         mounted() {

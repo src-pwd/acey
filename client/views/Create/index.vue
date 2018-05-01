@@ -12,15 +12,14 @@
                 <br>
                 <div class="type-block-body">This type is for defining accurate price for cryptocurrency in the moment</div>
             </router-link>
-            <div class="type-block">
+            <router-link tag="div" to="/create/parlay" class="type-block" ref="parlay">
                 <div class="type-block-head">Parlay</div>
-                <div class="soon-label"><span>SOON</span></div>
-            </div>
+                <br>
+                <div class="type-block-body">Bet on price of crypto!</div>
+            </router-link>
         </div>
         <transition name="fade">
-            <div>
                 <router-view></router-view>
-            </div>
         </transition>
     </div>
 </template>
@@ -39,6 +38,7 @@
         },
         mounted() {
             console.log(this.$refs)
+
         },
         computed: {
             configVal() {

@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import jwt_decode from 'jwt-decode'
 import fetch from "isomorphic-fetch";
+import store from './index'
 
 const state = {
   username:localStorage.getItem("u"),
@@ -49,6 +50,8 @@ const mutations = {
     state.loggedIn = false;
     state.username = "";
     state.password = "";
+    store.state.user.details = {}
+    
   },
   saveToken(state, value) {
     state.saveToken = value;
@@ -98,13 +101,15 @@ const actions = {
       else {
          response.json().then(el => {
        this.commit("updateToken", el.token);
+       store.dispatch("getUserInfo");
       })
       }
      
     })
       // repsonses with status < 400 get resolved. you can access response.status and response.data here
   },
-  refreshToken(store) {
+  
+   refreshToken(store) {
     var payload = {
       token: state.jwt
     };
@@ -120,6 +125,7 @@ const actions = {
       })
     });
   },
+  
   inspectToken(store) {
     console.log('evocated')
     const token = state.jwt;
@@ -137,7 +143,7 @@ const actions = {
         state.loggedIn = false
       } else {
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
-        console.log('huy')
+        alert('please relogin!').this.$router.push('/login')
       }
     }
   }
