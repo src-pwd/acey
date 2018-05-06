@@ -249,4 +249,19 @@ class DetailsParleyView(generics.RetrieveUpdateDestroyAPIView):
         return serializer_class
     # permission_classes = (IsAdminUser,)
 
+class ExchangeView(generics.ListAPIView):
+    serializer_class = ExchangeSerializer
+    queryset = Exchange.objects.all()
+
+class CurrenciesView(generics.ListAPIView):
+    serializer_class = CurrenciesSerializer
+    queryset = Currencies.objects.all()
+
+class ExchangeCurrenciesView(generics.ListAPIView):
+    serializer_class = ExchangeCurrenciesSerializer
+    queryset = ExchangeCurrencies.objects.all()
+
+
+
+
 

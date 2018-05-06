@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import transaction
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from .models import *
@@ -10,10 +11,15 @@ from django.core.mail import send_mail
 from django.db.utils import *
 from django.conf import settings
 import sys
+from crontab import CronTab
+import os
+import pwd
 sys.path.append('..')
 from utils.iden import Iden
 import hashlib
 
+LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
+DOMAIN = '127.0.0.1:8000'
 BACKGROUND = '#EEEEEE'
 
 class UserSerializer(serializers.ModelSerializer):
@@ -48,24 +54,25 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 		user_data = validated_data.pop('user')
-		user = User(
-			username=user_data['username'],
-			email=user_data.get('email', ''),
-			password=make_password(user_data['password']),
-			first_name = user_data.get('first_name', ''),
-			last_name = user_data.get('last_name', ''),
-			is_active = False,
-			# is_active = True,
-		)
-		try:
-			user.save()
-		except IntegrityError:
-			raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
-		profile = Profile.objects.create(user=user, profile_picture = "{0}.svg".format(user.username), **validated_data )
+		with transaction.atomic():
+			user = User(
+				username=user_data['username'],
+				email=user_data.get('email', ''),
+				password=make_password(user_data['password']),
+				first_name = user_data.get('first_name', ''),
+				last_name = user_data.get('last_name', ''),
+				is_active = False,
+				# is_active = True,
+			)
+			try:
+				user.save()
+			except IntegrityError:
+				raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
+			profile = Profile.objects.create(user=user, profile_picture = "{0}.svg".format(user.username), sum = 1000, **validated_data)
 		mail_subject = 'Activate your blog account.'
 		message = render_to_string('acc_active_email.html', {
 				'user': user,
-				'domain': "acey.it",
+				'domain': DOMAIN,
 				'uid':urlsafe_base64_encode(force_bytes(user.pk)),
 				'token':account_activation_token.make_token(user),
 			})
@@ -81,7 +88,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 		
 		if validated_data.get('rate') or validated_data.get('sum') or validated_data.get('bets') or validated_data.get('events') or validated_data.get('activity_rate') or validated_data.get('win_rate'):
 			raise serializers.ValidationError("Fields except info, picture, password, first and last name can't be updated.")
-		print(dict(validated_data))
+
 		instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
 		instance.info = validated_data.get('info', instance.info)
 		instance.save()
@@ -135,6 +142,7 @@ class EventSerializer(serializers.ModelSerializer):
 				)
 		read_only_fields = ('id', 'total_users', 'total_sum', 'created', 'status',)
 
+	@transaction.atomic
 	def create(self, validated_data):
 
 		event = Event.objects.create(
@@ -148,9 +156,23 @@ class EventSerializer(serializers.ModelSerializer):
 			status = "New",
 		)
 
-		_profile = Profile.objects.get(user = validated_data['creator'])
+		_profile = Profile.objects.select_for_update().get(user = validated_data['creator'])
 		_profile.events+=1
 		_profile.save()
+
+		cron = CronTab(user = pwd.getpwuid(os.getuid())[0])
+		job = cron.new(command = "cd {0}/utils && {1} {0}/utils/close_event.py {2} {3} {4} {5}".format(
+			settings.BASE_DIR,
+			sys.executable,
+			event.exchange,
+			event.currency_pair,
+			event.id,
+			event.type
+			)
+		)
+		
+		job.setall("{} {} {} {} *".format(event.expired.minute, event.expired.hour, event.expired.day, event.expired.month))
+		cron.write()
 
 		return event
 
@@ -178,6 +200,7 @@ class PredictionSerializer(serializers.ModelSerializer):
 				)
 		read_only_fields = ('status', 'type', 'created', 'total_users', 'total_sum',)
 
+	@transaction.atomic
 	def create(self, validated_data):
 
 		options = validated_data.pop('options')
@@ -191,10 +214,28 @@ class PredictionSerializer(serializers.ModelSerializer):
 			currency_pair = validated_data['currency_pair'],
 			exchange = validated_data['exchange'],			
 		)
-		
+
+		_profile = Profile.objects.select_for_update().get(user = validated_data['creator'])
+		_profile.events+=1
+		_profile.save()
+
 		if options:
 			for option in options:
 				Option.objects.create(**option, event = event)
+
+		cron = CronTab(user = pwd.getpwuid(os.getuid())[0])
+		job = cron.new(command = "cd {0}/utils && {1} {0}/utils/close_event.py {2} {3} {4} {5}".format(
+			settings.BASE_DIR,
+			sys.executable,
+			event.exchange,
+			event.currency_pair,
+			event.id,
+			"Prediction"
+			)
+		)
+		
+		job.setall("{} {} {} {} *".format(event.expired.minute, event.expired.hour, event.expired.day, event.expired.month))
+		cron.write()
 
 		return event
 
@@ -223,24 +264,27 @@ class BetSerializer(serializers.ModelSerializer):
 
 		if validated_data.get('bettor') == validated_data.get('option').event.creator:
 			raise serializers.ValidationError("Creator of event can't bet on his event.")
-
 		sum = validated_data.get('sum')
-		_profile = Profile.objects.get(user = validated_data.get('bettor'))
-		if _profile.sum - sum >= 0:
-			_profile.bets+=1
-			_profile.sum-=sum
-			_profile.save()
-		else:
-			raise serializers.ValidationError("Not enough funds on bettor wallet.")
 
-		_option = validated_data.get('option')
-		_option.total_users+=1
-		_option.total_sum+=sum
-		_event = _option.event
-		_event.total_users+=1
-		_event.total_sum+=sum
-		_option.save()
-		_event.save()
+		with transaction.atomic():
+
+			_profile = Profile.objects.select_for_update().get(user = validated_data.get('bettor'))
+			if _profile.sum - sum >= 0:
+				_profile.bets+=1
+				_profile.sum-=sum
+				_profile.save()
+			else:
+				raise serializers.ValidationError("Not enough funds on bettor wallet.")
+
+			_option = validated_data.get('option')
+			_option.total_users+=1
+			_option.total_sum+=sum
+			_event = _option.event
+			_event.total_users+=1
+			_event.total_sum+=sum
+			_option.save()
+			_event.save()
+
 		return Bet.objects.create(option = validated_data.get('option'), bettor = validated_data.get('bettor'), sum = sum)
 
 
@@ -271,25 +315,30 @@ class AccurateBetSerializer(serializers.ModelSerializer):
 			raise serializers.ValidationError("Incorrect token price stake. Token can't cost 0 or less.")
 
 		_sum = validated_data.get('sum')
-		_profile = Profile.objects.get(user = validated_data.get('bettor'))
+		accurate_bet = None
 
-		if _profile.sum - _sum >= 0:
-			_profile.bets+=1
-			_profile.sum-=_sum
-			_profile.save()
-		else:
-			raise serializers.ValidationError("Not enough funds on bettor wallet.")
+		with transaction.atomic():
 
-		_event = validated_data.get('event')
-		_event.total_users+=1
-		_event.total_sum+=validated_data.get('sum')
-		_event.save()
+			_profile = Profile.objects.select_for_update().get(user = validated_data.get('bettor'))
+			if _profile.sum - _sum >= 0:
+				_profile.bets+=1
+				_profile.sum-=_sum
+				_profile.save()
+			else:
+				raise serializers.ValidationError("Not enough funds on bettor wallet.")
 
-		return AccurateBet.objects.create(
-			event = validated_data.get('event'), 
-			bettor = validated_data.get('bettor'), 
-			sum = validated_data.get('sum'), 
-			stake = validated_data.get('stake'))
+			_event = validated_data.get('event')
+			_event.total_users+=1
+			_event.total_sum+=validated_data.get('sum')
+			_event.save()
+			accurate_bet = AccurateBet.objects.create(
+				event = validated_data.get('event'), 
+				bettor = validated_data.get('bettor'), 
+				sum = validated_data.get('sum'), 
+				stake = validated_data.get('stake')
+				)
+
+		return accurate_bet
 
 
 class ParleySerializer(serializers.ModelSerializer):
@@ -316,23 +365,30 @@ class ParleySerializer(serializers.ModelSerializer):
 		if validated_data.get('max_sum') * validated_data.get('koefficient') > Profile.objects.get(user = validated_data.get('creator')).sum:
 			raise serializers.ValidationError("Creator won't be able to pay that sum. Please decrease maximum sum possible to bet.")
 
-		_profile = Profile.objects.get(user = validated_data.get('creator'))
-		_profile.bets+=1
-		_profile.sum-=validated_data.get('max_sum') * validated_data.get('koefficient')
-		_profile.save()
-		_event = validated_data.get('event')
-		_event.total_users+=1
-		_event.total_sum+=validated_data.get('max_sum') * validated_data.get('koefficient')
+		parley = None
 
-		return Parley.objects.create(
-			event = _event,
-			creator = validated_data.get('creator'),
-			koefficient = validated_data.get('koefficient'),
-			min_sum = validated_data.get('min_sum'),
-			max_sum = validated_data.get('max_sum'),
-			status = "Waiting",
-			)
-	
+		with transaction.atomic():
+
+			_profile = Profile.objects.select_for_update().get(user = validated_data.get('creator'))
+			_profile.bets+=1
+			_profile.sum-=validated_data.get('max_sum') * validated_data.get('koefficient')
+			_profile.save()
+			_event = validated_data.get('event')
+			_event.total_users+=1
+			_event.total_sum+=validated_data.get('max_sum') * validated_data.get('koefficient')
+
+			parley = Parley.objects.create(
+				event = _event,
+				creator = validated_data.get('creator'),
+				koefficient = validated_data.get('koefficient'),
+				min_sum = validated_data.get('min_sum'),
+				max_sum = validated_data.get('max_sum'),
+				status = "Waiting",
+				)
+
+		return parley
+
+	@transaction.atomic
 	def update(self, instance, validated_data):
 
 		if validated_data.get('bettor') == instance.creator:
@@ -341,7 +397,7 @@ class ParleySerializer(serializers.ModelSerializer):
 		if (validated_data.get('bet_sum')>instance.max_sum or validated_data.get('bet_sum')<instance.min_sum):
 			raise serializers.ValidationError("Invalid sum to bet.")
 
-		_profile = Profile.objects.get(user = validated_data.get('bettor'))
+		_profile = Profile.objects.select_for_update().get(user = validated_data.get('bettor'))
 		if _profile.sum - validated_data.get('bet_sum')>=0:
 			_profile.sum-=validated_data.get('bet_sum')
 		else:
@@ -349,7 +405,7 @@ class ParleySerializer(serializers.ModelSerializer):
 		_profile.bets+=1
 		_profile.save()
 
-		_profile = Profile.objects.get(user = instance.creator)
+		_profile = Profile.objects.select_for_update().get(user = instance.creator)
 		_profile.sum += (instance.max_sum * instance.koefficient - validated_data.get('bet_sum') * instance.koefficient)
 		_profile.save()
 
@@ -364,6 +420,31 @@ class ParleySerializer(serializers.ModelSerializer):
 		instance.save()
 
 		return instance
+
+class ExchangeSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Exchange
+		fields = "__all__"
+		read_only_fields = ('name', 'url')
+
+class CurrenciesSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Currencies
+		fields = "__all__"
+		read_only_fields = ('name',)
+
+class ExchangeCurrenciesSerializer(serializers.ModelSerializer):
+
+	exchange = serializers.SlugRelatedField(slug_field = 'name', queryset = Exchange.objects.filter(), required = False)
+	currencies = CurrenciesSerializer(required = False)
+
+	class Meta:
+		model = ExchangeCurrencies
+		fields = ('exchange', 'сurrencies')
+		read_only_fields = ('exchange', 'сurrencies')
+
 
 
 

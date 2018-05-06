@@ -30,6 +30,9 @@ urlpatterns = [
 	url(r'^api/parleys/$', ParleysView.as_view(), name="create"),
 	url(r'^api/parleys/(?P<pk>[0-9]+)/$',
 		DetailsParleyView.as_view(), name="details"),
+	url(r'^api/exchanges/$', ExchangeView.as_view(), name = "list"),
+	url(r'^api/currencies/$', CurrenciesView.as_view(), name = 'list'),
+
 ]
 	
 urlpatterns = format_suffix_patterns(urlpatterns)
