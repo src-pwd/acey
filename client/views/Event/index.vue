@@ -31,24 +31,29 @@
             parlay
         },
         mounted() {
-            fetch('http://localhost:8000/api/events/', {
-                    method: "GET", // or 'PUT'
-                    headers: new Headers({
-                        "Content-Type": "application/json"
-                    })
-                })
-                .then(response => {
-                    return response.json()
-                })
-                .then((el) => {
-                    this.details = el.find(x => x.id == this.$route.params.id)
-                })
-             
-               
+            console.log(this.getToken)
+            this.fetchData();   
+        },
+        computed: {
+            getToken() {
+                return this.$store.state.auth.jwt
+            }
         },
         methods: {
             fetchData() {
-    
+                fetch('http://localhost:8000/api/events/', {
+                        method: "GET", // or 'PUT'
+                        headers: new Headers({
+                            "Content-Type": "application/json",
+                            "Authorization": "JWT " + this.getToken
+                        })
+                    })
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then((el) => {
+                        this.details = el.find(x => x.id == this.$route.params.id)
+                    })
             }
         },
         data() {
@@ -79,20 +84,20 @@
     
     
     /* .event {
-                
-                &-name {
                     
-                }
-                &-id {
-                    
-                }
-                &-desc {
-                    
-                }
-                &-expiredv{
-                    
-                }
-            } */
+                    &-name {
+                        
+                    }
+                    &-id {
+                        
+                    }
+                    &-desc {
+                        
+                    }
+                    &-expiredv{
+                        
+                    }
+                } */
     
     .range-bet-head {
         margin-right: auto;

@@ -1,20 +1,33 @@
 <template>
   <div class="container">
-  <div class="user-container">
-    <div class="user-dashboard">
+    <div class="user-container">
+    <div class="about-user-block">
+      <div>act rate{{userInfo.activity_rate}}</div>
+      <div>bets{{userInfo.bets}}</div>
+      <div>events{{userInfo.events}}</div>
+      <div>info{{userInfo.info}}</div>
+      <div>rate{{userInfo.rate}}</div>
+      <div>sum{{userInfo.sum}}</div>
     </div>
     <button @click="logout">Logout</button>
-    </div>
+
   </div>
+</div>
 </template>
 
 <script>
   export default {
     name: 'UserProfile',
     components: {},
+    mounted() {
+      console.log(this.imgSource)
+    },
     computed: {
-       isLogged() {
+      isLogged() {
         return this.$store.state.auth.loggedIn
+      },
+      userInfo() {
+        return this.$store.state.user.details
       }
       
     },
@@ -29,6 +42,7 @@
         this.$store.commit("removeToken")       
         this.$store.commit("loggingOut")    
       }
+      
     }
   }
 </script>
