@@ -1,8 +1,6 @@
 <template>
     <div class="dashboard">
-        <div v-for="element in events">
-            <dashboard-element :details="element"></dashboard-element>
-        </div>
+            <dashboard-element :details="element" v-for="element in events"></dashboard-element>
         <router-view></router-view>
     </div>
 </template>
@@ -21,9 +19,6 @@
         created() {
             
             this.fetchData()
-        },
-        mounted() {
-            console.log(this.getToken)
         },
         computed: {
             getToken() {

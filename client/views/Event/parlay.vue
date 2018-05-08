@@ -47,7 +47,6 @@
                     .then((el) => {
                         this.details = el
                         console.log(el)
-                        console.log(this.details)
                     })
             }
         }

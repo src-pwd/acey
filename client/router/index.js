@@ -83,8 +83,6 @@ export const routes = [
 
 export const router = new Router({ mode: 'history', routes })
 
-console.log(store)
-
 router.beforeEach((to, from, next) => {
   if (
     to.matched.some(record => record.meta.requiresAuth) &&

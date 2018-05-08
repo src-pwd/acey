@@ -12,7 +12,9 @@
          
         <div class="main-acey-logoform-inputs">
           <div class="login-form" v-if="selectedLogin">
+          <label class="main-acey-logoform-input-label" for="">Username</label>
             <input type="text" class="username-input main-acey-logoform-input" placeholder="Enter Username" :value="username" @input="changeUsername">
+          <label class="main-acey-logoform-input-label" for="">Password</label>
           <input type="text" class="password-input main-acey-logoform-input" placeholder="Enter Password" :value="password" @input="changePassword">
           <button class="confirm-button" @click="loginUser">
             LOGIN
@@ -20,9 +22,14 @@
           </div>
           
           <div class="registration-form" v-else>
-            <input type="text"  class="username-input main-acey-logoform-input" :value="username" placeholder="Enter Username" @input="changeUsername">
-          <input type="text"  class="username-input main-acey-logoform-input" :value="password" placeholder="Enter Password" @input="changePassword">
-          <input type="email"  class="username-input main-acey-logoform-input" :value="email" placeholder="Enter your e-mail" @input="changeEmail"> 
+          <p>New to ACEY?</p>
+          <label class="main-acey-logoform-input-label" for="">Username</label>
+            <input type="text" class="username-input main-acey-logoform-input" :value="username" placeholder="Your username" @input="changeUsername">
+          <label class="main-acey-logoform-input-label" for="">Password</label>
+          <input type="text"  class="username-input main-acey-logoform-input" :value="password" placeholder="Your password" @input="changePassword">
+          
+          <label class="main-acey-logoform-input-label" for="">E-mail</label>
+          <input type="email"  class="username-input main-acey-logoform-input" :value="email" placeholder="yourmail@com.it" @input="changeEmail"> 
           <button class="confirm-button" @click="registerUser">
             REGISTER 
           </button>

@@ -1,32 +1,41 @@
 <template>
-    <div class="container">
-        <p class="first-create-desc">2. Configure your prediction</p>
-        <h1 class="prediction-type">Parlay</h1>
+     <div class="container">
+       <p class="first-create-desc"><span class="big-number-create">2</span> Configure your prediction</p>
         <div class="range-bet-head-container">
-            <label for="bet-name">Name of prediction:</label>
-            <input name="bet-name" type="text" class="range-bet-head" :value="name" @input="changeName" placeholder="Enter prediction name">
+            <label class="range-bet-name-label" for="bet-name">Prediction name </label>         
+            <input name="bet-name" type="text" class="range-bet-name" :value="name" @input="changeName" placeholder="Name of event">
+            <span class="highlight"></span>
+            <span class="bar"></span>
         </div>
         <div class="range-bet-description-container">
-            <label for="bet-desc">Description:</label>
-            <textarea maxlength="200" name="bet-desc" type="text" class="range-bet-description" :value="description" @input="changeDescription" placeholder="Enter prediction description (max: 200 symbols)" width="100%"></textarea>
-            <label for="pair">Select exchange:</label>
-            <select name="pair" class="range-bet-select-pair" @change="changeExchange">
-                <option class="range-bet-select-pair-option" :value="bittrex">bittrex</option>
-                <option class="range-bet-select-pair-option" :value="poloniex">poloniex</option>
-                <option class="range-bet-select-pair-option" :value="binance">binance</option>
-            </select>
-            <label for="exchange">Select pair:</label>
-            <select name="exchange" class="range-bet-select-exchange" @change="changePair">
-                <option class="range-bet-select-exchange-option" :value="ETH/USD">ETH/USD</option>
-                <option class="range-bet-select-exchange-option" :value="BTC/USD">BTC/USD</option>
-                <option class="range-bet-select-exchange-option" :value="DASH/USD">DASH/USD</option>
-            </select>
+            <label for="bet-desc" class="range-bet-description-label">Description</label>
+            <input maxlength="200" name="bet-desc" type="text" class="range-bet-desc" :value="description" @input="changeDescription" placeholder="Provide short description">
         </div>
-        <div class="range-bet-description-expired range-bet-description-container">
-            <label for="bet-name">Expired:</label>
+        <div class="range-bet-exchange-container">
+            <div class="range-bet-exchange-selector">
+             <label for="pair" class="range-bet-select-pair-label">Select exchange</label>
+            <select name="pair" class="range-bet-select-pair" @change="changeExchange">
+                <option class="range-bet-select-pair-option" value="bittrex">bittrex</option>
+                <option class="range-bet-select-pair-option" value="poloniex">poloniex</option>
+                <option class="range-bet-select-pair-option" value="binance">binance</option>
+            </select>
+            </div>
+            <div class="range-bet-exchange-selector">
+            <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>            
+            <select name="exchange" class="range-bet-select-exchange" @change="changePair">
+                <option class="range-bet-select-exchange-option" value="ETH/USD">ETH/USD</option>
+                <option class="range-bet-select-exchange-option" value="BTC/USD">BTC/USD</option>
+                <option class="range-bet-select-exchange-option" value="DASH/USD">DASH/USD</option>
+            </select>
+            </div>
+            <div class="range-bet-exchange-selector">
+            <label for="bet-desc" class="datepicker-expired-label">Expired</label>
             <datepicker placeholder="Enter your date" class="datepicker-expired" :value="expired" @selected="changeExpired"></datepicker>
         </div>
-        <button class="save-button" @click="saveAccuracy"><span>SAVE</span></button>
+        </div>
+        <div class="rangeitem-button">     
+            <button @click="saveAccuracy" class="save-button">SAVE</button>
+        </div>
     </div>
 </template>
 
@@ -88,36 +97,3 @@ import Datepicker from 'vuejs-datepicker';
         }
     }
 </script>
-
-<style lang="scss">
-    .range-bet-head-container {
-        margin: 50px;
-    }
-    
-    .range-bet-description-container {
-        margin: 50px;
-    }
-    
-    .rangeitem-container {
-        display: flex;
-        flex-flow: row;
-    }
-    
-    .save-button {
-        display: flex;
-        flex-flow: row;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 30px;
-        outline: 0;
-        background-color: transparent;
-        border-radius: 7px;
-        height: 30px;
-        color: orange;
-        width: 90px;
-        margin-bottom: 50px;
-        &>span {
-            text-align: center;
-        }
-    }
-</style>

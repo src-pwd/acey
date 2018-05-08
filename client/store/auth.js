@@ -8,7 +8,7 @@ const state = {
   password: "",
   email: "",
   loggedIn: localStorage.getItem("h"),
-  jwt: localStorage.getItem("t"),
+  jwt: "",
   endpoints: {
     obtainJWT: "http://localhost:8000/api/login/",
     refreshJWT: "http://localhost:8000/api/login/refresh/"
@@ -17,7 +17,6 @@ const state = {
 
 const mutations = {
   updateToken(state, newToken) {
-    localStorage.setItem("t", newToken);
     localStorage.setItem("u", state.username);    
     localStorage.setItem("h", state.loggedIn);
     state.jwt = newToken;
@@ -140,12 +139,13 @@ const actions = {
         this.dispatch("refreshToken");
       } else if (exp - Date.now() / 1000 < 1800) {
         // DO NOTHING, DO NOT REFRESH
-        state.loggedIn = false
-      } else {
+       
+      }  else {
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
-        alert('please relogin!').this.$router.push('/login')
+        alert('please relogin!')
       }
     }
+   
   }
 };
 
