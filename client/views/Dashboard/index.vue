@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard">
-            <dashboard-element :details="element" v-for="element in events"></dashboard-element>
+            <dashboard-element :details="element" v-for="element in events" :key="element.id"></dashboard-element>
         <router-view></router-view>
     </div>
 </template>
