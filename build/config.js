@@ -5,8 +5,8 @@ module.exports = {
   title: 'Aceyapp',
   // when you use electron please set to relative path like ./
   // otherwise only set to absolute path when you're using history mode
-  publicPath: '/dist/',
-  assetsPublicPath: '/dist/',
+  publicPath: '',
+  assetsPublicPath: '',
   // add these dependencies to a standalone vendor bundle
   vendor: [
     'vue',

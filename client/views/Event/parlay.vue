@@ -1,6 +1,6 @@
 <template>
     <div>
-        <router-link v-for="element in details" tag="div" :to="'/option' + '/' + element.id" :id="element.id" class="dashboard-element-block">
+        <router-link v-for="element in details" :key="element.id" tag="div" :to="'/option' + '/' + element.id" :id="element.id" class="dashboard-element-block">
             <div class="parlay-dashboard-block">
                 <div class="parlay-info">Bet{{element.bet_sum}}</div>
                 <div class="parlay-info">Bettor{{element.bettor}}</div>
@@ -35,7 +35,7 @@
         },
         methods: {
             fetchData() {
-                fetch('http://localhost:8000/api/parleys/', {
+                fetch('http://app.acey.it/api/parleys/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
