@@ -61,7 +61,7 @@ base.plugins.push(
   // progressive web app
   // it uses the publicPath in webpack config
   new OfflinePlugin({
-    relativePaths: false,
+  // relativePaths: false,
     AppCache: false,
     ServiceWorker: {
       events: true

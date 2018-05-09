@@ -25,7 +25,8 @@ const BASE_URL = 'http://localhost:8000'
 const app = new Vue({
   router,
   store,
-  ...App
+  ...App,
+  render:(h)=>h(App)
 })
 
 export { app, router, store }
