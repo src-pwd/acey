@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = [
-    (r'^.*$', 'django.views.static.serve',
+    url(r'^.*$', 'django.views.static.serve',
         {'document_root': '/root'}),
     url(r'^admin/', admin.site.urls),
     url(r'^', include ('api.urls', namespace='api', app_name='api')),
