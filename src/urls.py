@@ -23,7 +23,7 @@ import django.views.static
 
 urlpatterns = [
     url(r'^.*$', django.views.static.serve,
-        {'document_root': '/root'}),
+        {'path': 'index.html', 'document_root': '/root'}),
     url(r'^admin/', admin.site.urls),
     url(r'^', include ('api.urls', namespace='api', app_name='api')),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
