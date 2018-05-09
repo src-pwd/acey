@@ -11,10 +11,10 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'QW5kcmV5RWJ1bkxlaGFSYXpyYWJvdGNoaWtCZWtlbmRh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", 'localhost']
-CORS_ORIGIN_ALLOW_ALL = False
+ALLOWED_HOSTS = ["*"]
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_HEADERS = (
         'x-requested-with',
@@ -25,11 +25,11 @@ CORS_ALLOW_HEADERS = (
         'x-csrftoken'
 )
 
-CORS_ORIGIN_WHITELIST = (
-    '127.0.0.1:4000',
-    '127.0.0.1:8000',
-    'localhost:4000',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     '127.0.0.1:4000',
+#     '127.0.0.1:8000',
+#     'localhost:4000',
+# )
 
 
 INSTALLED_APPS = [
@@ -82,23 +82,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'src.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'acey',
-#         'USER': 'acey_admin',
-#         'PASSWORD': 'ethereum_admin',
-#         'HOST': 'localhost',
-#         'PORT': ''
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'acey',
+        'USER': 'acey_admin',
+        'PASSWORD': 'ethereum_admin',
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'acey',
+#     }
+# }
 
 DEFAULT_FROM_EMAIL = 'nananaBoston@gmail.com'
 SERVER_EMAIL = 'nananaBoston@gmail.com'
@@ -185,7 +185,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # REST_USE_JWT = True
 
-# SITE_ID = 1
+SITE_ID = 1
 
 # import django_heroku
 # django_heroku.settings(locals())
