@@ -12,6 +12,10 @@ import 'whatwg-fetch' // polyfill
 import 'material-design-icons' // material icons, because Element-UI icons set is incomplete
 import 'styles/index.scss' // require styles using webpack alias
 import '../theme/index.css'
+import fontawesome from '@fortawesome/fontawesome'
+
+
+
 
 sync(store, router)
 Vue.use(Element, { locale })

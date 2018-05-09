@@ -5,6 +5,7 @@
             <div class="main-content">
                     <router-view></router-view>
             </div>
+            <!-- <footer-c class="footer" v-if="isLogged"></footer-c>-->
     </div>
 </div>
 </template>
@@ -12,6 +13,7 @@
 
 import { mapActions, mapState } from 'vuex'
 import Header from 'components/Header'
+import Footer from 'components/Footer'
   import fetch from 'isomorphic-fetch'
 
 export default {
@@ -29,16 +31,30 @@ export default {
         },
         isLogged: state => {
           return state.auth.loggedIn
+        },
+        jwt: state => {
+          return state.auth.jwt
         }
-    })
+    }),
+     getToken() {
+                return this.$store.state.auth.jwt
+            }
   },
- 
+  watch: {
+    checkJwtExist() {
+      console.log(jwt)
+    }
+  },
+
   components: {
-     'header-c' :Header
+     'header-c' :Header,
+     'footer-c' :Footer
   },
-  created: function () {
+  created() {
     window.addEventListener('resize', this.handleResize)
+    
   },
+
   
   beforeUpdate() {
       this.$store.dispatch('inspectToken')
@@ -50,4 +66,5 @@ export default {
 <style lang="scss">
 // You can import all your SCSS variables using webpack alias
 @import '~scss_vars';
-@import './style.scss';</style>
+@import './style.scss';
+</style>

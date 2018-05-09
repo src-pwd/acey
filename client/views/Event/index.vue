@@ -31,7 +31,7 @@
             parlay
         },
         mounted() {
-            console.log(this.getToken)
+           
             this.fetchData();   
         },
         computed: {
@@ -99,20 +99,7 @@
                     }
                 } */
     
-    .range-bet-head {
-        margin-right: auto;
-        margin-left: 40%;
-        width: 200px;
-        padding-left: 20px;
-        font-size: 24px;
-        background-color: #1a1a1a;
-        color: white;
-        border: none;
-        &:active {
-            outline: none;
-            border-bottom: 2px solid orange;
-        }
-    }
+   
     
     .prediction-options {
         margin-top: 50px;

@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <p class="first-create-desc">1. Select type of prediction to create:</p>
+    <div class="container container-first">
+        <p class="first-create-desc"><span class="big-number-create">1</span> Select type of prediction to create:</p>
         <div class="type-block-menu">
             <router-link tag="div" to="/create/range" class="type-block" ref="range">
                 <div class="type-block-head">Range</div>
@@ -18,9 +18,11 @@
                 <div class="type-block-body">Bet on price of crypto!</div>
             </router-link>
         </div>
+         
         <transition name="fade">
                 <router-view></router-view>
         </transition>
+        
     </div>
 </template>
 
@@ -37,8 +39,6 @@
             Range
         },
         mounted() {
-            console.log(this.$refs)
-
         },
         computed: {
             configVal() {
@@ -52,7 +52,6 @@
 
 <style lang="scss">
     @import '../../styles/vars.scss';
-    @import './create.scss';
     .container {
         width: 1170px;
     }
@@ -88,35 +87,6 @@
             transform: rotate(0deg);
         }
     }
+
     
-    .type-block {
-        margin: 25px;
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #bd7125;
-        width: 30%;
-        transition: 0.2s;
-        &:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 150px rgba(0, 0, 0, 0.25);
-        }
-    }
-    
-    .type-block-head {
-        font-size: 20px;
-        color: #fff;
-    }
-    
-    .range-bet-head {
-        width: 400px;
-        padding-left: 20px;
-        font-size: 24px;
-        background-color: #1a1a1a;
-        color: white;
-        border: none;
-        &:active {
-            outline: none;
-            border-bottom: 2px solid orange;
-        }
-    }
 </style>

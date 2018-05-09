@@ -87,7 +87,6 @@ const actions = {
   saveRangePrediction ({ commit }) {
     console.log('lol')
     console.log(state)
-    console.log(store)
 
     const data = {
       creator: store.state.auth.username,
