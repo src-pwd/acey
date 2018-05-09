@@ -463,23 +463,7 @@ body {
   transform: scale(1.1);
 }
 
-// .main-acey-logoform-input:focus, .main-acey-logoform-input:hover {
-//     border: 1px solid #ef7a13;
-//     outline: none;
-// }
 
-// .main-acey-logoform-input {
-//     width: 100%;
-//     background-color: #1a1a1a;
-//     color: #fff;
-//     padding: 10px;
-//     border: none;
-//     border: 1px solid black;
-//     margin-top: 10px;
-//     height: 50px;
-//     font-size: 20px;
-//     border-radius: 12px;
-//     margin-bottom: 20px;}
 
 .first-create-desc {
   font-size: 1.5em;
@@ -664,29 +648,286 @@ body {
   }
 }
 
-
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition-property: opacity;
-  transition-duration: .25s;
+  transition-duration: 0.25s;
 }
 
 .fade-enter-active {
-  transition-delay: .25s;
+  transition-delay: 0.25s;
 }
 
-.fade-enter, .fade-leave-active {
-  opacity: 0
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
 }
 
 .big-number-create {
   display: inline-block;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  padding: 8px;
-  background: #fff;
-  border: 2px solid #666;
-  color: #666;
+  width: 55px;
+  height: 55px;
+  padding: 17px;
+  background: $light-orange;
+  /* border: 2px solid #666; */
+  color: white;
   text-align: center;
-  font: 32px Arial, sans-serif;
+}
+
+.event {
+  &-desc {
+    text-align: center;
+    margin-top: 50px;
+  }
+  &-name {
+    font-size: 1.7em;
+    color: white;
+  }
+  &-exchange {
+    padding-right: 50px;
+
+    width: max-content;
+    & > span {
+      color: white;
+    }
+  }
+  &-pair {
+    padding-left: 30px;
+    font-size: 1.5em;
+    width: max-content;
+    padding-right: 50px;
+    & > span {
+      color: white;
+    }
+  }
+  &-expired {
+    padding-left: 50px;
+    width: max-content;
+    & > span {
+      color: white;
+    }
+  }
+  &-description {
+    font-size: 1em;
+  }
+  &-exchange-container {
+    margin-left: 17%;
+    margin-top: 30px;
+    font-size: 1.5em;
+    margin-right: auto;
+    display: flex;
+    flex-flow: row;
+  }
+}
+
+.event-container {
+  width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-flow: column;
+}
+
+.event-exchange-flex-container {
+  display: flex;
+  flex-flow: row;
+}
+.range-items {
+  display: flex;
+  justify-content: center;
+  flex-flow: row;
+  margin-top: 50px;
+}
+.range-items-pay {
+  margin-left: auto;
+  margin-top: 50px;
+  margin-right: auto;
+  text-align: center;
+  &-input {
+    margin-left: 50px;
+    width: 30%;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border: 1px solid black;
+    margin-top: 10px;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    &:focus,
+    &:hover {
+      border: 1px solid #ef7a13;
+      outline: none;
+    }
+  }
+  &-currency {
+    padding-left: 10px;
+  }
+  &-label {
+    margin-top: 10px;
+    font-size: 1.5em;
+    color: white;
+  }
+}
+.range-board {
+  text-align: center;
+  line-height: 20px;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-flow: column;
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid $light-orange;
+  border-radius: 16px;
+  &.active {
+    transform: scale(1.1);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  }
+}
+
+.range-item-bottombar {
+  margin-top: 60px;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.accuracy-control {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.row-block-button {
+  padding-top: 50px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+}
+
+.vote-range-button {
+  width: 250px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+  cursor: pointer;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #fff;
+  font-size: 13px;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 40px;
+  background-color: #151515;
+  outline: none;
+  border: 1px solid #a76123;
+  &:hover {
+    transform: scale(1.1);
+    transition-duration: 0.5s;
+    color: #fff;
+    text-decoration: none;
+    background: #ef7a13;
+    border-color: #ef7a13;
+    box-shadow: 0px 5px 15px #a76123 !important;
+  }
+}
+
+
+.accuracy-easy {
+  &:focus, &:hover {
+    border: 1px solid #ef7a13;
+    outline: none;
+}
+.betting-sum {
+    margin-left: 40%;
+    margin-top: 50px;
+}
+    width: 30%;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border: 1px solid black;
+    margin-top: 10px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.betting-sum {
+  width: 20%;
+}
+
+.accuracy-control {
+  .output {
+    width: 100%;
+    margin-left: 50%;
+  }
+  
+  input[type=range] {
+    -webkit-appearance: none;
+    /* Hides the slider so that custom slider can be made */
+    height: 5px;
+    width: 100%;
+    cursor: pointer;
+    background: $dark-orange;
+    margin-bottom: 10px;
+  }
+  
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 2px solid $dark-orange;
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    margin-top: 0px;
+    /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  }
+  
+  input[type=range]:focus {
+    outline: none;
+  }
+}
+
+
+.user-block {
+  &-left-part {
+    width: max-content;
+  }
+  &-right-part {
+    width: 350px;
+}
+}
+
+.button-container {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  margin-top: 100px;
+
+  
+  button {
+    border: 1px solid $dark-orange;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+    padding: 20px 50px;
+    background-color: #db4040;
+   -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 40px;
+  outline: none;
+  }
 }

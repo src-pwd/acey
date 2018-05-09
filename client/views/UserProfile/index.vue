@@ -1,18 +1,23 @@
 <template>
   <div class="container">
     <div class="user-container">
-    <div class="about-user-block">
-      <div>act rate{{userInfo.activity_rate}}</div>
-      <div>bets{{userInfo.bets}}</div>
-      <div>events{{userInfo.events}}</div>
-      <div>info{{userInfo.info}}</div>
-      <div>rate{{userInfo.rate}}</div>
-      <div>sum{{userInfo.sum}}</div>
+        <div class="user-block-left-part">
+          <div>act rate{{userInfo.activity_rate}}</div>
+          <div>bets{{userInfo.bets}}</div>
+          <div>events{{userInfo.events}}</div>
+          <div>info{{userInfo.info}}</div>
+          <div>rate{{userInfo.rate}}</div>
+          <div>sum{{userInfo.sum}}</div>
+        </div>
+        <div class="user-block-right-part">
+          <img class="userpart-userpic" src="kekes.svg" alt="">
+        </div>
+      
     </div>
-    <button @click="logout">Logout</button>
-
+    <div class="button-container">
+      <button @click="logout">Logout</button>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -29,57 +34,35 @@
       userInfo() {
         return this.$store.state.user.details
       }
-      
+  
     },
     watch: {
-    isLogged () {
-      if (this.isLogged == false) 
-      this.$router.push('/')
-    }
-  },
+      isLogged() {
+        if (this.isLogged == false)
+          this.$router.push('/')
+      }
+    },
     methods: {
       logout() {
-        this.$store.commit("removeToken")       
-        this.$store.commit("loggingOut")    
+        this.$store.commit("removeToken")
+        this.$store.commit("loggingOut")
       }
-      
+  
     }
   }
 </script>
 
 <style lang="scss">
-  .user-dashboard {
+  .user-container {
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-flow: row;
-  }
-  
-  .description-user-dashboard {
-    width: 50%;
-  }
-  .user-container {
-    width: 700px;
-    margin-top: 100px;
-    margin-left:auto;
+    margin-top: 80px;
+    margin-left: auto;
     margin-right: auto;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
   }
-  p.description-user-name {
-    font-size: 40px;
-    color: white;
-}
-
-.description-user-dashboard {
-  & > p {
-    font-size: 20px;
-    color: white;
-  }
-}
-
-.userpic-user-dashboard {
-  border-radius: 150px;
-  margin-left: 200px;
-}
-
-.description-user-balance {
-  color: orange !important;
-}
 </style>

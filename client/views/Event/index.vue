@@ -1,10 +1,15 @@
 <template>
     <div class="container event-container">
         <div class="event-desc">
-            <div class="event-name"><span>Name</span>{{ details.name }}</div>
-            <div class="event-description"><span>Description</span>{{ details.description }}</div>
-            <div class="event-expired"><span>Expired</span>{{ details.expired }}</div>
-            <div class="event-expired"><span>Created</span>{{ details.created }}</div>
+            <div class="event-name">{{ details.name }}</div>
+            <div class="event-description">{{ details.description }}</div>
+        </div>
+        <div class="event-exchange-flex-container">
+            <div class="event-exchange-container">
+                <div class="event-exchange">Exchange <span>{{ details.exchange }}</span></div>
+                <div class="event-pair"><span>{{ details.currency_pair }}</span></div>
+                <div class="event-expired">Expired in <span>{{ expiredDay }}</span> days</div>
+            </div>
         </div>
         <div v-if="details.type === 'Prediction'">
             <range />
@@ -31,13 +36,19 @@
             parlay
         },
         mounted() {
-           
-            this.fetchData();   
+    
+            this.fetchData();
         },
         computed: {
             getToken() {
                 return this.$store.state.auth.jwt
-            }
+            },
+            expiredDay() {
+                let oneDay = 24 * 60 * 60 * 1000;
+                let firstDate = new Date(this.details.expired) || ''
+                let secondDate = new Date(this.details.created) || ''
+                return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+            },
         },
         methods: {
             fetchData() {
@@ -54,8 +65,10 @@
                     .then((el) => {
                         this.details = el.find(x => x.id == this.$route.params.id)
                     })
+    
             }
         },
+    
         data() {
             return {
                 details: {},
@@ -64,75 +77,3 @@
     
     }
 </script>
-
-<style lang="scss">
-    .event-container {
-        width: 1100px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .event-desc {
-        font-size: 25px;
-        color: white;
-        margin-top: 100px;
-        &>div>span {
-            color: gray;
-            padding-right: 100px;
-        }
-    }
-    
-    
-    /* .event {
-                    
-                    &-name {
-                        
-                    }
-                    &-id {
-                        
-                    }
-                    &-desc {
-                        
-                    }
-                    &-expiredv{
-                        
-                    }
-                } */
-    
-   
-    
-    .prediction-options {
-        margin-top: 50px;
-        display: flex;
-        flex-flow: row;
-        justify-content: center;
-    }
-    
-    .option {
-        height: 200px;
-        width: 200px;
-        border: 1px solid orange;
-        border-radius: 7px;
-        padding: 30px;
-        margin: 30px;
-    }
-    
-    .option-text {
-        font-size: 20px;
-    }
-    
-    .save-button {
-        display: flex;
-        flex-flow: row;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 30px;
-        outline: 0;
-        background-color: transparent;
-        border-radius: 7px;
-        height: 30px;
-        color: orange;
-        width: 90px;
-        margin-bottom: 50px;
-    }
-</style>
