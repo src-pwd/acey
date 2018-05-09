@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from api import views
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
+    url(r'^.*$', TemplateView.as_view(teplate_name="/root/index.html")),
     url(r'^admin/', admin.site.urls),
     url(r'^', include ('api.urls', namespace='api', app_name='api')),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
