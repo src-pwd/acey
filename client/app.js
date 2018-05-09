@@ -16,7 +16,6 @@ import fontawesome from '@fortawesome/fontawesome'
 
 
 
-
 sync(store, router)
 Vue.use(Element, { locale })
 
@@ -26,7 +25,10 @@ const app = new Vue({
   router,
   store,
   ...App,
-  render:(h)=>h(App)
+  render:(h)=>h(App),
+  components: {
+    App
+  }
 })
 
-export { app, router, store }
+export { app, router, store, BASE_URL }
