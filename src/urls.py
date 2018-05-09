@@ -18,10 +18,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from api import views
 from django.views.generic import TemplateView
+import django.views.static
 
 
 urlpatterns = [
-    url(r'^.*$', 'django.views.static.serve',
+    url(r'^.*$', django.views.static.serve,
         {'document_root': '/root'}),
     url(r'^admin/', admin.site.urls),
     url(r'^', include ('api.urls', namespace='api', app_name='api')),
