@@ -93,6 +93,13 @@ WSGI_APPLICATION = 'src.wsgi.application'
 #     }
 # }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'acey',
+    }
+}
+
 DEFAULT_FROM_EMAIL = 'nananaBoston@gmail.com'
 SERVER_EMAIL = 'nananaBoston@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -103,12 +110,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'acey',
-    }
-}
+
 
 
 # Password validation
