@@ -2,34 +2,57 @@
     <div>
         <div class="range-items">
             <div v-for="item in options" :key="item.id" class="range-board" :class="selected === item ? 'active': ''" @click="chooseOption(item)">
-                <div>Sum from:{{item.sum_from}}</div>
-                <div>Sum to:{{item.sum_to}}</div>
-                <div>Total sum:{{item.total_sum}}</div>
-                <div>Total users:{{item.total_users}}</div>
+                <div>From {{item.sum_from}}</div>
+                <div>To {{item.sum_to}}</div>
+                <div class="range-item-bottombar">
+                    <font-awesome-icon :icon="sumo" />{{item.total_sum}} ACEY
+                    <font-awesome-icon :icon="users" />{{item.total_users}}</div>
             </div>
-    
         </div>
-        <div>
-      <input class="" v-model="sum"/><br />
-    </div>
+        <div class="range-items-pay">
+           <label class="range-items-pay-label">
+            Your investment
+           </label>
+           <br>
+            <input class="range-items-pay-input" v-model="sum" placeholder="your investment"/>
+            <span class="range-items-pay-currency"> ACEY</span>    
+        </div>
         <div class="row-block-button">
-            <div><button @click="voteFor">voteeeeee</button></div>
+            <div><button class="vote-range-button" @click="voteFor">vote</button></div>
         </div>
     </div>
 </template>
 
 
 <script>
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+    import {
+        faUser
+    } from '@fortawesome/fontawesome-free-solid'
+    import {
+        faDatabase
+    } from '@fortawesome/fontawesome-free-solid'
+    
     export default {
+        components: {
+            FontAwesomeIcon
+        },
         mounted() {
             this.fetchData()
         },
         computed: {
             username() {
                 return this.$store.state.auth.username
-            }
+            },
+            sumo() {
+                return faDatabase
+            },
+            users() {
+                return faUser
+            },
         },
         methods: {
+    
             fetchData() {
                 fetch('http://localhost:8000/api/options/', {
                         method: "GET", // or 'PUT'
@@ -84,31 +107,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .range-items {
-        display: flex;
-        justify-content: center;
-        flex-flow: row;
-    }
-    
-    .range-board {
-        display: flex;
-        flex-flow: column;
-        padding: 50px;
-    }
-    
-    .active {
-        border: 1px solid orange;
-    }
-    
-    .row-block-button {
-        padding-top: 50px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        flex-flow: row;
-        justify-content: center;
-    }
-</style>

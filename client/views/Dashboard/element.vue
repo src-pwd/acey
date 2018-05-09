@@ -54,12 +54,7 @@ import { faDatabase } from '@fortawesome/fontawesome-free-solid'
             },
             user() {
                 return faUser
-            },
-           
-    icon () {
-      return faCoffee
-    },
-            
+            }
         },
         mounted() {
         },

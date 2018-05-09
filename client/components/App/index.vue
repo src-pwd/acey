@@ -3,7 +3,9 @@
     <div class="page-layout">
             <header-c :title="title" v-if="isLogged"></header-c>
             <div class="main-content">
-                    <router-view></router-view>
+            <transition name="fade">
+                    <router-view></router-view>            
+            </transition>
             </div>
             <!-- <footer-c class="footer" v-if="isLogged"></footer-c>-->
     </div>
