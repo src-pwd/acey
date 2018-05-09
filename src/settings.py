@@ -66,7 +66,7 @@ ROOT_URLCONF = 'src.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates"),],
+        'DIRS': [os.path.join(BASE_DIR, "templates"), '/root/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,7 +109,9 @@ EMAIL_HOST_USER = 'nananaBoston@gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-
+TEMPLATE_DIRS = (
+    '/root/',
+)
 
 
 
