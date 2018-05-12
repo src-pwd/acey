@@ -19,7 +19,7 @@ from utils.iden import Iden
 import hashlib
 
 LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
-DOMAIN = '127.0.0.1:8000'
+DOMAIN = 'app.acey.it'
 BACKGROUND = '#EEEEEE'
 
 class UserSerializer(serializers.ModelSerializer):
