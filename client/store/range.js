@@ -7,10 +7,12 @@ export const SAVE_RANGE_PRED = 'SAVE_RANGE_PRED'
 const state = {
   options: [
     {
+      index: 0,
       sum_from: null,
       sum_to: null
     },
     {
+      index: 1,
       sum_from: null,
       sum_to: null
     }
@@ -32,10 +34,12 @@ const mutations = {
     state.created = true
     state.options = [
       {
+        index: 0,
         sum_from: null,
         sum_to: null
       },
       {
+        index: 1,
         sum_from: null,
         sum_to: null
       }
@@ -61,7 +65,7 @@ const mutations = {
   [ADD_RANGE] (state, range) {
     if (state.options.length < 5) {
       state.options.push({
-        name: '',
+        index: state.options.length,
         sum_from: null,
         sum_to: null
       })
@@ -74,7 +78,7 @@ const mutations = {
     state.options[payload[1]].sum_to = Number(payload[0])
   },
   deleteRange (state, item) {
-    state.options = state.options.filter(el => el.name !== item)
+    state.options = state.options.filter(el => el.index !== item)
   },
   [SAVE_RANGE_PRED] (state) {}
 }
@@ -85,9 +89,6 @@ const actions = {
   },
 
   saveRangePrediction ({ commit }) {
-    console.log('lol')
-    console.log(state)
-
     const data = {
       creator: store.state.auth.username,
       currency_pair: state.currency_pair,
@@ -97,7 +98,7 @@ const actions = {
       name: state.name,
       options: state.options
     }
-    fetch('http://app.acey.it/api/predictions/', {
+    fetch('http://localhost:8000/api/predictions/', {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(data),
       headers: {

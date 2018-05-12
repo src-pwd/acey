@@ -54,7 +54,7 @@
         methods: {
     
             fetchData() {
-                fetch('http://app.acey.it/api/options/', {
+                fetch('http://localhost:8000/api/options/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
@@ -68,7 +68,7 @@
                         console.log(this.options)
     
                     })
-                fetch('http://app.acey.it/api/users/', {
+                fetch('http://localhost:8000/api/users/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
