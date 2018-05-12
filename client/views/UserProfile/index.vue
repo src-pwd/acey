@@ -2,12 +2,11 @@
   <div class="container">
     <div class="user-container">
         <div class="user-block-left-part">
-          <div>act rate{{userInfo.activity_rate}}</div>
-          <div>bets{{userInfo.bets}}</div>
-          <div>events{{userInfo.events}}</div>
-          <div>info{{userInfo.info}}</div>
-          <div>rate{{userInfo.rate}}</div>
-          <div>sum{{userInfo.sum}}</div>
+          <div class="user-block-left-part-text">bets{{userInfo.bets}}</div>
+          <div class="user-block-left-part-text">events{{userInfo.events}}</div>
+          <div class="user-block-left-part-text">info{{userInfo.info}}</div>
+          <div class="user-block-left-part-text">rate{{userInfo.rate}}</div>
+          <div class="user-block-left-part-text">sum{{userInfo.sum}}</div>
         </div>
         <div class="user-block-right-part">
           <img class="userpart-userpic" src="kekes.svg" alt="">

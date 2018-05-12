@@ -73,7 +73,11 @@ export const routes = [
   {
     path: '/event',
     redirect: '/dashboard'
-  } 
+  },
+  {
+    path: '*',
+    redirect: '/404'
+}
 ]
 
 export const router = new Router({ mode: 'history', routes })

@@ -82,23 +82,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'src.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'acey',
-        'USER': 'acey_admin',
-        'PASSWORD': 'ethereum_admin',
-        'HOST': 'localhost',
-        'PORT': ''
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'acey',
+#         'USER': 'acey_admin',
+#         'PASSWORD': 'ethereum_admin',
+#         'HOST': 'localhost',
+#         'PORT': ''
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'acey',
+    }
+}
 
 DEFAULT_FROM_EMAIL = 'nananaBoston@gmail.com'
 SERVER_EMAIL = 'nananaBoston@gmail.com'
