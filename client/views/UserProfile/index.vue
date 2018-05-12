@@ -1,22 +1,37 @@
 <template>
-  <div class="container">
-    <div class="user-container">
-        <div class="user-block-left-part">
-          <div>act rate{{userInfo.activity_rate}}</div>
-          <div>bets{{userInfo.bets}}</div>
-          <div>events{{userInfo.events}}</div>
-          <div>info{{userInfo.info}}</div>
-          <div>rate{{userInfo.rate}}</div>
-          <div>sum{{userInfo.sum}}</div>
-        </div>
-        <div class="user-block-right-part">
+  <div class="container user-container">
+    <div class="user-about">
+      <p class="user-title">About</p>
+      <div class="user-about-main">
+        <p class="user-about-name"> <span>Name</span> {{ userInfo.user.username }} </p>
+        <p class="user-about-mail"> <span>E-mail</span> {{ userInfo.user.email }} </p>
+        <div class="user-userpic-container">
           <img class="userpart-userpic" src="kekes.svg" alt="">
         </div>
-      
+      </div>
+  
     </div>
-    <div class="button-container">
-      <button @click="logout">Logout</button>
+    <div class="user-achievments">
+      <p class="user-title">Total</p>
+      <p class="user-achievements-winrate"><span>Win rate</span> {{userInfo.win_rate}} </p>
+      <p class="user-achievements-bets"><span>Bets</span> {{userInfo.bets}} </p>
+      <p class="user-achievements-events"><span>Events</span> {{userInfo.events}} </p>
     </div>
+    <div class="user-balance">
+      <p class="user-title">Balance</p>
+      <div class="user-balance-container">
+        <span class="user-balance-sum">{{userInfo.sum}}</span>
+        <div class="user-balance-img-container">
+          <img src="acey_token.png">
+        </div>
+      </div>
+    </div>
+    <div class="user-balance">
+      <div class="button-container">
+        <button @click="logout">Logout</button>
+      </div>
+    </div>
+  
   </div>
 </template>
 
@@ -34,7 +49,6 @@
       userInfo() {
         return this.$store.state.user.details
       }
-  
     },
     watch: {
       isLogged() {
@@ -51,18 +65,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .user-container {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-flow: row;
-    margin-top: 80px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-flow: row;
-    justify-content: center;
-  }
-</style>

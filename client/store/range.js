@@ -21,9 +21,11 @@ const state = {
   description: '',
   expired: '',
   type: 'Prediction',
-  currency_pair: '',
-  exchange: '',
-  created: false
+  currency_pairin: 'DASH',
+  currency_pairout: 'XMR',
+  exchange: 'bitfinex',
+  created: false,
+  errors: {}
 }
 
 const mutations = {
@@ -56,8 +58,11 @@ const mutations = {
   updateExp (state, exp) {
     state.expired = exp
   },
-  updatePair (state, exp) {
-    state.currency_pair = exp
+  updatePairIn (state, exp) {
+    state.currency_pairin = exp
+  },
+  updatePairOut (state, exp) {
+    state.currency_pairout = exp
   },
   updateExchange (state, exp) {
     state.exchange = exp
@@ -80,7 +85,9 @@ const mutations = {
   deleteRange (state, item) {
     state.options = state.options.filter(el => el.index !== item)
   },
-  [SAVE_RANGE_PRED] (state) {}
+  updateErrors (state, item) {
+    state.errors = item
+  }
 }
 
 const actions = {
@@ -91,7 +98,7 @@ const actions = {
   saveRangePrediction ({ commit }) {
     const data = {
       creator: store.state.auth.username,
-      currency_pair: state.currency_pair,
+      currency_pair: state.currency_pairin + '/' + state.currency_pairout,
       description: state.description,
       exchange: state.exchange,
       expired: state.expired,
@@ -107,7 +114,9 @@ const actions = {
 
     }).then(response => {
       if (!response.ok) {
-        response.json().then(el => window.alert(el))
+        response.json().then(el => {
+          this.commit('updateErrors', el)
+        })
         return
       }
       response.json().then(() => {

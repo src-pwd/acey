@@ -19,13 +19,13 @@
                     </div>
                 </div>
                 <router-link tag="div" class="app-main-nav-link app-main-nav-userpart" to="/profile">
-                    <div class="userpart-details" v-if="profileRoute"> 
-                        <div class="userpart-username">{{username}}</div>
-                        <div class="userpart-sum">{{sum}} ACEY</div>
-                        <div class="userpart-button"></div>
-                    </div>
-                    <div class="userpart-details-raw" v-else>
-                        <div class="userpart-username-raw">{{username}}</div>
+                    <div class="userpart-token">
+                    <span class="userpart-token-sum-desc">Avaliable balance</span>
+                    
+                        <span class="userpart-token-sum">{{ sum ? sum : '138' }}</span>
+                        <div class="userpart-token-img-container">
+                            <img class="userpart-token-img" src="acey_token.png">
+                        </div>
                     </div>
                     <div class="userpart-userpic-container">
                         <img class="userpart-userpic" src="kekes.svg" alt="">

@@ -5,7 +5,7 @@ const state = {
   name: '',
   description: '',
   expired: '',
-  type: 'AccuratePrediction',
+  type: 'Parlay',
   currency_pairIn: 'DASH',
   currency_pairOut: 'XMR',
   exchange: 'bitfinex',
@@ -14,10 +14,10 @@ const state = {
 }
 
 const mutations = {
-  updateNameAcc (state, name) {
+  updateNamePar (state, name) {
     state.name = name
   },
-  updateCreatedAcc (state) {
+  updateCreatedPar (state) {
     state.name = ''
     state.description = ''
     state.expired = ''
@@ -25,19 +25,19 @@ const mutations = {
     state.exchange = ''
     state.created = true
   },
-  updateDescAcc (state, desc) {
+  updateDescPar (state, desc) {
     state.description = desc
   },
-  updateExpAcc (state, exp) {
+  updateExpPar (state, exp) {
     state.expired = exp
   },
-  updatePairAccIn (state, exp) {
+  updatePairParIn (state, exp) {
     state.currency_pairIn = exp
   },
-  updatePairAccOut (state, exp) {
+  updatePairParOut (state, exp) {
     state.currency_pairOut = exp
   },
-  updateExchangeAcc (state, exp) {
+  updateExchangePar (state, exp) {
     state.exchange = exp
   },
   updateErrors (state, item) {
@@ -47,7 +47,7 @@ const mutations = {
 
 const actions = {
 
-  saveAccuracy ({ commit }) {
+  savePar ({ commit }) {
     const data = {
       creator: store.state.auth.username,
       currency_pair: state.currency_pairIn + '/' + state.currency_pairOut,
@@ -72,7 +72,7 @@ const actions = {
         return
       }
       response.json().then(() => {
-        this.commit('updateCreatedAcc')
+        this.commit('updateCreatedPar')
       })
     })
   }

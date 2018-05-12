@@ -71,14 +71,22 @@ body {
     border-radius: 8px 8px 0 0;
     transition: box-shadow 0.7s ease;
     &.router-link-active {
+      border-radius: 12px 12px 0 0;
+
       background-color: $background-color !important;
-      -webkit-box-shadow: -5px -20px 100px 2px rgba(0, 0, 0, 0.75);
-      -moz-box-shadow: -5px -20px 100px 2px rgba(0, 0, 0, 0.75);
-      box-shadow: -5px -20px 100px 2px rgba(0, 0, 0, 0.75);
+      -webkit-box-shadow: 0px -15px 70px -20px rgba(0, 0, 0, 0.75);
+      -moz-box-shadow: 0px -15px 70px -20px rgba(0, 0, 0, 0.75);
+      box-shadow: 0px -15px 70px -20px rgba(0, 0, 0, 0.75);
     }
   }
   &-link:hover {
     color: $main-orange;
+    .soon-header-sticker {
+      transform: rotate(0deg) scale(1.3);
+      -webkit-box-shadow: -1px 2px 10px 1px rgba(252, 179, 70, 1);
+      -moz-box-shadow: -1px 2px 10px 1px rgba(252, 179, 70, 1);
+      box-shadow: -1px 2px 10px 1px rgba(252, 179, 70, 1);
+    }
   }
 
   &-links > div {
@@ -93,16 +101,11 @@ body {
     display: flex;
     flex-flow: row;
     justify-content: flex-end;
-    width: 450px;
-    margin-left: 245px;
-    width: 320px;
+    width: 100%;
     border-radius: 0;
     transition: color 0.3s ease;
     color: $font-color !important;
     &.router-link-active {
-      -webkit-box-shadow: 0px 2px 82px -2px rgba(237, 142, 26, 1);
-      -moz-box-shadow: 0px 2px 82px -2px rgba(237, 142, 26, 1);
-      box-shadow: 0px 2px 82px -2px rgba(237, 142, 26, 1);
     }
     &:hover {
       color: $main-orange !important;
@@ -160,25 +163,40 @@ body {
     border-radius: 50%;
     background-color: white;
   }
+
   &-userpic-container {
-    width: 55px;
+    width: 75px;
+    margin-right: 20px;
   }
-  &-username {
-    font-size: 30px;
-    &-raw {
-      font-size: 20px;
-      display: inline-block;
-      padding-right: 15px;
-    }
-  }
-  &-sum {
-  }
-  &-button {
-  }
-  &-details {
+  &-token {
+    margin-top: 20px;
+    width: max-content;
+    justify-content: flex-end;
     display: flex;
-    flex-flow: column;
-    justify-content: center;
+    background-color: #1a1a1a;
+    align-items: center;
+    height: 40px;
+    border-right: transparent;
+    margin-right: 5px;
+    border-radius: 5px 25px 25px 5px;
+    &-sum {
+      margin-left: 10px;
+      margin-right: 5px;
+      &-desc {
+        text-transform: none;
+        margin-left: 10px;
+      }
+    }
+    &-img {
+      width: 100%;
+      &-container {
+        display: flex;
+        width: 35px;
+        float: right;
+        flex-flow: column;
+        justify-content: center;
+      }
+    }
   }
 }
 
@@ -323,16 +341,10 @@ body {
   transform: rotate(-35deg);
   transition: transform 0.5s ease, scale 0.7s ease-in;
   border-radius: 20px;
-  color: white;
+  color: black;
   background-color: $main-orange;
   padding: 10px 10px;
   font-size: 14px;
-  &:hover {
-    transform: rotate(0deg) scale(1.3);
-    -webkit-box-shadow: -1px 2px 10px 1px rgba(252, 179, 70, 1);
-    -moz-box-shadow: -1px 2px 10px 1px rgba(252, 179, 70, 1);
-    box-shadow: -1px 2px 10px 1px rgba(252, 179, 70, 1);
-  }
 }
 
 .dashboard-element {
@@ -463,8 +475,6 @@ body {
   transform: scale(1.1);
 }
 
-
-
 .first-create-desc {
   font-size: 1.5em;
 }
@@ -534,6 +544,11 @@ body {
     color: #c1c1c1;
     background-color: #1a1a1a;
   }
+}
+
+.range-bet-select-exchange-label {
+  position: relative;
+    top: -95px;
 }
 
 .range-bet-exchange-selector {
@@ -841,27 +856,27 @@ body {
   }
 }
 
-
 .accuracy-easy {
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     border: 1px solid #ef7a13;
     outline: none;
-}
-.betting-sum {
+  }
+  .betting-sum {
     margin-left: 40%;
     margin-top: 50px;
-}
-    width: 30%;
-    background-color: #1a1a1a;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border: 1px solid black;
-    margin-top: 10px;
-    height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
+  }
+  width: 30%;
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border: 1px solid black;
+  margin-top: 10px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
 .betting-sum {
@@ -873,8 +888,8 @@ body {
     width: 100%;
     margin-left: 50%;
   }
-  
-  input[type=range] {
+
+  input[type="range"] {
     -webkit-appearance: none;
     /* Hides the slider so that custom slider can be made */
     height: 5px;
@@ -883,8 +898,8 @@ body {
     background: $dark-orange;
     margin-bottom: 10px;
   }
-  
-  input[type=range]::-webkit-slider-thumb {
+
+  input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     border: 2px solid $dark-orange;
     height: 20px;
@@ -895,39 +910,120 @@ body {
     margin-top: 0px;
     /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
   }
-  
-  input[type=range]:focus {
+
+  input[type="range"]:focus {
     outline: none;
   }
-}
-
-
-.user-block {
-  &-left-part {
-    width: max-content;
-  }
-  &-right-part {
-    width: 350px;
-}
 }
 
 .button-container {
   display: flex;
   flex-flow: row;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 50px;
 
-  
   button {
     border: 1px solid $dark-orange;
     outline: none;
     background-color: transparent;
     color: white;
     font-size: 24px;
-    padding: 20px 50px;
+    padding: 10px 30px;
     background-color: #db4040;
-   -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 40px;
-  outline: none;
+    -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 40px;
+    outline: none;
   }
+}
+.user-container {
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-flow: row;
+  @media (min-width: 1100px) {
+    width: 1100px;
+  }
+  & > div {
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+    border-radius: 6px;
+  }
+}
+
+.user {
+  &-title {
+    text-align: center;
+    font-size: 1.3em;
+    color: white;
+    text-transform: uppercase;
+  }
+  &-userpic-container {
+    width: 150px;
+  }
+  &-about {
+    width: max-content;
+    height: 200px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    &-description {
+      width: 30%;
+    }
+    &-main {
+      display: flex;
+      & > p > span {
+        font-size: 1.1em;
+        text-transform: uppercase;
+        color: rgba(189, 189, 189, 0.3);
+      }
+    }
+    &-name {
+     
+    }
+  }
+  &-achievments {
+    text-align: center;
+    width: 300px;
+    height: 200px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    & > p > span {
+        font-size: 1.1em;
+        text-transform: uppercase;
+        color: rgba(189, 189, 189, 0.3);
+      }
+  }
+  &-balance {
+   &-container{ display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;}
+    width: 300px;
+    height: 200px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    & > p > span {
+        font-size: 1.1em;
+        text-transform: uppercase;
+        color: rgba(189, 189, 189, 0.3);
+      }
+
+    &-img-container {
+      width: 60px;
+      & > img {
+        width: 100%;
+      }
+    }
+    &-sum {
+      font-size: 1.8em;
+    }
+  }
+}
+
+.cell.day {
+  color: gray;
+}
+.vdp-datepicker__calendar {
+  background: #1F2021 !important;
 }

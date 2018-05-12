@@ -7,7 +7,7 @@ const state = {
   username:localStorage.getItem("u"),
   password: "",
   email: "",
-  loggedIn: true,
+  loggedIn: false,
   jwt: "",
   endpoints: {
     obtainJWT: "http://localhost:8000/api/login/",
