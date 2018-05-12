@@ -47,28 +47,8 @@
         return this.$store.state.auth.loggedIn
       },
       userInfo() {
-        // return this.$store.state.user.details
-        return ({
-          "user": {
-            "username": "Andryuha",
-            "email": "awda@gmail.com",
-            "password": "pbkdf2_sha256 $36000$tA4KdsQQ0anK$Yo00zEKj9FVOz1P5n4GAVq+m+7frOelZ0kp9Pw4FIoU=",
-            "first_nam e": "",
-            "last_name": "",
-            "date_joined": "2018-03- 08T06:02:00.043809+02:00",
-            "last_login": null
-          },
-          "profile_picture": null,
-          "rate": 0,
-          "info": "Crypto Andryuha",
-          "sum": 49809,
-          "bets": 12,
-          "events": 3,
-          "activity_rate": null,
-          "win_rate": 20
-        })
+        return this.$store.state.user.details
       }
-  
     },
     watch: {
       isLogged() {
