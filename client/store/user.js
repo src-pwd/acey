@@ -1,15 +1,19 @@
+/*eslint-disable*/
+
 import fetch from 'isomorphic-fetch'
 import store from './index'
 
 const state = {
-  details: {}
+  details: JSON.parse(localStorage.getItem('about')) || {}
 }
 
 const getters = {}
 
 const mutations = {
+
   aboutUser (state, value) {
     state.details = value
+    localStorage.setItem('about', JSON.stringify(state.details))
   }
 
 }

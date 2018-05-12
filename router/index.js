@@ -15,13 +15,9 @@ import UserProfile from 'views/UserProfile'
 import Event from 'views/Event'
 import ChooseParlay from 'views/Event/voteparlay'
 
-Vue.use(Router)
+import NotFoundComponent from 'views/NotFoundComponent'
 
-const withPrefix = (prefix, routes) => 
-    routes.map( (route) => {
-        route.path = prefix + route.path;
-        return route;
-    });
+Vue.use(Router)
 
 export const routes = [
   {
@@ -38,8 +34,18 @@ export const routes = [
     }
 
   },
-  ...withPrefix('/create',[
-        {
+  {
+    path: '/create',
+    component: Create,
+    meta: {
+      title: 'Create'
+    },
+    children: [
+      {
+        path: '',
+        component: 'Create'
+      },
+      {
         path: 'range',
         component: CreateRange
       },
@@ -51,13 +57,7 @@ export const routes = [
         path: 'parlay',
         component: CreateParlay
       }
-    ]),
-  {
-    path: '/create',
-    component: Create,
-    meta: {
-      title: 'Create'
-    }
+    ]
   }, {
     path: '/user_dashboard',
     component: UserProfile,
@@ -65,7 +65,7 @@ export const routes = [
       title: 'User\'s dasbhboard'
     }
   }, {
-    path: '/event/:id/',
+    path: 'event/:id/',
     component: Event,
     meta: {
       title: 'Event'
@@ -80,10 +80,7 @@ export const routes = [
     path: '/event',
     redirect: '/dashboard'
   },
-  {
-    path: '*',
-    redirect: '/'
-  }
+  { path: '*', component: NotFoundComponent }
 ]
 
 export const router = new Router({ mode: 'history', routes })

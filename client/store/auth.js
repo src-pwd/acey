@@ -7,8 +7,8 @@ const state = {
   username:localStorage.getItem("u"),
   password: "",
   email: "",
-  loggedIn: false,
-  jwt: "",
+  loggedIn: localStorage.getItem("h") || false,
+  jwt: localStorage.getItem("t"),
   endpoints: {
     obtainJWT: "http://localhost:8000/api/login/",
     refreshJWT: "http://localhost:8000/api/login/refresh/"
@@ -19,28 +19,26 @@ const mutations = {
   updateToken(state, newToken) {
     localStorage.setItem("u", state.username);    
     localStorage.setItem("h", state.loggedIn);
+    localStorage.setItem("t", state.jwt);
     state.jwt = newToken;
     this.commit("loggingIn");
   },
   removeToken(state) {
     localStorage.removeItem("u");    
     localStorage.removeItem("t");
-    localStorage.removeItem("h");    
+    localStorage.removeItem("h");  
+    localStorage.removeItem("about");          
     state.jwt = null;
   },
   updateUsername(state, value) {
     state.username = value;
   },
   updatePassword(state, value) {
-    console.log(value);
-
     state.password = value;
   },
   updateEmail(state, value) {
-    console.log(value);
     state.email = value;
   },
-
   loggingIn() {
     state.loggedIn = true;
   },

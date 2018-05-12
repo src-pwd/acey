@@ -56,8 +56,6 @@ export default {
     window.addEventListener('resize', this.handleResize)
     
   },
-
-  
   beforeUpdate() {
       this.$store.dispatch('inspectToken')
       console.log(this.$store)

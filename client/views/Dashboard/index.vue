@@ -16,8 +16,7 @@
                 events: []
             }
         },
-        created() {
-            
+        mounted() {
             this.fetchData()
         },
         computed: {
