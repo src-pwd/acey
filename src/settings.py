@@ -11,7 +11,7 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'QW5kcmV5RWJ1bkxlaGFSYXpyYWJvdGNoaWtCZWtlbmRh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
@@ -100,14 +100,12 @@ DATABASES = {
     }
 }
 
-DEFAULT_FROM_EMAIL = 'nananaBoston@gmail.com'
-SERVER_EMAIL = 'nananaBoston@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = '12345678'
-EMAIL_HOST_USER = 'nananaBoston@gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+EMAIL_HOST_USER = 'app.acey.it@gmail.com'
+EMAIL_HOST_PASSWORD = 'Acey2017'
 
 TEMPLATE_DIRS = (
     '/root/',
@@ -146,8 +144,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

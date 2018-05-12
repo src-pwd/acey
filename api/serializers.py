@@ -19,7 +19,7 @@ from utils.iden import Iden
 import hashlib
 
 LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
-DOMAIN = '127.0.0.1:8000'
+DOMAIN = 'app.acey.it'
 BACKGROUND = '#EEEEEE'
 
 class UserSerializer(serializers.ModelSerializer):
@@ -69,7 +69,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 			except IntegrityError:
 				raise serializers.ValidationError("User with username '{}' already exists.".format(user.username))
 			profile = Profile.objects.create(user=user, profile_picture = "{0}.svg".format(user.username), sum = 1000, **validated_data)
-		mail_subject = 'Activate your blog account.'
+		mail_subject = 'Activate your ACEY account.'
 		message = render_to_string('acc_active_email.html', {
 				'user': user,
 				'domain': DOMAIN,
