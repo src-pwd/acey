@@ -22,11 +22,9 @@ import django.views.static
 
 
 urlpatterns = [
-    url(r'^.*$', TemplateView.as_view(template_name="index.html")),
     url(r'^admin/', admin.site.urls),
     url(r'^', include ('api.urls', namespace='api', app_name='api')),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
-    # url(r'^auth/', include('django.contrib.auth.urls')),
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
