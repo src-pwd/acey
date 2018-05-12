@@ -1,21 +1,35 @@
 <template>
-  <div class="container">
-    <div class="user-container">
-        <div class="user-block-left-part">
-          <div class="user-block-left-part-text">bets{{userInfo.bets}}</div>
-          <div class="user-block-left-part-text">events{{userInfo.events}}</div>
-          <div class="user-block-left-part-text">info{{userInfo.info}}</div>
-          <div class="user-block-left-part-text">rate{{userInfo.rate}}</div>
-          <div class="user-block-left-part-text">sum{{userInfo.sum}}</div>
-        </div>
-        <div class="user-block-right-part">
-          <img class="userpart-userpic" src="kekes.svg" alt="">
-        </div>
+  <div class="container user-container">
+    <div class="user-about">
+      <p class="user-title">About</p>
+      <div class="user-about-main">
+        <p> Name {{ userInfo.user.username }} </p>
+        <p> E-mail {{ userInfo.user.email }} </p>        
+      <div class="user-userpic-container">
+        <img class="userpart-userpic" src="kekes.svg" alt="">
+      </div>
+      </div>
       
     </div>
-    <div class="button-container">
-      <button @click="logout">Logout</button>
+    <div class="user-achievments">
+      <p class="user-title">Total</p>
+      <p>Win rate {{userInfo.win_rate}} </p>
+      <p>Bets {{userInfo.bets}} </p>
+      <p>Events {{userInfo.events}} </p>
     </div>
+    <div class="user-balance">
+      <p class="user-title">Balance</p>
+      <span>{{userInfo.sum}}</span>
+      <div class="user-balance-img-container">
+        <img src="acey_token.png">
+      </div>
+  
+    </div>
+  
+  
+    <!--<div class="button-container">
+          <button @click="logout">Logout</button>
+        </div>-->
   </div>
 </template>
 
@@ -31,7 +45,26 @@
         return this.$store.state.auth.loggedIn
       },
       userInfo() {
-        return this.$store.state.user.details
+        // return this.$store.state.user.details
+        return ({
+          "user": {
+            "username": "Andryuha",
+            "email": "awda@gmail.com",
+            "password": "pbkdf2_sha256 $36000$tA4KdsQQ0anK$Yo00zEKj9FVOz1P5n4GAVq+m+7frOelZ0kp9Pw4FIoU=",
+            "first_nam e": "",
+            "last_name": "",
+            "date_joined": "2018-03- 08T06:02:00.043809+02:00",
+            "last_login": null
+          },
+          "profile_picture": null,
+          "rate": 0,
+          "info": "Crypto Andryuha",
+          "sum": 49809,
+          "bets": 12,
+          "events": 3,
+          "activity_rate": null,
+          "win_rate": 20
+        })
       }
   
     },
@@ -50,18 +83,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .user-container {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-flow: row;
-    margin-top: 80px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-flow: row;
-    justify-content: center;
-  }
-</style>

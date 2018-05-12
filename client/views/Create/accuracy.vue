@@ -15,7 +15,7 @@
             <div class="range-bet-exchange-selector">
              <label for="pair" class="range-bet-select-pair-label">Select exchange</label>
             <select name="pair" class="range-bet-select-pair" @change="changeExchange">
-                <option class="range-bet-select-pair-option" value="bittrex">bittrex</option>
+                <option class="range-bet-select-pair-option" value="bittrex" selected>bittrex</option>
                 <option class="range-bet-select-pair-option" value="poloniex">poloniex</option>
                 <option class="range-bet-select-pair-option" value="binance">binance</option>
             </select>
@@ -23,7 +23,7 @@
             <div class="range-bet-exchange-selector">
             <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>            
             <select name="exchange" class="range-bet-select-exchange" @change="changePair">
-                <option class="range-bet-select-exchange-option" value="ETH/USD">ETH/USD</option>
+                <option class="range-bet-select-exchange-option" value="ETH/USD" selected>ETH/USD</option>
                 <option class="range-bet-select-exchange-option" value="BTC/USD">BTC/USD</option>
                 <option class="range-bet-select-exchange-option" value="DASH/USD">DASH/USD</option>
             </select>

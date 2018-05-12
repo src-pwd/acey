@@ -9,8 +9,8 @@ const state = {
   description: '',
   expired: '',
   type: 'AccuratePrediction',
-  currency_pair: '',
-  exchange: '',
+  currency_pair: 'ETH/USD',
+  exchange: 'bittrex',
   created: false
 }
 
