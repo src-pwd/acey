@@ -17,6 +17,12 @@ import ChooseParlay from 'views/Event/voteparlay'
 
 Vue.use(Router)
 
+const withPrefix = (prefix, routes) => 
+    routes.map( (route) => {
+        route.path = prefix + route.path;
+        return route;
+    });
+
 export const routes = [
   {
     path: '/',
@@ -32,14 +38,8 @@ export const routes = [
     }
 
   },
-  {
-    path: '/create',
-    component: Create,
-    meta: {
-      title: 'Create'
-    },
-    children: [
-      {
+  ...withPrefix('/create',[
+        {
         path: 'range',
         component: CreateRange
       },
@@ -51,7 +51,13 @@ export const routes = [
         path: 'parlay',
         component: CreateParlay
       }
-    ]
+    ]),
+  {
+    path: '/create',
+    component: Create,
+    meta: {
+      title: 'Create'
+    }
   }, {
     path: '/user_dashboard',
     component: UserProfile,
@@ -76,8 +82,8 @@ export const routes = [
   },
   {
     path: '*',
-    redirect: '/404'
-}
+    redirect: '/'
+  }
 ]
 
 export const router = new Router({ mode: 'history', routes })

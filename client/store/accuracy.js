@@ -9,7 +9,8 @@ const state = {
   currency_pairIn: 'DASH',
   currency_pairOut: 'XMR',
   exchange: 'bitfinex',
-  created: false
+  created: false,
+  errors: {}
 }
 
 const mutations = {
@@ -38,6 +39,9 @@ const mutations = {
   },
   updateExchangeAcc (state, exp) {
     state.exchange = exp
+  },
+  updateErrors (state, item) {
+    state.errors = item
   }
 }
 
@@ -62,7 +66,9 @@ const actions = {
 
     }).then(response => {
       if (!response.ok) {
-        response.json().then(el => window.alert(el))
+        response.json().then(el => {
+          this.commit('updateErrors', el)
+        })
         return
       }
       response.json().then(() => {

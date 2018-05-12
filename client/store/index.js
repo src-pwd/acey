@@ -4,6 +4,7 @@ import ui from './ui'
 import range from './range'
 import auth from './auth'
 import accuracy from './accuracy'
+import parlay from './parlay'
 import eventsDashboard from './eventsdashboard'
 import user from './user'
 import event from './event'
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
     eventsDashboard,
     user,
     auth,
-    event
+    event,
+    parlay
   },
   strict: true
 })

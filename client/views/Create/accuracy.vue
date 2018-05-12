@@ -74,14 +74,27 @@ import Datepicker from 'vuejs-datepicker';
             },
             created () {
                 return this.$store.state.accuracy.created
+            },
+            errors() {
+                return this.$store.state.accuracy.errors
             }
         },
         watch: {
           created () {
               this.$router.push('/dashboard')
-          } 
+          },
+          errors () {
+              console.log(this.errors)
+          }
         },
         methods: {
+            errorDescription(error) {
+				var errors = {
+					is_public_unique: 'This key is already in use',
+					is_required: 'Field is required'
+				};
+				return errors[error.check];
+			},
             changeExchange(e) {
                 this.$store.commit('updateExchangeAcc', e.target.value)
             },

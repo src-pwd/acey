@@ -24,7 +24,8 @@ const state = {
   currency_pairin: 'DASH',
   currency_pairout: 'XMR',
   exchange: 'bitfinex',
-  created: false
+  created: false,
+  errors: {}
 }
 
 const mutations = {
@@ -84,7 +85,9 @@ const mutations = {
   deleteRange (state, item) {
     state.options = state.options.filter(el => el.index !== item)
   },
-  [SAVE_RANGE_PRED] (state) {}
+  updateErrors (state, item) {
+    state.errors = item
+  }
 }
 
 const actions = {
@@ -111,7 +114,9 @@ const actions = {
 
     }).then(response => {
       if (!response.ok) {
-        response.json().then(el => window.alert(el))
+        response.json().then(el => {
+          this.commit('updateErrors', el)
+        })
         return
       }
       response.json().then(() => {

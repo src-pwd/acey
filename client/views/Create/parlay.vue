@@ -44,7 +44,7 @@
         </div>
         </div>
         <div class="rangeitem-button">     
-            <button @click="saveAccuracy" class="save-button">SAVE</button>
+            <button @click="savePar" class="save-button">SAVE</button>
         </div>
     </div>
 </template>
@@ -64,44 +64,58 @@ import Datepicker from 'vuejs-datepicker';
         },
         computed: {
             name() {
-                return this.$store.state.accuracy.name
+                return this.$store.state.parlay.name
             },
             description() {
-                return this.$store.state.accuracy.description
+                return this.$store.state.parlay.description
             },
             expired() {
-                return this.$store.state.accuracy.expired
+                return this.$store.state.parlay.expired
             },
             created () {
-                return this.$store.state.accuracy.created
+                return this.$store.state.parlay.created
+            },
+            errors() {
+                return this.$store.state.parlay.errors
             }
         },
         watch: {
           created () {
               this.$router.push('/dashboard')
+          },
+          errors () {
+              console.log(this.errors)
+              
           } 
         },
         methods: {
+            errorDescription(error) {
+				var errors = {
+					is_public_unique: 'This key is already in use',
+					is_required: 'Field is required'
+				};
+				return errors[error.check];
+			},
             changeExchange(e) {
-                this.$store.commit('updateExchangeAcc', e.target.value)
+                this.$store.commit('updateExchangePar', e.target.value)
             },
             changePairIn(e) {
-                this.$store.commit('updatePairAccIn', e.target.value)
+                this.$store.commit('updatePairParIn', e.target.value)
             },
             changePairOut(e) {
-                this.$store.commit('updatePairAccOut', e.target.value)
+                this.$store.commit('updatePairParOut', e.target.value)
             },
             changeName(e) {
-                this.$store.commit('updateNameAcc', e.target.value)
+                this.$store.commit('updateNamePar', e.target.value)
             },
             changeDescription(e) {
-                this.$store.commit('updateDescAcc', e.target.value)
+                this.$store.commit('updateDescPar', e.target.value)
             },
             changeExpired(e) {
                 e = e.toISOString().slice(0, -5)
-                this.$store.commit('updateExpAcc', e)
+                this.$store.commit('updateExpPar', e)
             },
-               ...mapActions(['saveAccuracy'])
+               ...mapActions(['savePar'])
         },
         data() {
             return {

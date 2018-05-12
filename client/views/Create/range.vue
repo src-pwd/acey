@@ -91,17 +91,33 @@ export default {
             },
             created() {
                 return this.$store.state.range.created
+            },
+            errors() {
+                return this.$store.state.range.errors
             }
 
     },
     watch: {
         created() {
             this.$router.push('/dashboard')
+        },
+        errors() {
+              console.log(this.errors)
+            
         }
     },
-
     methods: {
-        changeExchange(e) {
+        	// <p class="text-danger" v-if="errors.private">
+			// 			{{ errorDescription(errors.private) }}
+			// 		</p>
+        errorDescription(error) {
+				var errors = {
+					is_public_unique: 'This key is already in use',
+					is_required: 'Field is required'
+				};
+				return errors[error.check];
+			},
+            changeExchange(e) {
                 this.$store.commit('updateExchange', e.target.value)
             },
             changePairIn(e) {
