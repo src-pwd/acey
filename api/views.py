@@ -67,8 +67,8 @@ class ProfilesView(generics.ListCreateAPIView):
     serializer_class = ProfileSerializer
     # permission_classes = [IsAuthenticated]
 
-class LeaderBoard(generics.ListCreateAPIView):
-    queryset = Profile.objects.all().order_by("-win_rate")
+class LeaderBoard(generics.ListAPIView):
+    queryset = Profile.objects.all().order_by("-rate")
     serializer_class = ProfileSerializer
 
 class DetailsProfileView(generics.RetrieveUpdateDestroyAPIView):
