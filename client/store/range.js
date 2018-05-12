@@ -105,7 +105,7 @@ const actions = {
       name: state.name,
       options: state.options
     }
-    fetch('http://localhost:8000/api/predictions/', {
+    fetch('http://app.acey.it/api/predictions/', {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(data),
       headers: {

@@ -10,8 +10,8 @@ const state = {
   loggedIn: localStorage.getItem("h") || false,
   jwt: localStorage.getItem("t"),
   endpoints: {
-    obtainJWT: "http://localhost:8000/api/login/",
-    refreshJWT: "http://localhost:8000/api/login/refresh/"
+    obtainJWT: "http://app.acey.it/api/login/",
+    refreshJWT: "http://app.acey.it/api/login/refresh/"
   }
 };
 
@@ -56,7 +56,7 @@ const mutations = {
 
 const actions = {
   register(store) {
-    fetch("http://localhost:8000/api/users/", {
+    fetch("http://app.acey.it/api/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -123,7 +123,6 @@ const actions = {
   },
   
   inspectToken(store) {
-    console.log('evocated')
     const token = state.jwt;
     if (token) {
       const decoded = jwt_decode(token);
@@ -139,6 +138,7 @@ const actions = {
        
       }  else {
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+        this.commit("removeToken")
         alert('please relogin!')
       }
     }
