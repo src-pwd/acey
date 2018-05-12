@@ -32,7 +32,7 @@ urlpatterns = [
 		DetailsParleyView.as_view(), name="details"),
 	url(r'^api/exchanges/$', ExchangeView.as_view(), name = "list"),
 	url(r'^api/currencies/$', CurrenciesView.as_view(), name = 'list'),
-
+	url(r'^api/leaderboard/$', LeaderBoard.as_view(), name = 'list')
 ]
 	
 urlpatterns = format_suffix_patterns(urlpatterns)
