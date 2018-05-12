@@ -57,7 +57,7 @@ const actions = {
       name: state.name,
       type: state.type
     }
-    fetch('http://app.acey.it/api/events/', {
+    fetch('http://localhost:8000/api/events/', {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(data),
       headers: {

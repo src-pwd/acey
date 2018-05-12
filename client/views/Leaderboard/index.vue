@@ -1,19 +1,27 @@
 <template>
     <div class="dashboard">
-            <dashboard-element :details="element" v-for="element in events" :key="element.id"></dashboard-element>
+        <div class="container">
+            <div class="leaderboard-head first-create-desc"><span>Leaderboard</span></div>
+            
+            <div class="container-leaderboard">
+                <div class="leaderboard-desc"><span>ID</span><span>Username</span><span>Rate</span></div>
+                <leaderboard-element :details="element" :id="index" v-for="(element,index) in elements" :key="index"></leaderboard-element>
+            </div>
+        </div>
         <router-view></router-view>
     </div>
 </template>
+
 
 <script>
     import element from './element.vue'
     export default {
         components: {
-            'dashboard-element': element
+            'leaderboard-element': element
         },
         data() {
             return {
-                events: []
+                elements: []
             }
         },
         mounted() {
@@ -26,7 +34,7 @@
         },
         methods: {
             fetchData() {
-                fetch('http://localhost:8000/api/events/', {
+                fetch('http://localhost:8000/api/leaderboard/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
@@ -36,7 +44,8 @@
                         return response.json()
                     })
                     .then((el) => {
-                        this.events = el
+                        console.log(el)
+                        this.elements = el
                     })
             }
         }

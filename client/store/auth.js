@@ -10,8 +10,8 @@ const state = {
   loggedIn: localStorage.getItem("h") || false,
   jwt: localStorage.getItem("t"),
   endpoints: {
-    obtainJWT: "http://app.acey.it/api/login/",
-    refreshJWT: "http://app.acey.it/api/login/refresh/"
+    obtainJWT: "http://localhost:8000/api/login/",
+    refreshJWT: "http://localhost:8000/api/login/refresh/"
   }
 };
 
@@ -56,7 +56,7 @@ const mutations = {
 
 const actions = {
   register(store) {
-    fetch("http://app.acey.it/api/users/", {
+    fetch("http://localhost:8000/api/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -17,6 +17,8 @@ import ChooseParlay from 'views/Event/voteparlay'
 
 import NotFoundComponent from 'views/NotFoundComponent'
 
+import Leaderboard from 'views/Leaderboard'
+
 Vue.use(Router)
 
 export const routes = [
@@ -80,7 +82,14 @@ export const routes = [
     path: '/event',
     redirect: '/dashboard'
   },
-  { path: '*', component: NotFoundComponent }
+  { path: '*', component: NotFoundComponent },
+  {
+    path: 'leaderboard',
+    component: Leaderboard,
+    meta: {
+      title: 'Leaderboard'
+    }
+  }
 ]
 
 export const router = new Router({ mode: 'history', routes })

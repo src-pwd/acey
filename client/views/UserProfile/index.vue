@@ -40,7 +40,7 @@
     name: 'UserProfile',
     components: {},
     mounted() {
-      console.log(this.imgSource)
+       this.$store.dispatch('getUserInfo')
     },
     computed: {
       isLogged() {
