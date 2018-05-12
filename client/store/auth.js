@@ -123,7 +123,6 @@ const actions = {
   },
   
   inspectToken(store) {
-    console.log('evocated')
     const token = state.jwt;
     if (token) {
       const decoded = jwt_decode(token);
@@ -139,6 +138,7 @@ const actions = {
        
       }  else {
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+        this.commit("removeToken")
         alert('please relogin!')
       }
     }
