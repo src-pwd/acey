@@ -7,11 +7,11 @@ const state = {
   username:localStorage.getItem("u"),
   password: "",
   email: "",
-  loggedIn: localStorage.getItem("h"),
+  loggedIn: true,
   jwt: "",
   endpoints: {
-    obtainJWT: "http://app.acey.it/api/login/",
-    refreshJWT: "http://app.acey.it/api/login/refresh/"
+    obtainJWT: "http://localhost:8000/api/login/",
+    refreshJWT: "http://localhost:8000/api/login/refresh/"
   }
 };
 
@@ -29,7 +29,6 @@ const mutations = {
     state.jwt = null;
   },
   updateUsername(state, value) {
-    console.log(value);
     state.username = value;
   },
   updatePassword(state, value) {
@@ -59,7 +58,7 @@ const mutations = {
 
 const actions = {
   register(store) {
-    fetch("http://app.acey.it/api/users/", {
+    fetch("http://localhost:8000/api/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

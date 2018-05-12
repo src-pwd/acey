@@ -10,7 +10,7 @@ const mutations = {
 const actions = {
   predictionBet (state, payload) {
     console.log(payload)
-    fetch('http://app.acey.it/api/bets/', {
+    fetch('http://localhost:8000/api/bets/', {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(payload), // data can be `string` or {object}!
       headers: {
@@ -29,7 +29,7 @@ const actions = {
   },
   accurateBet (state, payload) {
     console.log(payload)
-    fetch('http://app.acey.it/api/accuratebets/', {
+    fetch('http://localhost:8000/api/accuratebets/', {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(payload), // data can be `string` or {object}!
       headers: {
