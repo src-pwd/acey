@@ -15,17 +15,27 @@
             <div class="range-bet-exchange-selector">
              <label for="pair" class="range-bet-select-pair-label">Select exchange</label>
             <select name="pair" class="range-bet-select-pair" @change="changeExchange">
-                <option class="range-bet-select-pair-option" value="bittrex" selected>bittrex</option>
-                <option class="range-bet-select-pair-option" value="poloniex">poloniex</option>
-                <option class="range-bet-select-pair-option" value="binance">binance</option>
+                <option class="range-bet-select-pair-option" value="bittrex" selected>bitfinex</option>
+                <option class="range-bet-select-pair-option" value="poloniex" disabled>poloniex</option>
+                <option class="range-bet-select-pair-option" value="binance" disabled>binance</option>
             </select>
             </div>
             <div class="range-bet-exchange-selector">
             <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>            
-            <select name="exchange" class="range-bet-select-exchange" @change="changePair">
-                <option class="range-bet-select-exchange-option" value="ETH/USD" selected>ETH/USD</option>
-                <option class="range-bet-select-exchange-option" value="BTC/USD">BTC/USD</option>
-                <option class="range-bet-select-exchange-option" value="DASH/USD">DASH/USD</option>
+            <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairIn">
+            dsh, xmr, btc, ltc, eth
+                <option class="range-bet-select-exchange-option" value="DASH" selected>DASH</option>
+                <option class="range-bet-select-exchange-option" value="XMR">XMR</option>
+                <option class="range-bet-select-exchange-option" value="BTC">BTC</option>
+                <option class="range-bet-select-exchange-option" value="LTC">LTC</option>
+                <option class="range-bet-select-exchange-option" value="ETH">ETH</option>
+            </select>
+            <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairOut">
+                <option class="range-bet-select-exchange-option" value="DASH">DASH</option>
+                <option class="range-bet-select-exchange-option" value="XMR" selected>XMR</option>
+                <option class="range-bet-select-exchange-option" value="BTC">BTC</option>
+                <option class="range-bet-select-exchange-option" value="LTC">LTC</option>
+                <option class="range-bet-select-exchange-option" value="ETH">ETH</option>
             </select>
             </div>
             <div class="range-bet-exchange-selector">
@@ -75,8 +85,11 @@ import Datepicker from 'vuejs-datepicker';
             changeExchange(e) {
                 this.$store.commit('updateExchangeAcc', e.target.value)
             },
-            changePair(e) {
-                this.$store.commit('updatePairAcc', e.target.value)
+            changePairIn(e) {
+                this.$store.commit('updatePairAccIn', e.target.value)
+            },
+            changePairOut(e) {
+                this.$store.commit('updatePairAccOut', e.target.value)
             },
             changeName(e) {
                 this.$store.commit('updateNameAcc', e.target.value)

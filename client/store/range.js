@@ -21,8 +21,9 @@ const state = {
   description: '',
   expired: '',
   type: 'Prediction',
-  currency_pair: 'ETH/USD',
-  exchange: 'bittrex',
+  currency_pairin: 'DASH',
+  currency_pairout: 'XMR',
+  exchange: 'bitfinex',
   created: false
 }
 
@@ -56,8 +57,11 @@ const mutations = {
   updateExp (state, exp) {
     state.expired = exp
   },
-  updatePair (state, exp) {
-    state.currency_pair = exp
+  updatePairIn (state, exp) {
+    state.currency_pairin = exp
+  },
+  updatePairOut (state, exp) {
+    state.currency_pairout = exp
   },
   updateExchange (state, exp) {
     state.exchange = exp
@@ -91,7 +95,7 @@ const actions = {
   saveRangePrediction ({ commit }) {
     const data = {
       creator: store.state.auth.username,
-      currency_pair: state.currency_pair,
+      currency_pair: state.currency_pairin + '/' + state.currency_pairout,
       description: state.description,
       exchange: state.exchange,
       expired: state.expired,
