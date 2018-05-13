@@ -31,7 +31,6 @@
         },
         mounted() {
             this.fetchData()
-            console.log('lol')
         },
         methods: {
             fetchData() {
@@ -46,7 +45,6 @@
                     })
                     .then((el) => {
                         this.details = el
-                        console.log(el)
                     })
             }
         }

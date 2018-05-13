@@ -44,7 +44,6 @@
                         return response.json()
                     })
                     .then((el) => {
-                        console.log(el)
                         this.elements = el
                     })
             }

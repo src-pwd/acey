@@ -73,9 +73,6 @@
         components: {
             Datepicker
         },
-        mounted() {
-            console.log(this.$data)
-        },
         computed: {
             name() {
                 return this.$store.state.range.name

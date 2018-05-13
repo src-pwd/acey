@@ -65,8 +65,6 @@
                     })
                     .then((el) => {
                         this.options = el.filter(l => l.event == this.$route.params.id)
-                        console.log(this.options)
-    
                     })
                 fetch('http://app.acey.it/api/users/', {
                         method: "GET", // or 'PUT'
@@ -78,12 +76,9 @@
                         return response.json()
                     })
                     .then((el) => {
-    
-                        console.log(el)
                     })
             },
             chooseOption(item) {
-                console.log(item)
                 this.selected = item
             },
             voteFor() {

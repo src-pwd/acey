@@ -42,9 +42,7 @@
         },
         computed: {
             configVal() {
-                // if (this.$refs.accuracy.$el.className.indexOf("router-link-active") !== -1 || this.$refs.range.$el.className.indexOf("router-link-active") !== -1) {
-                    // console.log('lol')
-                // }
+             
             }
         }
     }

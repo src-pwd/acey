@@ -89,7 +89,6 @@ import Datepicker from 'vuejs-datepicker';
               this.$router.push('/dashboard')
           },
           errors () {
-              console.log(this.errors)
           }
         },
         methods: {

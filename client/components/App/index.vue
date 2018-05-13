@@ -48,9 +48,6 @@ export default {
         return this.$store.state.auth.loggedIn 
       }
   },
-  mounted() {
-    console.log(this.isRlyLogged)
-  },
 
   components: {
      'header-c' :Header,

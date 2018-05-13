@@ -119,7 +119,6 @@ const actions = {
       })
     }).then(response => {
       response.json().then(el => {
-        console.log(el)
         if (!el.token)  {this.commit("removeToken")
           this.commit("loggingOut")}
         this.commit("updateToken", el.token);
@@ -136,19 +135,17 @@ const actions = {
       const decoded = jwt_decode(token);
       const exp = decoded.exp;
       const orig_iat = decoded.orig_iat;
-      console.log('posssleee')
-      
       if (
         exp - Date.now() / 1000 < 900 &&
         Date.now() / 1000 - orig_iat < 628200
       ) {
-        console.log('this niga')
+        console.log('fi')
         this.dispatch("refreshToken");
       } else if (exp - Date.now() / 1000 < 1800) {
         // DO NOTHING, DO NOT REFRESH
-       console.log('nigger niga')
+       console.log('se')
       }  else {
-       console.log('nigger niga')
+       console.log('la')
         
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
         this.commit("removeToken")
