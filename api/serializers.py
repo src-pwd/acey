@@ -14,6 +14,8 @@ import sys
 from crontab import CronTab
 import os
 import pwd
+from datetime import datetime
+from dateutil.tz import tzutc
 sys.path.append('..')
 from utils.iden import Iden
 import hashlib
@@ -142,8 +144,23 @@ class EventSerializer(serializers.ModelSerializer):
 				)
 		read_only_fields = ('id', 'total_users', 'total_sum', 'created', 'status',)
 
+
 	@transaction.atomic
 	def create(self, validated_data):
+
+		# if validated_data.get('exchange') not in Exchange.objects.only("name"):
+		# 	raise serializers.ValidationError("Wrong or unsupported exchange.")
+
+		# currency_from = validated_data.get('currency_pair')[:3]
+		# currency_to = validated_data.get('currency_pair')[4:] 
+		# currencies = Currencies.objects.only("name")
+		# if not currency_from or not currency_to or currency_from not in currencies or currency_to not in currencies or currency_from==currency_to:
+		# 	raise serializers.ValidationError("Wrong or unsupported currency pair.")
+
+		timedelta = validated_data['expired'].replace(tzinfo=tzutc())-datetime.now().replace(tzinfo=tzutc())
+
+		if timedelta.seconds < 3600 or timedelta.days < 0:
+			raise serializers.ValidationError("Events should expire at least in 1 hour after creating.")
 
 		event = Event.objects.create(
 			creator = validated_data['creator'],
@@ -204,6 +221,20 @@ class PredictionSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 
 		options = validated_data.pop('options')
+
+		if validated_data.get('exchange') not in Exchange.objects.only("name"):
+			raise serializers.ValidationError("Wrong or unsupported exchange.")
+
+		currency_from = validated_data.get('currency_pair')[:3]
+		currency_to = validated_data.get('currency_pair')[4:] 
+		currencies = Currencies.objects.only("name")
+		if not currency_from or not currency_to or currency_from not in currencies or currency_to not in currencies or currency_from==currency_to:
+			raise serializers.ValidationError("Wrong or unsupported currency pair.")
+
+		timedelta = validated_data['expired'].replace(tzinfo=tzutc())-datetime.now().replace(tzinfo=tzutc())
+
+		if timedelta.seconds < 3600 or timedelta.days < 0:
+			raise serializers.ValidationError("Events should expire at least in 1 hour after creating.")
 
 		event = Event.objects.create(
 			creator = validated_data['creator'],
