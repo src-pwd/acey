@@ -83,7 +83,7 @@ export const routes = [
       requiresAuth: true
     }
   },
-  { path: '*', component: NotFoundComponent },
+  { path: '*', component: Dashboard },
   {
     path: '/leaderboard',
     component: Leaderboard,

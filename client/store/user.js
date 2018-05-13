@@ -20,7 +20,6 @@ const mutations = {
 
 const actions = {
   getUserInfo (state) {
-    console.log(store.state.auth.token)
     fetch('http://localhost:8000/api/users/username/', {
       method: 'get',
       headers: {

@@ -1,85 +1,82 @@
 
 
 <template>
-
-<div class="container range-create">
-    <p class="first-create-desc"><span class="big-number-create">2</span> Configure your prediction</p>
-    <div class="range-bet-head-container">
-        <label class="range-bet-name-label" for="bet-name">Prediction name </label>
-        <input name="bet-name" type="text" class="range-bet-name" :value="name" @input="changeName" placeholder="Name of event">
-        <span class="highlight"></span>
-        <span class="bar"></span>
-    </div>
-    <div class="range-bet-description-container">
-        <label for="bet-desc" class="range-bet-description-label">Description</label>
-        <input maxlength="200" name="bet-desc" type="text" class="range-bet-desc" :value="description" @input="changeDescription" placeholder="Provide short description">
-    </div>
-    <div class="range-bet-exchange-container">
-        <div class="range-bet-exchange-selector">
-            <label for="pair" class="range-bet-select-pair-label">Select exchange</label>
-            <select name="pair" class="range-bet-select-pair" @change="changeExchange">
-                <option class="range-bet-select-pair-option" value="bittrex" selected>bitfinex</option>
-                <option class="range-bet-select-pair-option" value="poloniex" disabled>poloniex</option>
-                <option class="range-bet-select-pair-option" value="binance" disabled>binance</option>
-            </select>
+    <div class="container range-create">
+        <p class="first-create-desc"><span class="big-number-create">2</span> Configure your prediction</p>
+        <div class="range-bet-head-container">
+            <label class="range-bet-name-label" for="bet-name">Prediction name </label>
+            <input name="bet-name" type="text" class="range-bet-name" :value="name" @input="changeName" placeholder="Name of event">
+            <span class="highlight"></span>
+            <span class="bar"></span>
         </div>
-        <div class="range-bet-exchange-selector">
-            <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>
-            <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairIn">
-                <option class="range-bet-select-exchange-option" value="DASH" selected>DASH</option>
-                <option class="range-bet-select-exchange-option" value="XMR">XMR</option>
-                <option class="range-bet-select-exchange-option" value="BTC">BTC</option>
-                <option class="range-bet-select-exchange-option" value="LTC">LTC</option>
-                <option class="range-bet-select-exchange-option" value="ETH">ETH</option>
-            </select>
-            <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairOut">
-                <option class="range-bet-select-exchange-option" value="DASH">DASH</option>
-                <option class="range-bet-select-exchange-option" value="XMR" selected>XMR</option>
-                <option class="range-bet-select-exchange-option" value="BTC">BTC</option>
-                <option class="range-bet-select-exchange-option" value="LTC">LTC</option>
-                <option class="range-bet-select-exchange-option" value="ETH">ETH</option>
-            </select>
+        <div class="range-bet-description-container">
+            <label for="bet-desc" class="range-bet-description-label">Description</label>
+            <input maxlength="200" name="bet-desc" type="text" class="range-bet-desc" :value="description" @input="changeDescription" placeholder="Provide short description">
         </div>
-        <div class="range-bet-exchange-selector">
-            <label for="bet-desc" class="datepicker-expired-label">Expired</label>
-            <datepicker placeholder="Enter your date" class="datepicker-expired" :value="expired" @selected="changeExpired"></datepicker>
+        <div class="range-bet-exchange-container">
+            <div class="range-bet-exchange-selector">
+                <label for="pair" class="range-bet-select-pair-label">Select exchange</label>
+                <select name="pair" class="range-bet-select-pair" @change="changeExchange">
+                        <option class="range-bet-select-pair-option" value="bittrex" selected>bitfinex</option>
+                        <option class="range-bet-select-pair-option" value="poloniex" disabled>poloniex</option>
+                        <option class="range-bet-select-pair-option" value="binance" disabled>binance</option>
+                    </select>
+            </div>
+            <div class="range-bet-exchange-selector">
+                <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>
+                <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairIn">
+                        <option class="range-bet-select-exchange-option" :disabled="pairOut == 'DASH'" value="DASH" selected>DASH</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairOut == 'XMR'" value="XMR">XMR</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairOut == 'BTC'" value="BTC">BTC</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairOut == 'LTC'" value="LTC">LTC</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairOut == 'ETH'" value="ETH">ETH</option>
+                    </select>
+                <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairOut">
+                        <option class="range-bet-select-exchange-option" :disabled="pairIn == 'DASH'" value="DASH">DASH</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairIn == 'XMR'"  value="XMR" selected>XMR</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairIn == 'BTC'"  value="BTC">BTC</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairIn == 'LTC'"  value="LTC">LTC</option>
+                        <option class="range-bet-select-exchange-option" :disabled="pairIn == 'ETH'"  value="ETH">ETH</option>
+                    </select>
+            </div>
+            <div class="range-bet-exchange-selector">
+                <label for="bet-desc" class="datepicker-expired-label">Expired</label>
+                <datepicker :monday-first="true" :disabledDates="disabledDates" placeholder="Enter your date" class="datepicker-expired" :value="expired" @selected="changeExpired"></datepicker>
+            </div>
+        </div>
+        <div class="rangeitem-container">
+            <div v-for="(item,index) in options" class="range-bet-rangeitem">
+                <input type="number" v-model="item.sum_from" placeholder="from">
+                <input type="number" v-model="item.sum_to" placeholder="to">
+                <div class="delete-button" @click="deleteRange(item)"><span>delete</span></div>
+            </div>
+            <div class="add-to-ranges">
+                <button @click="addNewRange" v-if="options.length < 7" class="save-button">Add</button>
+            </div>
+        </div>
+        <div class="rangeitem-button">
+            <button @click="saveRangePrediction" class="save-button">SAVE</button>
         </div>
     </div>
-    <div class="rangeitem-container">
-        <div v-for="(item,index) in options" class="range-bet-rangeitem">
-            <input type="number" :value="item.priceFrom" @input="itemPriceFromChange($event, index)" placeholder="from">
-            <input type="number" :value="item.priceTo" @input="itemPriceToChange($event,index)" placeholder="to">
-            <div class="delete-button" @click="deleteRange(item)"><span>delete</span></div>
-        </div>
-        <div class="add-to-ranges">
-            <button @click="addNewRange" v-if="options.length < 5" class="save-button">Add</button>
-        </div>
-    </div>
-    <div class="rangeitem-button">
-        <button @click="saveRangePrediction" class="save-button">SAVE</button>
-    </div>
-</div>
-
 </template>
 
 <script>
-
-import Datepicker from 'vuejs-datepicker';
-import {
-    mapState,
-    mapActions
-}
-from 'vuex'
-
-export default {
-    name: 'Range',
-    components: {
-        Datepicker
-    },
-    computed: {
-            options() {
-                return this.$store.state.range.options
-            },
+    import Datepicker from 'vuejs-datepicker';
+    import {
+        mapState,
+        mapActions
+    }
+    from 'vuex'
+    
+    export default {
+        name: 'Range',
+        components: {
+            Datepicker
+        },
+        mounted() {
+            console.log(this.$data)
+        },
+        computed: {
             name() {
                 return this.$store.state.range.name
             },
@@ -94,29 +91,35 @@ export default {
             },
             errors() {
                 return this.$store.state.range.errors
+            },
+            pairIn() {
+                return this.$store.state.range.currency_pairin
+            },
+            pairOut() {
+                return this.$store.state.range.currency_pairout
             }
-
-    },
-    watch: {
-        created() {
-            this.$router.push('/dashboard')
+    
         },
-        errors() {
-              console.log(this.errors)
-            
-        }
-    },
-    methods: {
-        	// <p class="text-danger" v-if="errors.private">
-			// 			{{ errorDescription(errors.private) }}
-			// 		</p>
-        errorDescription(error) {
-				var errors = {
-					is_public_unique: 'This key is already in use',
-					is_required: 'Field is required'
-				};
-				return errors[error.check];
-			},
+        watch: {
+            created() {
+                this.$router.push('/dashboard')
+            },
+            errors() {
+                console.log(this.errors)
+    
+            }
+        },
+        methods: {
+            // <p class="text-danger" v-if="errors.private">
+            // 			{{ errorDescription(errors.private) }}
+            // 		</p>
+            errorDescription(error) {
+                var errors = {
+                    is_public_unique: 'This key is already in use',
+                    is_required: 'Field is required'
+                };
+                return errors[error.check];
+            },
             changeExchange(e) {
                 this.$store.commit('updateExchange', e.target.value)
             },
@@ -137,28 +140,48 @@ export default {
                 this.$store.commit('updateExp', e)
             },
             deleteRange(item) {
-                this.$store.commit('deleteRange', item.index)
+                this.options = this.options.filter(el => el.index != item.index)
             },
             itemNameChange(e, index) {
                 let payload = [e.target.value, index]
                 this.$store.commit('itemName', payload)
             },
-            itemPriceFromChange(e, index) {
-                let payload = [e.target.value, index]
-                this.$store.commit('itemPriceFrom', payload)
+            addNewRange(e) {
+                let min = Math.ceil(1);
+                let max = Math.floor(50);
+                
+                let newIndex = Math.floor(Math.random() * (max - min)) + min;
+                let item = {
+                    index: newIndex,
+                    sum_from: 0,
+                    sum_to: 0
+                }
+                this.options.find(el => el.index == newIndex) ?
+                        this.options.push({
+                            index: newIndex + newIndex,
+                            sum_from: 0,
+                            sum_to: 0
+                        }) :
+                        this.options.push(item)
+                this.$store.commit('updateOptions', this.options)
             },
-            itemPriceToChange(e, index) {
-                let payload = [e.target.value, index]
-                this.$store.commit('itemPriceTo', payload)
-            },
-            ...mapActions(['addNewRange', 'saveRangePrediction'])
-
-    },
-    data() {
-        return {
-            date: ''
+            ...mapActions(['saveRangePrediction'])
+    
+        },
+        data() {
+            return {
+                date: '',
+                disabledDates: {
+                    daysOfMonth: [1, 29, 30, 31]
+                },
+                options: [{
+                        index: 0,
+                        sum_from: 0,
+                        sum_to: 0
+                    },
+                ],
+    
+            }
         }
     }
-}
-
 </script>

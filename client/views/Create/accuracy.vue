@@ -22,20 +22,19 @@
             </div>
             <div class="range-bet-exchange-selector">
             <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>            
-            <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairIn">
-            dsh, xmr, btc, ltc, eth
-                <option class="range-bet-select-exchange-option" value="DASH" selected>DASH</option>
-                <option class="range-bet-select-exchange-option" value="XMR">XMR</option>
-                <option class="range-bet-select-exchange-option" value="BTC">BTC</option>
-                <option class="range-bet-select-exchange-option" value="LTC">LTC</option>
-                <option class="range-bet-select-exchange-option" value="ETH">ETH</option>
+             <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairIn">
+                <option class="range-bet-select-exchange-option" :disabled="pairOut == 'DASH'" value="DASH" selected>DASH</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairOut == 'XMR'" value="XMR">XMR</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairOut == 'BTC'" value="BTC">BTC</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairOut == 'LTC'" value="LTC">LTC</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairOut == 'ETH'" value="ETH">ETH</option>
             </select>
             <select name="exchange" class="range-bet-select-exchange" size="5" @change="changePairOut">
-                <option class="range-bet-select-exchange-option" value="DASH">DASH</option>
-                <option class="range-bet-select-exchange-option" value="XMR" selected>XMR</option>
-                <option class="range-bet-select-exchange-option" value="BTC">BTC</option>
-                <option class="range-bet-select-exchange-option" value="LTC">LTC</option>
-                <option class="range-bet-select-exchange-option" value="ETH">ETH</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairIn == 'DASH'" value="DASH">DASH</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairIn == 'XMR'"  value="XMR" selected>XMR</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairIn == 'BTC'"  value="BTC">BTC</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairIn == 'LTC'"  value="LTC">LTC</option>
+                <option class="range-bet-select-exchange-option" :disabled="pairIn == 'ETH'"  value="ETH">ETH</option>
             </select>
             </div>
             <div class="range-bet-exchange-selector">
@@ -77,6 +76,12 @@ import Datepicker from 'vuejs-datepicker';
             },
             errors() {
                 return this.$store.state.accuracy.errors
+            },
+            pairIn() {
+                return this.$store.state.accuracy.currency_pairIn
+            },
+            pairOut() {
+                return this.$store.state.accuracy.currency_pairOut
             }
         },
         watch: {

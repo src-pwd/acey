@@ -1,6 +1,6 @@
 <template>
   <div class="container user-container">
-    <div class="user-about">
+    <div class="user-about" v-if="userInfo">
       <p class="user-title">About</p>
       <div class="user-about-main">
         <p class="user-about-name"> <span>Name</span> {{ userInfo.user.username }} </p>
@@ -11,13 +11,13 @@
       </div>
   
     </div>
-    <div class="user-achievments">
+    <div class="user-achievments" v-if="userInfo">
       <p class="user-title">Total</p>
       <p class="user-achievements-winrate"><span>Win rate</span> {{userInfo.win_rate}} </p>
       <p class="user-achievements-bets"><span>Bets</span> {{userInfo.bets}} </p>
       <p class="user-achievements-events"><span>Events</span> {{userInfo.events}} </p>
     </div>
-    <div class="user-balance">
+    <div class="user-balance" v-if="userInfo">
       <p class="user-title">Balance</p>
       <div class="user-balance-container">
         <span class="user-balance-sum">{{userInfo.sum}}</span>
