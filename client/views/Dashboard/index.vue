@@ -26,7 +26,7 @@
         },
         methods: {
             fetchData() {
-                fetch('http://localhost:8000/api/events/', {
+                fetch('http://app.acey.it/api/events/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"

@@ -8,7 +8,6 @@ import parlay from './parlay'
 import eventsDashboard from './eventsdashboard'
 import user from './user'
 import event from './event'
-
 Vue.use(Vuex)
 
 const store = new Vuex.Store({

@@ -1,74 +1,82 @@
 /*eslint-disable */
-import Vue from 'vue'
-import Router from 'vue-router'
-import store from 'store'
-import Authorization from 'views/Authorization'
+import Vue from "vue";
+import Router from "vue-router";
+import store from "store";
+import Authorization from "views/Authorization";
 
-import Dashboard from 'views/Dashboard'
+import Dashboard from "views/Dashboard";
 
-import Create from 'views/Create'
-import CreateRange from 'views/Create/range.vue'
-import CreateAccuracy from 'views/Create/accuracy.vue'
-import CreateParlay from 'views/Create/parlay.vue'
+import Create from "views/Create";
+import CreateRange from "views/Create/range.vue";
+import CreateAccuracy from "views/Create/accuracy.vue";
+import CreateParlay from "views/Create/parlay.vue";
 
-import UserProfile from 'views/UserProfile'
+import UserProfile from "views/UserProfile";
 
-import Event from 'views/Event'
-import NotFoundComponent from 'views/NotFoundComponent'
+import Event from "views/Event";
+import NotFoundComponent from "views/NotFoundComponent";
 
-import Leaderboard from 'views/Leaderboard'
+import Leaderboard from "views/Leaderboard";
 
-
-Vue.use(Router)
+Vue.use(Router);
 
 export const routes = [
-  
   {
-    path: '/',
-    redirect: '/dashboard',
+    path: "/",
+    redirect: "/dashboard",
     meta: {
-      title: 'Dashboard'
-    }
-  },
-  {
-    path: '/login',
-    component: Authorization,
-    meta: {
-      title: 'Authorization'
-    }
-  },
-  { 
-    path: '/dashboard',
-    component: Dashboard,
-    meta: {
-      title: 'Dashboard',
+      title: "Dashboard",
       requiresAuth: true
     }
   },
   {
-    path: '/create',
+    path: "/login",
+    component: Authorization,
+    meta: {
+      title: "Authorization"
+    }
+  },
+  {
+    path: "/dashboard",
+    component: Dashboard,
+    meta: {
+      title: "Dashboard",
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/create",
     component: Create,
     meta: {
-      title: 'Create',
+      title: "Create",
       requiresAuth: true
     },
     children: [
       {
-        path: 'range',
-        component: CreateRange
+        path: "range",
+        component: CreateRange,
+        meta: {
+          requiresAuth: true
+        }
       },
       {
-        path: 'accuracy',
-        component: CreateAccuracy
+        path: "accuracy",
+        component: CreateAccuracy,
+        meta: {
+          requiresAuth: true
+        }
       },
       {
-        path: 'parlay',
-        component: CreateParlay
+        path: "parlay",
+        component: CreateParlay,
+        meta: {
+          requiresAuth: true
+        }
       }
     ]
   },
   {
-    path: '/profile',
+    path: "/profile",
     component: UserProfile,
     meta: {
       title: "User's profile",
@@ -76,32 +84,47 @@ export const routes = [
     }
   },
   {
-    path: '/event/:id',
+    path: "/event/:id",
     component: Event,
     meta: {
-      title: 'Event',
+      title: "Event",
       requiresAuth: true
     }
   },
-  { path: '*', component: Dashboard },
   {
-    path: '/leaderboard',
+    path: "*",
+    component: Dashboard,
+    meta: {
+      title: "Dashboard",
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/leaderboard",
     component: Leaderboard,
     meta: {
-      title: 'Leaderboard'
+      title: "Leaderboard",
+      requiresAuth: true
     }
   }
-]
+];
 
-export const router = new Router({ mode: 'history', routes })
+export const router = new Router({ mode: "history", routes });
+
 
 router.beforeEach((to, from, next) => {
-  if (
-    to.matched.some(record => record.meta.requiresAuth) &&
-    !store.state.auth.loggedIn
-  ) {
-    next({ path: '/login', query: { redirect: to.fullPath }})
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!store.state.auth.loggedIn) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
   } else {
-    next()
+    next() // make sure to always call next()!
   }
 })

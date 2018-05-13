@@ -15,7 +15,7 @@
           <label class="main-acey-logoform-input-label" for="">Username</label>
             <input type="text" class="username-input main-acey-logoform-input" placeholder="Enter Username" :value="username" @input="changeUsername">
           <label class="main-acey-logoform-input-label" for="">Password</label>
-          <input type="text" class="password-input main-acey-logoform-input" placeholder="Enter Password" :value="password" @input="changePassword">
+          <input type="password" class="password-input main-acey-logoform-input" placeholder="Enter Password" :value="password" @input="changePassword">
           <button class="confirm-button" @click="loginUser">
             LOGIN
           </button>
@@ -26,7 +26,7 @@
           <label class="main-acey-logoform-input-label" for="">Username</label>
             <input type="text" class="username-input main-acey-logoform-input" :value="username" placeholder="Your username" @input="changeUsername">
           <label class="main-acey-logoform-input-label" for="">Password</label>
-          <input type="text"  class="username-input main-acey-logoform-input" :value="password" placeholder="Your password" @input="changePassword">
+          <input type="password"  class="username-input main-acey-logoform-input" :value="password" placeholder="Your password" @input="changePassword">
           
           <label class="main-acey-logoform-input-label" for="">E-mail</label>
           <input type="email"  class="username-input main-acey-logoform-input" :value="email" placeholder="yourmail@com.it" @input="changeEmail"> 

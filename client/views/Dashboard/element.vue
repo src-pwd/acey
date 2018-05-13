@@ -1,5 +1,5 @@
 <template>
-    <router-link tag="div"  :to="'event' + '/' + details.id + '/'" :id="details.id" class="dashboard-element-block">
+    <router-link tag="div"  :to=" details.type=='Parlay' ? '#' : 'event' + '/' + details.id + '/'" :id="details.id" class="dashboard-element-block">
         <div class="top-block">
             <div class="pair">{{ details.currency_pair }}</div>
             <div class="exchange">at {{ details.exchange }}</div>
@@ -15,7 +15,7 @@
             <br>
             <div class="block-icon total-used"><span><font-awesome-icon :icon="user" /></span>{{ details.total_users }}</div>
         </div>
-        
+        <span v-if="details.type == 'Parlay'" class="soon-header-sticker">SOON</span>
     </router-link>
 </template>
 

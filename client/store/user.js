@@ -2,6 +2,8 @@
 
 import fetch from 'isomorphic-fetch'
 import store from './index'
+import { router } from '../router' // Vue Router
+
 
 const state = {
   details: JSON.parse(localStorage.getItem('about')) || {}
@@ -20,15 +22,22 @@ const mutations = {
 
 const actions = {
   getUserInfo (state) {
-    fetch('http://localhost:8000/api/users/username/', {
+    fetch('http://app.acey.it/api/users/username/', {
       method: 'get',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'JWT ' + store.state.auth.jwt
       }
     }).then(
-      el => el.json().then(el => this.commit('aboutUser', el))
+      el => el.json().then(el => {
+        if(el.detail) {
+          store.commit('removeToken')  
+        }
+     
+      this.commit('aboutUser', el)
+      }
       )
+    )
   }
 }
 

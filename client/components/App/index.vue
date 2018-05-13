@@ -1,12 +1,12 @@
 <template>
 <div id="app">
     <div class="page-layout">
-            <header-c :title="title" v-if="isLogged"></header-c>
-            <div class="main-content">
-            <transition name="fade">
-                    <router-view></router-view>            
-            </transition>
-            </div>
+        <header-c :title="title" v-if="isRlyLogged"></header-c>
+        <div class="main-content">
+          <transition name="fade">
+                  <router-view></router-view>            
+          </transition>
+        </div>
             <!-- <footer-c class="footer" v-if="isLogged"></footer-c>-->
     </div>
 </div>
@@ -23,6 +23,11 @@ export default {
   methods: {
     ...mapActions(['handleResize', 'openSidebar', 'closeSidebar'])
   },
+  data() {
+    return { 
+      skert: false
+    }
+  },
   computed: {
     ...mapState({
         obfuscatorActive: state => {
@@ -31,21 +36,20 @@ export default {
         title: state => {
           return state.route.meta.title
         },
-        isLogged: state => {
-          return state.auth.loggedIn
-        },
         jwt: state => {
           return state.auth.jwt
         }
+        
     }),
      getToken() {
                 return this.$store.state.auth.jwt
-            }
+            },
+      isRlyLogged() {
+        return this.$store.state.auth.loggedIn 
+      }
   },
-  watch: {
-    checkJwtExist() {
-      console.log(jwt)
-    }
+  mounted() {
+    console.log(this.isRlyLogged)
   },
 
   components: {
@@ -58,7 +62,6 @@ export default {
   },
   beforeUpdate() {
       this.$store.dispatch('inspectToken')
-      console.log(this.$store)
   }
 }
 </script>

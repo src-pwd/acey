@@ -7,11 +7,11 @@ const state = {
   username:localStorage.getItem("u"),
   password: "",
   email: "",
-  loggedIn: localStorage.getItem("h") || false,
+  loggedIn: JSON.parse(localStorage.getItem("h")) || false,
   jwt: localStorage.getItem("t"),
   endpoints: {
-    obtainJWT: "http://localhost:8000/api/login/",
-    refreshJWT: "http://localhost:8000/api/login/refresh/"
+    obtainJWT: "http://app.acey.it/api/login/",
+    refreshJWT: "http://app.acey.it/api/login/refresh/"
   }
 };
 
@@ -26,12 +26,17 @@ const mutations = {
   removeToken(state) {
     localStorage.removeItem("u");    
     localStorage.removeItem("t");
-    localStorage.removeItem("h");  
+    localStorage.setItem("h", "false");  
     localStorage.removeItem("about");          
     state.jwt = null;
   },
   updateUsername(state, value) {
     state.username = value;
+  },
+  removeCreds(state) {
+    state.email = ''
+    state.password  = ''
+    state.username = ''
   },
   updatePassword(state, value) {
     state.password = value;
@@ -47,7 +52,6 @@ const mutations = {
     state.username = "";
     state.password = "";
     store.state.user.details = {}
-    
   },
   saveToken(state, value) {
     state.saveToken = value;
@@ -56,7 +60,7 @@ const mutations = {
 
 const actions = {
   register(store) {
-    fetch("http://localhost:8000/api/users/", {
+    fetch("http://app.acey.it/api/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,13 +74,11 @@ const actions = {
       })
     })
       .then(responseJson => {
-        console.log(responseJson);
       })
       .then(data => {
-        console.log(data);
+        this.commit("removeCreds")        
       })
       .catch(data => {
-        console.log(data);
       });
   },
   obtainToken(store) {
@@ -105,9 +107,9 @@ const actions = {
       // repsonses with status < 400 get resolved. you can access response.status and response.data here
   },
   
-   refreshToken(store) {
+  refreshToken(store) {
     var payload = {
-      token: state.jwt
+      token: state.jwt || ''
     };
     fetch(state.endpoints.refreshJWT, {
       method: "POST", // or 'PUT'
@@ -118,27 +120,36 @@ const actions = {
     }).then(response => {
       response.json().then(el => {
         console.log(el)
-        if (!el.token) console.log('blya come on')
+        if (!el.token)  {this.commit("removeToken")
+          this.commit("loggingOut")}
         this.commit("updateToken", el.token);
       })
     });
   },
   
   inspectToken(store) {
-    const token = state.jwt;
+    const token = state.jwt || '';
     if (token) {
+      token === "null" ? 
+         this.commit("removeToken") :
+          console.log('vy zdes')
       const decoded = jwt_decode(token);
       const exp = decoded.exp;
       const orig_iat = decoded.orig_iat;
+      console.log('posssleee')
+      
       if (
         exp - Date.now() / 1000 < 900 &&
         Date.now() / 1000 - orig_iat < 628200
       ) {
+        console.log('this niga')
         this.dispatch("refreshToken");
       } else if (exp - Date.now() / 1000 < 1800) {
         // DO NOTHING, DO NOT REFRESH
-       
+       console.log('nigger niga')
       }  else {
+       console.log('nigger niga')
+        
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
         this.commit("removeToken")
         alert('please relogin!')
