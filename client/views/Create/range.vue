@@ -6,12 +6,18 @@
         <div class="range-bet-head-container">
             <label class="range-bet-name-label" for="bet-name">Prediction name </label>
             <input name="bet-name" type="text" class="range-bet-name" :value="name" @input="changeName" placeholder="Name of event">
+            <p class="text-danger" v-if="errors.name">
+            	{{ errorDescription(errors.name) }}
+            </p>
             <span class="highlight"></span>
             <span class="bar"></span>
         </div>
         <div class="range-bet-description-container">
             <label for="bet-desc" class="range-bet-description-label">Description</label>
             <input maxlength="200" name="bet-desc" type="text" class="range-bet-desc" :value="description" @input="changeDescription" placeholder="Provide short description">
+            <p class="text-danger" v-if="errors.description">
+            	{{ errorDescription(errors.description) }}
+            </p>
         </div>
         <div class="range-bet-exchange-container">
             <div class="range-bet-exchange-selector">
@@ -42,6 +48,9 @@
             <div class="range-bet-exchange-selector">
                 <label for="bet-desc" class="datepicker-expired-label">Expired</label>
                 <datepicker :monday-first="true" :disabledDates="disabledDates" placeholder="Enter your date" class="datepicker-expired" :value="expired" @selected="changeExpired"></datepicker>
+                <p class="text-danger" v-if="errors.expired">
+            	{{ errorDescription(errors.expired) }}
+            </p>
             </div>
         </div>
         <div class="rangeitem-container">
@@ -103,19 +112,13 @@
             },
             errors() {
                 console.log(this.errors)
-    
+                this.errorsList = this.errors
             }
         },
         methods: {
-            // <p class="text-danger" v-if="errors.private">
-            // 			{{ errorDescription(errors.private) }}
-            // 		</p>
             errorDescription(error) {
-                var errors = {
-                    is_public_unique: 'This key is already in use',
-                    is_required: 'Field is required'
-                };
-                return errors[error.check];
+                console.log(error[0])
+                return error[0];
             },
             changeExchange(e) {
                 this.$store.commit('updateExchange', e.target.value)
@@ -168,15 +171,13 @@
         data() {
             return {
                 date: '',
-                disabledDates: {
-                    daysOfMonth: [1, 29, 30, 31]
-                },
                 options: [{
                         index: 0,
                         sum_from: 0,
                         sum_to: 0
                     },
                 ],
+                errorsList: []
     
             }
         }

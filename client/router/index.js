@@ -91,14 +91,14 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
-    path: "*",
-    component: Dashboard,
-    meta: {
-      title: "Dashboard",
-      requiresAuth: true
-    }
-  },
+  // {
+  //   path: "*",
+  //   component: Dashboard,
+  //   meta: {
+  //     title: "Dashboard",
+  //     requiresAuth: true
+  //   }
+  // },
   {
     path: "/leaderboard",
     component: Leaderboard,
@@ -109,7 +109,7 @@ export const routes = [
   }
 ];
 
-export const router = new Router({ mode: "history", routes });
+export const router = new Router({ routes });
 
 
 router.beforeEach((to, from, next) => {

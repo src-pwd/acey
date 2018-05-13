@@ -2,6 +2,9 @@
 
 @import "./vars.scss";
 
+
+$border-rad: 16px;
+
 html,
 body {
   width: 100%;
@@ -68,10 +71,10 @@ body {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    border-radius: 8px 8px 0 0;
+    border-radius: $border-rad $border-rad 0 0;
     transition: box-shadow 0.7s ease;
     &.router-link-active {
-      border-radius: 12px 12px 0 0;
+      border-radius: $border-rad $border-rad 0 0;
 
       background-color: $background-color !important;
       -webkit-box-shadow: 0px -15px 70px -20px rgba(0, 0, 0, 0.75);
@@ -135,7 +138,7 @@ body {
 }
 
 .router-link-active {
-  border-radius: 12px;
+  border-radius: $border-rad;
   -webkit-box-shadow: -5px 4px 100px 2px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: -5px 4px 100px 2px rgba(0, 0, 0, 0.75);
   box-shadow: -5px 4px 100px 2px rgba(0, 0, 0, 0.75);
@@ -209,7 +212,7 @@ body {
     background: #151515;
     margin-top: -6vh;
     width: min-content;
-    border-radius: 12px;
+    border-radius: $border-rad;
     border: 1px solid #a76123;
   }
   &-right-part {
@@ -238,7 +241,7 @@ body {
   }
   &-tab.active {
     width: 70%;
-    border-radius: 12px 12px 0 0;
+    border-radius: $border-rad $border-rad 0 0;
 
     border-right: 1px solid #a76123;
     border-left: 1px solid #a76123;
@@ -253,7 +256,7 @@ body {
   &-inputs {
     width: 350px;
     padding: 20px 20px;
-    border-radius: 12px;
+    border-radius: $border-rad;
     height: 100%;
     position: relative;
   }
@@ -268,7 +271,7 @@ body {
     margin-top: 10px;
     height: 50px;
     font-size: 20px;
-    border-radius: 12px;
+    border-radius: $border-rad;
     margin-bottom: 20px;
     &-label {
       margin-top: 20px;
@@ -300,7 +303,7 @@ body {
   pointer-events: auto;
   cursor: pointer;
   -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 40px;
+  border-radius:$border-rad;
   background-color: #151515;
   outline: none;
   position: absolute;
@@ -319,7 +322,7 @@ body {
 }
 
 .logoform-right-part-pic {
-  border-radius: 12px;
+  border-radius: $border-rad;
 }
 
 .authorization-logo {
@@ -335,7 +338,7 @@ body {
   left: 50px;
   transform: rotate(-35deg);
   transition: transform 0.5s ease, scale 0.7s ease-in;
-  border-radius: 20px;
+  border-radius: $border-rad;
   color: black;
   background-color: $main-orange;
   padding: 10px 10px;
@@ -348,7 +351,7 @@ body {
     height: 250px;
     margin: 30px;
     border: 1px solid $main-orange;
-    border-radius: 7px;
+    border-radius: $border-rad;
     background: url("../../static/dash.png") no-repeat;
     background-size: cover;
     overflow: hidden;
@@ -395,7 +398,7 @@ body {
         padding: 10px;
         font-size: 0.9em;
         border: 1px solid $main-orange;
-        border-radius: 20px;
+        border-radius: $border-rad;
         transition: transform 0.5s ease-out;
       }
     }
@@ -456,7 +459,7 @@ body {
 .type-block {
   margin: 25px;
   padding: 20px;
-  border-radius: 10px;
+  border-radius:$border-rad;
   border: 1px solid #bd7125;
   width: 30%;
   transition: 0.2s;
@@ -497,7 +500,7 @@ body {
     margin-top: 10px;
     height: 50px;
     font-size: 20px;
-    border-radius: 12px;
+    border-radius: $border-rad;
     margin-bottom: 20px;
     &:focus,
     &:hover {
@@ -524,7 +527,7 @@ body {
     margin-top: 10px;
     height: 50px;
     font-size: 20px;
-    border-radius: 12px;
+    border-radius: $border-rad;
     margin-bottom: 20px;
     &:focus,
     &:hover {
@@ -572,7 +575,7 @@ body {
   background-color: #1a1a1a;
   height: 30px;
   color: #c1c1c1;
-  border-radius: 6px;
+  border-radius: $border-rad;
   margin-left: 50px;
   font-size: 1em;
 }
@@ -601,7 +604,7 @@ body {
     margin-top: 10px;
     height: 30px;
     font-size: 20px;
-    border-radius: 12px;
+    border-radius: $border-rad;
     margin-bottom: 20px;
     &:focus,
     &:hover {
@@ -638,7 +641,7 @@ body {
     color: rgba(0, 0, 0, 0.5);
     font-weight: 500;
     cursor: pointer;
-    padding-top: 12px;
+    padding-top: $border-rad;
     padding-bottom: 12px;
     padding-left: 20px;
     padding-right: 20px;
@@ -771,7 +774,7 @@ body {
     margin-top: 10px;
     height: 30px;
     font-size: 20px;
-    border-radius: 12px;
+    border-radius: $border-rad;
     margin-bottom: 20px;
     &:focus,
     &:hover {
@@ -798,7 +801,7 @@ body {
   padding: 20px;
   margin: 20px;
   border: 1px solid $light-orange;
-  border-radius: 16px;
+  border-radius: $border-rad;
   &.active {
     transform: scale(1.1);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -876,7 +879,7 @@ body {
   margin-top: 10px;
   height: 50px;
   font-size: 20px;
-  border-radius: 12px;
+  border-radius: $border-rad;
   margin-bottom: 20px;
 }
 
@@ -949,7 +952,7 @@ body {
     padding: 10px;
     margin: 10px;
     width: 100%;
-    border-radius: 6px;
+    border-radius: $border-rad;
   }
 }
 
@@ -1029,6 +1032,8 @@ body {
 }
 .vdp-datepicker__calendar {
   background: #1f2021 !important;
+  top: -100px;
+  border-radius: $border-rad;
 }
 
 .container-leaderboard {
@@ -1049,7 +1054,7 @@ body {
     border: 1px solid gray;
     padding: 20px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    border-radius: 25px;
+    border-radius: $border-rad;
     justify-content: space-around;
     
   }

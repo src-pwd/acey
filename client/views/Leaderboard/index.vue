@@ -34,7 +34,7 @@
         },
         methods: {
             fetchData() {
-                fetch('http://app.acey.it/api/leaderboard/', {
+                fetch('http://localhost:8000/api/leaderboard/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"

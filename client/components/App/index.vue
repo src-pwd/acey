@@ -23,6 +23,9 @@ export default {
   methods: {
     ...mapActions(['handleResize', 'openSidebar', 'closeSidebar'])
   },
+  beforeCreate() {
+    
+  },
   data() {
     return { 
       skert: false

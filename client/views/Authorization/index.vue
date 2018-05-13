@@ -11,26 +11,27 @@
         </div>
          
         <div class="main-acey-logoform-inputs">
-          <div class="login-form" v-if="selectedLogin">
+        
+          <div class="login-form" v-if="selectedLogin" @keyup.enter="loginUser">
           <label class="main-acey-logoform-input-label" for="">Username</label>
             <input type="text" class="username-input main-acey-logoform-input" placeholder="Enter Username" :value="username" @input="changeUsername">
           <label class="main-acey-logoform-input-label" for="">Password</label>
           <input type="password" class="password-input main-acey-logoform-input" placeholder="Enter Password" :value="password" @input="changePassword">
-          <button class="confirm-button" @click="loginUser">
+          <button class="confirm-button" @click="loginUser" @keyup.enter="loginUser">
             LOGIN
           </button>
           </div>
           
-          <div class="registration-form" v-else>
+          <div class="registration-form" v-else @keyup.enter="registerUser">
           <p>New to ACEY?</p>
           <label class="main-acey-logoform-input-label" for="">Username</label>
-            <input type="text" class="username-input main-acey-logoform-input" :value="username" placeholder="Your username" @input="changeUsername">
+            <input type="text" class="username-input main-acey-logoform-input" :value="usernameReg" placeholder="Your username" @input="changeUsernameReg">
           <label class="main-acey-logoform-input-label" for="">Password</label>
-          <input type="password"  class="username-input main-acey-logoform-input" :value="password" placeholder="Your password" @input="changePassword">
+          <input type="password"  class="username-input main-acey-logoform-input" :value="passwordReg" placeholder="Your password" @input="changePasswordReg">
           
           <label class="main-acey-logoform-input-label" for="">E-mail</label>
           <input type="email"  class="username-input main-acey-logoform-input" :value="email" placeholder="yourmail@com.it" @input="changeEmail"> 
-          <button class="confirm-button" @click="registerUser">
+          <button class="confirm-button" @click="registerUser" @keyup.enter="registerUser">
             REGISTER 
           </button>
           </div>
@@ -55,8 +56,14 @@
       username() {
         return this.$store.state.auth.username
       },
+      usernameReg() {
+        return this.$store.state.auth.usernameReg
+      },
       password() {
         return this.$store.state.auth.password
+      },
+      passwordReg() {
+        return this.$store.state.auth.passwordReg
       },
       email() {
         return this.$store.state.auth.email
@@ -80,8 +87,14 @@
       changeUsername(e) {
         this.$store.commit('updateUsername', e.target.value)
       },
+      changeUsernameReg(e) {
+        this.$store.commit('updateUsernameReg', e.target.value)
+      },
       changePassword(e) {
         this.$store.commit('updatePassword', e.target.value)
+      },
+      changePasswordReg(e) {
+        this.$store.commit('updatePasswordReg', e.target.value)
       },
       changeEmail(e) {
         this.$store.commit('updateEmail', e.target.value)

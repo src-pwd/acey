@@ -54,7 +54,7 @@
         methods: {
     
             fetchData() {
-                fetch('http://app.acey.it/api/options/', {
+                fetch('http://localhost:8000/api/options/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
@@ -66,7 +66,7 @@
                     .then((el) => {
                         this.options = el.filter(l => l.event == this.$route.params.id)
                     })
-                fetch('http://app.acey.it/api/users/', {
+                fetch('http://localhost:8000/api/users/', {
                         method: "GET", // or 'PUT'
                         headers: new Headers({
                             "Content-Type": "application/json"
