@@ -19,7 +19,7 @@ import fontawesome from '@fortawesome/fontawesome'
 sync(store, router)
 Vue.use(Element, { locale })
 
-const BASE_URL = 'http://app.acey.it'
+const BASE_URL = 'http://localhost:8000'
 
 const app = new Vue({
   router,

@@ -5,18 +5,7 @@ export const DELETE_RANGE = 'DELETE_RANGE'
 export const SAVE_RANGE_PRED = 'SAVE_RANGE_PRED'
 
 const state = {
-  options: [
-    {
-      index: 0,
-      sum_from: null,
-      sum_to: null
-    },
-    {
-      index: 1,
-      sum_from: null,
-      sum_to: null
-    }
-  ],
+  options: [],
   name: '',
   description: '',
   expired: '',
@@ -34,18 +23,7 @@ const mutations = {
   },
   updateCreated (state) {
     state.created = true
-    state.options = [
-      {
-        index: 0,
-        sum_from: null,
-        sum_to: null
-      },
-      {
-        index: 1,
-        sum_from: null,
-        sum_to: null
-      }
-    ]
+    state.options = []
     state.name = ''
     state.description = ''
     state.expired = ''
@@ -67,23 +45,8 @@ const mutations = {
   updateExchange (state, exp) {
     state.exchange = exp
   },
-  [ADD_RANGE] (state, range) {
-    if (state.options.length < 5) {
-      state.options.push({
-        index: state.options.length,
-        sum_from: null,
-        sum_to: null
-      })
-    }
-  },
-  itemPriceFrom (state, payload) {
-    state.options[payload[1]].sum_from = Number(payload[0])
-  },
-  itemPriceTo (state, payload) {
-    state.options[payload[1]].sum_to = Number(payload[0])
-  },
-  deleteRange (state, item) {
-    state.options = state.options.filter(el => el.index !== item)
+  updateOptions (state, options) {
+    state.options = options
   },
   updateErrors (state, item) {
     state.errors = item
@@ -91,10 +54,6 @@ const mutations = {
 }
 
 const actions = {
-  addNewRange ({ commit }) {
-    commit({ type: ADD_RANGE })
-  },
-
   saveRangePrediction ({ commit }) {
     const data = {
       creator: store.state.auth.username,
@@ -105,7 +64,7 @@ const actions = {
       name: state.name,
       options: state.options
     }
-    fetch('http://app.acey.it/api/predictions/', {
+    fetch('http://localhost:8000/api/predictions/', {
       method: 'POST', // or 'PUT'
       body: JSON.stringify(data),
       headers: {

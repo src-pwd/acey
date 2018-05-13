@@ -10,8 +10,8 @@ const state = {
   loggedIn: localStorage.getItem("h") || false,
   jwt: localStorage.getItem("t"),
   endpoints: {
-    obtainJWT: "http://app.acey.it/api/login/",
-    refreshJWT: "http://app.acey.it/api/login/refresh/"
+    obtainJWT: "http://localhost:8000/api/login/",
+    refreshJWT: "http://localhost:8000/api/login/refresh/"
   }
 };
 
@@ -56,7 +56,7 @@ const mutations = {
 
 const actions = {
   register(store) {
-    fetch("http://app.acey.it/api/users/", {
+    fetch("http://localhost:8000/api/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -117,6 +117,8 @@ const actions = {
       })
     }).then(response => {
       response.json().then(el => {
+        console.log(el)
+        if (!el.token) console.log('blya come on')
         this.commit("updateToken", el.token);
       })
     });
@@ -140,6 +142,7 @@ const actions = {
         // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
         this.commit("removeToken")
         alert('please relogin!')
+        localStorage.clear
       }
     }
    

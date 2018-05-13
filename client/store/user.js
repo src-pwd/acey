@@ -20,8 +20,7 @@ const mutations = {
 
 const actions = {
   getUserInfo (state) {
-    console.log(store.state.auth.token)
-    fetch('http://app.acey.it/api/users/username/', {
+    fetch('http://localhost:8000/api/users/username/', {
       method: 'get',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

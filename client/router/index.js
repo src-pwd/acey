@@ -14,6 +14,10 @@ import CreateParlay from 'views/Create/parlay.vue'
 import UserProfile from 'views/UserProfile'
 
 import Event from 'views/Event'
+import NotFoundComponent from 'views/NotFoundComponent'
+
+import Leaderboard from 'views/Leaderboard'
+
 
 Vue.use(Router)
 
@@ -79,6 +83,14 @@ export const routes = [
       requiresAuth: true
     }
   },
+  { path: '*', component: Dashboard },
+  {
+    path: '/leaderboard',
+    component: Leaderboard,
+    meta: {
+      title: 'Leaderboard'
+    }
+  }
 ]
 
 export const router = new Router({ mode: 'history', routes })

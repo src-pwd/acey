@@ -1,6 +1,5 @@
 <template>
     <div class="header">
-
         <div class="header-container">
             <div class="app-main-nav">
                 <div class="main-nav-logo">
@@ -13,15 +12,14 @@
                     <router-link tag="div" class="app-main-nav-link" to="/create">
                         <span>Creators Tool</span>
                     </router-link>
-                    <div class="app-main-nav-link">
-                        <span>Leadersboard</span>
-                        <span class="soon-header-sticker">SOON</span>
-                    </div>
+                    <router-link tag="div" class="app-main-nav-link" to="/leaderboard">
+                        <span>Leaderboard</span>
+                    </router-link>
                 </div>
                 <router-link tag="div" class="app-main-nav-link app-main-nav-userpart" to="/profile">
                     <div class="userpart-token">
-                    <span class="userpart-token-sum-desc">Avaliable balance</span>
-                    
+                        <span class="userpart-token-sum-desc">Avaliable balance</span>
+    
                         <span class="userpart-token-sum">{{ sum ? sum : '138' }}</span>
                         <div class="userpart-token-img-container">
                             <img class="userpart-token-img" src="acey_token.png">
@@ -32,9 +30,9 @@
                     </div>
                 </router-link>
             </div>
-
+    
         </div>
-
+    
     </div>
 </template>
 
@@ -45,6 +43,9 @@
                 showInfo: false
             }
         },
+        mounted() {
+            this.$store.dispatch('getUserInfo')
+        },
         computed: {
             username() {
                 return this.$store.state.auth.username
@@ -54,6 +55,11 @@
             },
             profileRoute() {
                 return this.$route.fullPath === "/profile"
+            }
+        },
+        watch: {
+            sum() {
+                return this.sum
             }
         }
     }
