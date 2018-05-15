@@ -9,8 +9,6 @@
             <p class="text-danger" v-if="errors.name">
             	{{ errorDescription(errors.name) }}
             </p>
-            <span class="highlight"></span>
-            <span class="bar"></span>
         </div>
         <div class="range-bet-description-container">
             <label for="bet-desc" class="range-bet-description-label">Description</label>
@@ -27,6 +25,9 @@
                         <option class="range-bet-select-pair-option" value="poloniex" disabled>poloniex</option>
                         <option class="range-bet-select-pair-option" value="binance" disabled>binance</option>
                     </select>
+                     <p class="text-danger" v-if="errors.exchange">
+            	{{ errorDescription(errors.exchange) }}
+            </p>
             </div>
             <div class="range-bet-exchange-selector">
                 <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>
@@ -44,6 +45,9 @@
                         <option class="range-bet-select-exchange-option" :disabled="pairIn == 'LTC'"  value="LTC">LTC</option>
                         <option class="range-bet-select-exchange-option" :disabled="pairIn == 'ETH'"  value="ETH">ETH</option>
                     </select>
+                    <p class="text-danger" v-if="errors.pair">
+            	{{ errorDescription(errors.pair) }}
+            </p>
             </div>
             <div class="range-bet-exchange-selector">
                 <label for="bet-desc" class="datepicker-expired-label">Expired</label>
@@ -59,13 +63,17 @@
                 <input type="number" v-model="item.sum_to" placeholder="to">
                 <div class="delete-button" @click="deleteRange(item)"><span>delete</span></div>
             </div>
+            
             <div class="add-to-ranges">
                 <button @click="addNewRange" v-if="options.length < 7" class="save-button">Add</button>
             </div>
         </div>
         <div class="rangeitem-button">
-            <button @click="saveRangePrediction" class="save-button">SAVE</button>
+            <button @click="saveRange" class="save-button">SAVE</button>
         </div>
+        	<p class="text-danger" v-if="errors.save">
+					{{ errorDescription(errors.save) }}
+				</p>
     </div>
 </template>
 
@@ -111,14 +119,17 @@
                 this.$router.push('/dashboard')
             },
             errors() {
-                console.log(this.errors)
                 this.errorsList = this.errors
             }
         },
         methods: {
             errorDescription(error) {
-                console.log(error[0])
-                return error[0];
+                if (error === this.errors.expired) {
+                    let err = error[0]
+                    err = err.substr(0,26)
+                    return err
+                }
+                return error[0]
             },
             changeExchange(e) {
                 this.$store.commit('updateExchange', e.target.value)
@@ -165,7 +176,13 @@
                         this.options.push(item)
                 this.$store.commit('updateOptions', this.options)
             },
-            ...mapActions(['saveRangePrediction'])
+          saveRange(e) {
+               this.$store.dispatch('saveRangePrediction')
+               setTimeout(()=>{
+                   console.log('el')
+                   this.errorsList = []
+               }, 5000)
+          }
     
         },
         data() {

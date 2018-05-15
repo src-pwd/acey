@@ -4,12 +4,18 @@
         <div class="range-bet-head-container">
             <label class="range-bet-name-label" for="bet-name">Prediction name </label>         
             <input name="bet-name" type="text" class="range-bet-name" :value="name" @input="changeName" placeholder="Name of event">
+            <p class="text-danger" v-if="errors.name">
+					{{ errorDescription(errors.name) }}
+				</p>
             <span class="highlight"></span>
             <span class="bar"></span>
         </div>
         <div class="range-bet-description-container">
             <label for="bet-desc" class="range-bet-description-label">Description</label>
             <input maxlength="200" name="bet-desc" type="text" class="range-bet-desc" :value="description" @input="changeDescription" placeholder="Provide short description">
+            	<p class="text-danger" v-if="errors.description">
+					{{ errorDescription(errors.description) }}
+				</p>
         </div>
         <div class="range-bet-exchange-container">
             <div class="range-bet-exchange-selector">
@@ -19,6 +25,9 @@
                 <option class="range-bet-select-pair-option" value="poloniex" disabled>poloniex</option>
                 <option class="range-bet-select-pair-option" value="binance" disabled>binance</option>
             </select>
+            	<p class="text-danger" v-if="errors.exchange">
+					{{ errorDescription(errors.exchange) }}
+				</p>
             </div>
             <div class="range-bet-exchange-selector">
             <label for="exchange" class="range-bet-select-exchange-label">Select pair</label>            
@@ -36,15 +45,24 @@
                 <option class="range-bet-select-exchange-option" :disabled="pairIn == 'LTC'"  value="LTC">LTC</option>
                 <option class="range-bet-select-exchange-option" :disabled="pairIn == 'ETH'"  value="ETH">ETH</option>
             </select>
+            	<p class="text-danger" v-if="errors.pair">
+					{{ errorDescription(errors.pair) }}
+				</p>
             </div>
             <div class="range-bet-exchange-selector">
             <label for="bet-desc" class="datepicker-expired-label">Expired</label>
             <datepicker placeholder="Enter your date" class="datepicker-expired" :value="expired" @selected="changeExpired"></datepicker>
+            	<p class="text-danger" v-if="errors.expired">
+					{{ errorDescription(errors.expired) }}
+				</p>
         </div>
         </div>
         <div class="rangeitem-button">     
             <button @click="saveAccuracy" class="save-button">SAVE</button>
         </div>
+        	<p class="text-danger" v-if="errors[0]">
+					{{ errorDescription(errors[0]) }}
+				</p>
     </div>
 </template>
 
@@ -92,13 +110,14 @@ import Datepicker from 'vuejs-datepicker';
           }
         },
         methods: {
-            errorDescription(error) {
-				var errors = {
-					is_public_unique: 'This key is already in use',
-					is_required: 'Field is required'
-				};
-				return errors[error.check];
-			},
+             errorDescription(error) {
+                if (error === this.errors.expired) {
+                    let err = error[0]
+                    err = err.substr(0,26)
+                    return err
+                }
+                return error[0];
+            },
             changeExchange(e) {
                 this.$store.commit('updateExchangeAcc', e.target.value)
             },

@@ -46,7 +46,15 @@
                     .then((el) => {
                         this.details = el
                     })
-            }
+            },
+             errorDescription(error) {
+                if (error === this.errors.expired) {
+                    let err = error[0]
+                    err = err.substr(0,26)
+                    return err
+                }
+                return error[0];
+            },
         }
     
     }
